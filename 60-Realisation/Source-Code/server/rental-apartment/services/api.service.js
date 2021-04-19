@@ -4,7 +4,7 @@ const ApiGateway = require("moleculer-web");
 const dotenv = require('dotenv');
 const cors = require('cors');
 var corsOptions = {
-    origin: "http://localhost:51603"
+    origin: ["http://localhost:54231","http://localhost:54332","http://localhost:54111"]
   };
 
 /**
