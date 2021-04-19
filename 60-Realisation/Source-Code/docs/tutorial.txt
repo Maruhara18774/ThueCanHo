@@ -1,0 +1,24 @@
+Các bước chạy project:
+0> Nếu muốn môi trường làm việc tốt hơn, tìm file .code-workspace và Open workspace
+
+1> (Terminal 1) Đến "~/backend", chạy "docker-compose up"
+
+2> Đến Azure Data Center > New connection với các thông số sau:
+    + Server: localhost
+    + Authentication type: SQL Login
+    + Username: sa
+    + Password: !Passw0rd
+    + Remember password: true
+    + Vào mục Advanced... > Port: 4000
+
+3> Sau khi kết nối được CSDL, kiểm tra có database RENTALAPARTMENT chưa, nếu chưa có:
+    + New query > CREATE DATABASE RENTALAPARTMENT > Execute
+    + Tìm docs/SQLQuery.sql trong folder dự án
+    + Tạo query mới, copy paste vào và Execute
+
+4> (Terminal 2) Đến "~/server/rental-apartment", chạy "npm run dev"
+    + Chỉ chỉnh sửa trên file service của mình
+    Vd: customer.service.js
+    + Có thể kiểm tra connection tại "http://localhost:33456"
+
+5> (Terminal 3) Đến "~/frontend
