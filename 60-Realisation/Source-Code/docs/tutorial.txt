@@ -18,7 +18,8 @@ Các bước chạy project:
 
 4> (Terminal 2) Đến "~/server/rental-apartment", chạy "npm run dev"
     + Chỉ chỉnh sửa trên file service của mình
-    Vd: customer.service.js
+    Vd: customer.service.js, partner.service.js
+    (Mẫu thì có thể sample customer nhé)
     + Có thể kiểm tra connection tại "http://localhost:33456"
 
 5> (Terminal 3) Đến "~/frontend/<thư mục phần bạn>
