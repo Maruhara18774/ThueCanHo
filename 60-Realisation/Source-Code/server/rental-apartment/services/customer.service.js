@@ -108,7 +108,31 @@ module.exports = {
 				return checkDetail;
 			}
 		},
-
+		searchApartment: {
+			rest: {
+				method: "POST",
+				path: "/searchApartment"
+			},
+			async handler({action,params,meta, ... ctx}) {
+                const {id, idOwner, address} = params;
+                const checkDetail = await dbContext.NHA.findAll({
+                    where: {
+                        [Op.or]:[
+							{ID_NHA: id},
+							{ID_TAIKHOAN: idOwner}
+						]
+                    }
+                });
+                if (checkDetail == null){
+                    return "Không có căn hộ này";
+                }
+                // Create account
+                // 1 54 28
+                // localhost - 1400 
+                // npx sequelize-auto -h localhost -d RENTALAPARTMENT -u sa -x !Passw0rd -p 1400 -e mssql -o "./src/models"    
+				return checkDetail;
+			}
+		},
 		/**
 		 * Welcome, a username
 		 *

@@ -13,9 +13,11 @@ var _NHA = require("./NHA");
 var _NOITHAT = require("./NOITHAT");
 var _NOITHATPHONG = require("./NOITHATPHONG");
 var _PHONG = require("./PHONG");
+var _QUAN = require("./QUAN");
 var _STYLE = require("./STYLE");
 var _STYLENHA = require("./STYLENHA");
 var _TAIKHOAN = require("./TAIKHOAN");
+var _THANHPHO = require("./THANHPHO");
 var _THONGTINCHUHO = require("./THONGTINCHUHO");
 var _THONGTINKHACHHANG = require("./THONGTINKHACHHANG");
 
@@ -34,9 +36,11 @@ function initModels(sequelize) {
   var NOITHAT = _NOITHAT(sequelize, DataTypes);
   var NOITHATPHONG = _NOITHATPHONG(sequelize, DataTypes);
   var PHONG = _PHONG(sequelize, DataTypes);
+  var QUAN = _QUAN(sequelize, DataTypes);
   var STYLE = _STYLE(sequelize, DataTypes);
   var STYLENHA = _STYLENHA(sequelize, DataTypes);
   var TAIKHOAN = _TAIKHOAN(sequelize, DataTypes);
+  var THANHPHO = _THANHPHO(sequelize, DataTypes);
   var THONGTINCHUHO = _THONGTINCHUHO(sequelize, DataTypes);
   var THONGTINKHACHHANG = _THONGTINKHACHHANG(sequelize, DataTypes);
 
@@ -92,9 +96,11 @@ function initModels(sequelize) {
     NOITHAT,
     NOITHATPHONG,
     PHONG,
+    QUAN,
     STYLE,
     STYLENHA,
     TAIKHOAN,
+    THANHPHO,
     THONGTINCHUHO,
     THONGTINKHACHHANG,
   };
