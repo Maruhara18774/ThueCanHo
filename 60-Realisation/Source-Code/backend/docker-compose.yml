@@ -1,0 +1,19 @@
+version: "3.3"
+
+services:
+
+  user-db:
+    image: mcr.microsoft.com/mssql/server:2017-latest
+    restart: always
+    ports:
+        - "1400:1433"
+    environment:
+        ACCEPT_EULA : "Y"
+        SA_PASSWORD : "!Passw0rd"
+    networks: 
+        - rentalapartment-backend
+networks:
+    rentalapartment-backend:
+        driver: bridge
+
+        

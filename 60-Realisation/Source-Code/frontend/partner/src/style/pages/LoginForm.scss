@@ -1,0 +1,120 @@
+$font-app: Roboto, Arial, sans-serif;
+
+.flexbox {
+  padding: 32px 0;
+  background-color: #235d9f;
+  .container {
+    background: white;
+    border-radius: 6px;
+    padding: 0;
+    max-width: 380px;
+    .card {
+      border: none;
+      padding: 40px;
+      min-height: 700px;
+      position: relative;
+      box-sizing: inherit;
+      h3 {
+        font-size: 24px;
+        text-align: center;
+        position: relative;
+        margin-top: 8px;
+        margin-bottom: 60px;
+        box-sizing: inherit;
+      }
+      .card-body {
+        padding: 0;
+        .card-tittle {
+          font-size: 20px;
+          line-height: 24px;
+        }
+        .card-text {
+          color: #687176;
+          margin: 0;
+          margin-bottom: 16px;
+        }
+        .login-form {
+          box-sizing: inherit;
+          i {
+            
+            position: absolute;
+            color: #235d9f;
+          }
+          .form-label {
+            display: block;
+            margin-bottom: 2px;
+            font-style: normal;
+            -webkit-font-smoothing: antialiased;
+            color: #4c5052;
+            cursor: default;
+            font-weight: 1000;
+          }
+          input {
+            background-color: rgb(236, 248, 255);
+            display: block;
+            padding: 7px 0px 7px 29px;
+            font-size: 14px;
+            border: 1px solid #235d9f;
+            border-radius: 3px;
+            width: 100%;
+            margin-bottom: 16px;
+            line-height: 20.02px;
+            &:focus {
+              outline: none;
+              border-color: #8c9fba;
+            }
+          }
+          
+          .icon {
+            padding: 10px;
+            min-width: 40px;
+          }
+          .login-form-forgot {
+            width: 100%;
+            display: block;
+            margin-bottom: 16px;
+          }
+          #btn-login {
+            width: 100%;
+            background: #ff5e1f;
+            padding: 8px 12px;
+            border-radius: 6px;
+            border-width: 0;
+            font-weight: bold;
+            font-size: 16px;
+            line-height: 24px;
+            box-sizing: border-box;
+            height: 41px;
+            color: #fff;
+            outline: none;
+          }
+        }
+        p {
+          font-family: $font-app;
+          font-size: 14px;
+        }
+        .line-spacing {
+          font-size: 14px;
+          margin-top: 16px;
+          margin-bottom: 16px;
+          width: 100%;
+          border-bottom: 1px dashed #d9dfe8;
+        }
+        .icon {
+          -webkit-box-pack: justify;
+          display: flex;
+          justify-content: space-between;
+          a {
+            display: flex;
+            flex: 1;
+            padding-right: 30px;
+            img {
+              width: 135px;
+              height: 40px;
+            }
+          }
+        }
+      }
+    }
+  }
+}
