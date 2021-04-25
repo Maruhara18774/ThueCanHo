@@ -1,3 +1,11 @@
+Các bước đồng bộ github trên github desktop:
+0> Bật Github desktop
+1> Chuyển branch thành branch phần mình
+2> "Open in Visual Code"
+3> Chuyển đến tab Source Control (bar ngoài cùng bên trái, icon thứ 3)
+4> Nhấn "..." > "Pull, Push" > "Pull from ..." > origin > main
+5> Chờ thanh load chạy xong và về lại tab chính làm việc
+
 Các bước chạy project:
 0> Nếu muốn môi trường làm việc tốt hơn, tìm file .code-workspace và Open workspace
 
