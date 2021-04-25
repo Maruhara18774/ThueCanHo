@@ -1,3 +1,15 @@
-.logo{
-    margin-right: 50px;
+.mrl10{
+    margin-right: 10px;
+}
+
+.bg-main-nav{
+    background-color: #4287f5;
+}
+
+.white-text{
+    color:white
+}
+.white-text:hover{
+    text-decoration: none;
+    color:yellow
 }
