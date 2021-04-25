@@ -9,7 +9,8 @@ class HomePage extends Component{
     render(){
         return (
             <div>
-                <label>Home</label>
+                
+                <lable>Home</lable>
             </div>
             
           );
