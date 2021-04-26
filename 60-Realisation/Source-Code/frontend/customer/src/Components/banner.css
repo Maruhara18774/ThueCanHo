@@ -1,4 +1,51 @@
 .banner-background{
     height: 400px;
-    background: linear-gradient(to bottom, #add1ff 0%, #5bb6fb 100%);
+    background: linear-gradient(to top, #3380e6 0%, #94d1ff 84%);
+}
+.image-small{
+    width: 500px;
+    height: 250px;
+    border-radius: 10px;
+}
+.content-main{
+    padding-top: 50px;
+    padding-left: 300px;
+}
+.button-zone{
+    color: white;
+}
+.button-zone .bonus{
+    color: rgb(230, 227, 227);
+    text-decoration: none;
+}
+.button-zone .bonus:hover{
+    color: rgb(255, 255, 255);
+    text-decoration: underline;
+}
+.button-zone .button-prev{
+    margin-right: 100px;
+}
+.button-zone .button-next{
+    margin-left: 100px;
+}
+
+.button-zone .button-next:hover{
+    color:#3380E6;
+}
+.button-zone .button-prev:hover{
+    color:#3380E6;
+}
+
+.greeting{
+    color:white;
+    padding-right: 20px;
+    font-family: "Gill Sans", sans-serif;
+    text-align: left;
+}
+.greeting a{
+    text-decoration: underline;
+    color: white;
+}
+.greeting a:hover{
+    color:#3380E6;
 }
