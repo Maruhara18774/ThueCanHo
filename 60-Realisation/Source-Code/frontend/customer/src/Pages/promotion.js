@@ -1,16 +1,15 @@
 import {Component,createRef} from 'react';
 import Axios from 'axios';
-import Banner from '../Components/banner'
 
 
-class HomePage extends Component{
+class PromotionPage extends Component{
     constructor(props){
         super(props);
     }
     render(){
         return (
             <div>
-                <Banner/>
+                Promotion
             </div>
             
           );
@@ -18,4 +17,4 @@ class HomePage extends Component{
 
 }
 
-export default HomePage;
+export default PromotionPage;
