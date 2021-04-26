@@ -1,6 +1,7 @@
 .banner-background{
-    height: 400px;
+    height:450px;
     background: linear-gradient(to top, #3380e6 0%, #94d1ff 84%);
+    position: relative;
 }
 .image-small{
     width: 500px;
@@ -8,11 +9,18 @@
     border-radius: 10px;
 }
 .content-main{
-    padding-top: 50px;
-    padding-left: 300px;
+    width: 70%;
+    margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  
 }
 .button-zone{
     color: white;
+    margin-top: 10px;
 }
 .button-zone .bonus{
     color: rgb(230, 227, 227);
