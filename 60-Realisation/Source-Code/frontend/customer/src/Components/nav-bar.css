@@ -1,15 +1,22 @@
 .mrl10{
     margin-right: 10px;
 }
-
+.mrl5{
+    margin-right: 5px;
+}
+.mrl20{
+    margin-right: 20px;
+}
 .bg-main-nav{
-    background-color: #4287f5;
+    background-color: #ffffff;
 }
-
-.white-text{
-    color:white
+.sea-text{
+    color:#54c6ff;
 }
-.white-text:hover{
+.gray-text{
+    color:rgb(165, 165, 165);
+}
+.gray-text:hover{
     text-decoration: none;
-    color:yellow
+    color:#54c6ff;
 }

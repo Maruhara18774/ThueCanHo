@@ -1,5 +1,6 @@
 import {Component,createRef} from 'react';
 import Axios from 'axios';
+import Banner from '../Components/banner'
 
 
 class HomePage extends Component{
@@ -9,8 +10,7 @@ class HomePage extends Component{
     render(){
         return (
             <div>
-                
-                <lable>Home</lable>
+                <Banner/>
             </div>
             
           );

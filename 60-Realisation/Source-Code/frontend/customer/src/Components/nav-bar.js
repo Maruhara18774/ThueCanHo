@@ -4,7 +4,7 @@ import './nav-bar.css'
 
 function Navbar() {
   return (
-    <nav class="bg-main-nav navbar navbar-expand-lg navbar-dark">
+    <nav class="bg-main-nav navbar navbar-expand-lg navbar-light">
       <Link to="/">
         <div class="navbar-brand">
         <h3>
@@ -20,18 +20,18 @@ function Navbar() {
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav">
             <li class="nav-item">
-              <Link to="/apaLst" className="white-text mrl10"><span className="mrl10"><i class="fas fa-home"></i></span>Xem căn hộ</Link>
+              <Link to="/apaLst" className="gray-text mrl20"><span className="sea-text mrl5"><i class="fas fa-home"></i></span>Xem căn hộ</Link>
             </li>
             <li class="nav-item">
-              <Link to="/apaLst" className="white-text mrl10"><span className="mrl10"><i class="fas fa-chart-line"></i></span>Trending</Link>
+              <Link to="/apaLst" className="gray-text mrl20"><span className="sea-text mrl5"><i class="fas fa-chart-line"></i></span>Trending</Link>
             </li>
             <li class="nav-item">
-              <Link to="/apaLst" className="white-text mrl10"><span className="mrl10"><i class="fas fa-gift"></i></span>Khuyến mãi</Link>
+              <Link to="/apaLst" className="gray-text mrl20"><span className="sea-text mrl5"><i class="fas fa-gift"></i></span>Khuyến mãi</Link>
             </li>
           </ul>
         <ul class="navbar-nav flex-row ml-md-auto d-none d-md-flex">
           <li class="nav-item active">
-            <Link to="/login" className="white-text"><span className="mrl10"><i class="far fa-user"></i></span>Login</Link>
+            <Link to="/login" className="gray-text mrl20"><span className="sea-text mrl5"><i class="far fa-user"></i></span>Login</Link>
           </li>
         </ul>
       </div>
