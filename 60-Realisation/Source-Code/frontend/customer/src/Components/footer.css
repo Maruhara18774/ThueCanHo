@@ -11,7 +11,7 @@
     vertical-align: text-top;
   }
   .footer-bg .main .partner-button{
-      padding: 5px 10px 5px 10px;
+      padding: 10px 20px 10px 20px;
     border-style: solid;
     border-width: 1px;
     border-color: white;
@@ -50,12 +50,18 @@
       margin: 0px;
       padding: 0px;
     list-style-type: none;
+    
   }
   .footer-bg .main ul li{
     margin-top: 5px;
+    
 }
-.footer-bg .main ul li:hover{
+.footer-bg .main ul li a:hover{
     color: #3380E6;
+}
+.footer-bg .main ul li a{
+  text-decoration: none;
+    color: white;
 }
   .footer-bg .main .block{
       padding: 20px 20px 20px 20px;
@@ -66,16 +72,21 @@
   }
   .footer-bg .main .contact a{
     text-decoration: none;
+    
   }
   .footer-bg .main .contact .twitter:hover{
+    cursor: pointer;
       color: #3380E6;
   }
   .footer-bg .main .contact .facebook:hover{
+    cursor: pointer;
     color: #73aefc;
 }
 .footer-bg .main .contact .instagram:hover{
+  cursor: pointer;
     color: #f765fc;
 }
 .footer-bg .main .contact .youtube:hover{
+  cursor: pointer;
     color: #f53232;
 }

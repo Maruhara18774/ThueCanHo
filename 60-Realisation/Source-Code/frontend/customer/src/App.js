@@ -5,6 +5,7 @@ import Login from './Components/login.js';
 import ListApartment from './Components/show-apartment';
 import HomePage from './Pages/home'
 import FooterCustom from './Components/footer'
+import PromotionPage from './Pages/promotion'
 
 
 function App() {
@@ -22,6 +23,7 @@ function App() {
         <Switch>
           <Route path="/login" component={Login}></Route>
           <Route path="/apaLst" component={ListApartment}></Route>
+          <Route path="/promotion" component={PromotionPage}></Route>
           <Route path="/" exact component={HomePage}></Route>
         </Switch>
       </Router>

@@ -26,7 +26,7 @@ function Navbar() {
               <Link to="/apaLst" className="gray-text mrl20"><span className="sea-text mrl5"><i class="fas fa-chart-line"></i></span>Trending</Link>
             </li>
             <li class="nav-item">
-              <Link to="/apaLst" className="gray-text mrl20"><span className="fire-text mrl5"><i class="fas fa-gift"></i></span>Khuyến mãi</Link>
+              <Link to="/promotion" className="gray-text mrl20"><span className="fire-text mrl5"><i class="fas fa-gift"></i></span>Khuyến mãi</Link>
             </li>
           </ul>
         <ul class="navbar-nav flex-row ml-md-auto d-none d-md-flex">
