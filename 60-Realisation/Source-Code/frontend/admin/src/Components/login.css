@@ -24,7 +24,7 @@ h2{
     margin: 2px auto;
     font-weight: 500;
 }
-.box-login input[type='email'],.box input[type='password']{
+.box-login input[type='text'],.box input[type='password']{
     border: 0;
     background: none;
     text-align: center;
@@ -37,7 +37,7 @@ h2{
     margin: 2px auto;
 }
 
-.box-login input[type ='email']:focus,.box-login input[ type='password']:focus{
+.box-login input[type ='text']:focus,.box-login input[ type='password']:focus{
     border-color: #cfd1d2;
 }
 .box input[type='submit']{

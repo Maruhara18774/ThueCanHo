@@ -1,0 +1,62 @@
+{
+    "users":
+        [
+            {
+              "Id": 1,
+              "Name": "Nguyễn Văn A",
+              "Username": "nguyenvana",
+              "Email": "nguyenvana@gmail.com",
+              "Phone": "0101010101",
+              "Address": "HCM "
+            },
+            {
+              "id": 2,
+              "Name": "Nguyễn Văn A",
+              "Username": "nguyenvana",
+              "Email": "nguyenvana@gmail.com",
+              "Phone": "0101010101",
+              "Address": "HCM "
+            },
+            {
+              "id": 3,
+              "Name": "Nguyễn Văn A",
+              "Username": "nguyenvana",
+              "Email": "nguyenvana@gmail.com",
+              "Phone": "0101010101",
+              "Address": "HCM "
+            },
+            {
+              "id": 4,
+              "Name": "Nguyễn Văn A",
+              "Username": "nguyenvana",
+              "Email": "nguyenvana@gmail.com",
+              "Phone": "0101010101",
+              "Address": "HCM "
+            },
+            {
+              "id": 5,
+              "Name": "Nguyễn Văn A",
+              "Username": "nguyenvana",
+              "Email": "nguyenvana@gmail.com",
+              "Phone": "0101010101",
+              "Address": "HCM "
+            },
+            {
+              "id": 6,
+              "Name": "Nguyễn Văn A",
+              "Username": "nguyenvana",
+              "Email": "nguyenvana@gmail.com",
+              "Phone": "0101010101",
+              "Address": "HCM "
+            },
+            {
+              "id": 7,
+              "Name": "Nguyễn Văn A",
+              "Username": "nguyenvana",
+              "Email": "nguyenvana@gmail.com",
+              "Phone": "0101010101",
+              "Address": "HCM "
+            }
+          ]
+    
+}

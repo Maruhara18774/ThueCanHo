@@ -1,45 +1,89 @@
-import React, {useState} from 'react'
-import {Link} from 'react-router-dom'
-import * as FaIcons from 'react-icons/fa'
-import * as AiIcons from 'react-icons/ai'
-import { SidebarData } from './sidebarData'
-import './navbar.css'
-import { IconContext} from 'react-icons'
+import React, { Component } from 'react'
+import { Link, NavLink,Redirect } from 'react-router-dom'
 
-function Navbar() {
-    const [sidebar, setSidebar] = useState(false)
+export default class Navbar extends Component {
+    constructor(props){
+        super(props)
+        this.state ={
 
-    //Hàm xử lí đóng / mở Sidebar
-    const showSidebar = () => setSidebar(!sidebar)
-    return (
-        <>
-        <IconContext.Provider value={{color: '#fff'}}>
-        <div className="navbar">
-            <Link to="#" className="menu-bars">
-                <FaIcons.FaBars onClick={showSidebar}/>
-            </Link>
-        </div>
-        <nav className={sidebar ? 'nav-menu active': 'nav-menu'}>
-            <ul className='nav-menu-items' onClick={showSidebar}>
-                <li className='navbar-toggle'>
-                    <Link to="#" className='menu-bars'>
-                        <FaIcons.FaAngleLeft/>
-                    </Link>
-                </li>
-                {SidebarData.map((item, index) => {
-                    return (
-                        <li key={index} className= {item.cName}>
-                            <Link to={item.path}>
-                                {item.icon}
-                                <span>{item.title}</span>
-                            </Link>
-                        </li>
-                    )
-                })}
-            </ul>
-        </nav>
-        </IconContext.Provider>
-        </>
-    )
+        }
+        // const token = localStorage.getItem("token")
+
+         let loggedIn = true
+        // if( token == null){
+        //     loggedIn = false
+        // }
+
+        this.state ={
+             loggedIn
+        }
+    }
+    render() {
+        if( this.state.loggedIn === false){
+             return <Redirect to='/login'/>
+         }
+        return (
+            <div>
+                <nav className="navbar navbar-expand-lg navbar-dark bg-primary">
+                    <div className="container">
+                        <span className="navbar-brand">ADMIN MANAGER</span>
+
+                        <div className="collapse navbar-collapse">
+                            <ul className="navbar-nav mr-auto">
+                                <li className="nav-item">
+                                    <NavLink className="nav-link" exact to="/account">Account</NavLink>
+                                </li>
+                                <li className="nav-item">
+                                    <NavLink className="nav-link" exact to="/trending">Trending</NavLink>
+                                </li>
+                                <li className="nav-item">
+                                    <NavLink className="nav-link" exact to="/report">Report</NavLink>
+                                </li>
+                            </ul>
+                        </div>
+                        <Link className="btn btn-outline-light mx-2" to="/login">Login</Link>
+                        <Link className="btn btn-outline-light" to="/login">Logout</Link>
+                        {/* <Link className="btn btn-outline-light" to="/users/add">Add Account</Link> */}
+                    </div>
+                </nav>
+            </div>
+        )
+    }
 }
-export default Navbar
+
+// import React, { Component } from 'react'
+// import {Link, NavLink } from 'react-router-dom'
+
+// class Navbar extends Component {
+//     constructor(props) {
+//         super(props)
+//         this.state = {}
+//     }
+//     render() {
+//         return (
+//             <div clickLogout ={this.logout}>
+//                 <nav className="navbar navbar-expand-lg navbar-dark bg-primary">
+//                     <div className="container">
+//                         <Link exact path="/admin"><span className="navbar-brand">ADMIN MANAGER</span></Link>
+
+//                         <div className="collapse navbar-collapse">
+//                             <ul className="navbar-nav mr-auto">/                                 
+//                                 <li className="nav-item">
+//                                      <NavLink className="nav-link" exact to="/admin/account">Account</NavLink>
+//                                 </li>
+//                                  <li className="nav-item">
+//                                      <NavLink className="nav-link" exact to="/admin/trending">Trending</NavLink>
+//                                  </li>
+//                                  <li className="nav-item">
+//                                      <NavLink className="nav-link" exact to="/admin/report">Report</NavLink>
+//                                 </li>
+//                              </ul>
+//                          </div>
+//                          <button onClick ={() => this.props.clickLogout()}>Logout</button>
+//                     </div>
+//                 </nav>
+//             </div>
+//         )
+//     }
+// }
+//export default Navbar
