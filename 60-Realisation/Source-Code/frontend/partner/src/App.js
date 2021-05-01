@@ -6,6 +6,7 @@ import PersonalDetail from './components/pages/PersonalDetail'
 import PasswordCheck from './components/pages/PasswordCheck'
 
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+
 function App() {
   return (
     <>
