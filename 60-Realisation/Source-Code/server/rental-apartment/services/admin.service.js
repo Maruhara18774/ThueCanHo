@@ -10,7 +10,7 @@ const dbContext = require('../src/DBContext')();
 
 
 module.exports = {
-	name: "customer",
+	name: "admin",
 
 	/**
 	 * Settings

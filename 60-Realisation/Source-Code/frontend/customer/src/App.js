@@ -10,10 +10,6 @@ import PromotionPage from './Pages/promotion'
 function App() {
   return (
     <div className="App">
-      
-      
-      
-      
       <Router>
         <div class="fixed-top">
           <Navbar/>
