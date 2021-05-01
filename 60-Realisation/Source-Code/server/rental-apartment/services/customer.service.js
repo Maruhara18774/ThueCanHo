@@ -136,7 +136,7 @@ module.exports = {
 		},
 		getListCity: {
 			rest: {
-				method: "GET",
+				method: "POST",
 				path: "/getListCity"
 			},
 			async handler(ctx){
@@ -146,6 +146,34 @@ module.exports = {
 				return listCity;
 				
 			}
+		},
+		getListDistrict:{
+			rest:{
+				method: "POST",
+				path: "/getListDistrict"
+			},
+			params:{
+				cityId: {type:"string"}
+			},
+			async handler({action,params,meta, ... ctx}){
+				const {cityId} = params;
+                const checkCity = await dbContext.QUAN.findAll({
+                    where: {
+                        ID_THANHPHO: cityId
+                      }
+                });
+				return checkCity;
+			},
+		},
+		getListStyle:{
+			rest:{
+				method: "POST",
+				path: "/getListStyle"
+			},
+			async handler({action,params,meta, ... ctx}){
+                const checkStyle = await dbContext.STYLE.findAll();
+				return checkStyle;
+			},
 		},
 		/**
 		 * Welcome, a username
