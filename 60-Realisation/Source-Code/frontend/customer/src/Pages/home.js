@@ -1,6 +1,7 @@
 import {Component,createRef} from 'react';
 import Axios from 'axios';
 import Banner from '../Components/banner'
+import FooterCustom from '../Components/footer'
 
 
 class HomePage extends Component{
@@ -11,6 +12,7 @@ class HomePage extends Component{
         return (
             <div>
                 <Banner/>
+                <FooterCustom/>
             </div>
             
           );

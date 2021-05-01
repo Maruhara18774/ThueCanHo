@@ -86,7 +86,7 @@ module.exports = {
 				return checkList;
 			}
 		},
-        getDetailApartment: {
+		getDetailApartment: {
 			rest: {
 				method: "GET",
 				path: "/getDetailApartment"
@@ -108,6 +108,7 @@ module.exports = {
 				return checkDetail;
 			}
 		},
+        
 		searchApartment: {
 			rest: {
 				method: "POST",
@@ -131,6 +132,19 @@ module.exports = {
                 // localhost - 1400 
                 // npx sequelize-auto -h localhost -d RENTALAPARTMENT -u sa -x !Passw0rd -p 1400 -e mssql -o "./src/models"    
 				return checkDetail;
+			}
+		},
+		getListCity: {
+			rest: {
+				method: "GET",
+				path: "/getListCity"
+			},
+			async handler(ctx){
+				console.log("Im here")
+				const listCity = dbContext.THANHPHO.findAll();
+				
+				return listCity;
+				
 			}
 		},
 		/**
