@@ -1,7 +1,7 @@
 import {Component} from 'react';
 import Axios from 'axios';
 
-class SearchForm extends Component{
+class SearchBox extends Component{
     constructor(props){
         super(props);
         this.state = {
@@ -18,19 +18,8 @@ class SearchForm extends Component{
     })
     render(){
         return (
-            <div>
-                <div className="Apartments">
-            {this.state.myList.map((val,key)=>{
-                console.log(val);
-                return(
-                  <div className="AnApartment">
-                      <hr/>
-                      <h1>{val.THUTU_NHA} - {val.ID_NHA} - {val.ID_TAIKHOAN}</h1>
-                      <p>Khu tiếp tân: {val.KHUTIEPTAN === true ? "co" : "khong"}</p>
-                  </div>
-              )
-            })}
-      </div>
+            <div className="seachingBoxWrap">
+                <input placeholder="Tìm kiếm ..."/>
             </div>
             
           );
@@ -38,4 +27,4 @@ class SearchForm extends Component{
 
 }
 
-export default SearchForm;
+export default SearchBox;
