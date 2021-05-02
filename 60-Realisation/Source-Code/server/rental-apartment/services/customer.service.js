@@ -108,30 +108,90 @@ module.exports = {
 				return checkDetail;
 			}
 		},
-        
-		searchApartment: {
+        searchApartmentWithText: {
 			rest: {
 				method: "POST",
-				path: "/searchApartment"
+				path: "/searchApartmentWithText"
+			},
+			params:{
+				text: {type:"string"}
 			},
 			async handler({action,params,meta, ... ctx}) {
-                const {id, idOwner, address} = params;
-                const checkDetail = await dbContext.NHA.findAll({
-                    where: {
-                        [Op.or]:[
-							{ID_NHA: id},
-							{ID_TAIKHOAN: idOwner}
-						]
-                    }
-                });
-                if (checkDetail == null){
-                    return "Không có căn hộ này";
-                }
-                // Create account
-                // 1 54 28
-                // localhost - 1400 
-                // npx sequelize-auto -h localhost -d RENTALAPARTMENT -u sa -x !Passw0rd -p 1400 -e mssql -o "./src/models"    
-				return checkDetail;
+                const {text} = params;
+				const lsWords = text.split(" ");
+				const checkList = await dbContext.NHA.findAll();
+				const result = [];
+				checkList.forEach(element => {
+					if(lswords.some(r => element.ID_NHA.include(r)|| element.TEN_DUONG.include(r))){
+						result.push(element);
+					}
+					else{
+						const checkDistrict = await dbContext.QUAN.findOne({
+							where: {
+								ID_QUAN: element.ID_QUAN
+							}
+						})
+						if(lswords.some(r => checkDistrict.TEN_QUAN.include(r))){
+							result.push(element);
+						}
+					}
+				});
+				
+				return result;
+			}
+		},
+		searchApartmentWithDetail: {
+			rest: {
+				method: "POST",
+				path: "/searchApartmentWithDetail"
+			},
+			params:{
+				idDistrict: {type:"string"},
+				idStyle: {type:"string"}
+			},
+			async handler({action,params,meta, ... ctx}) {
+                const {idDistrict, idStyle} = params;
+				const result = [];
+				if (idDistrict!= 0){
+					const checkList = await dbContext.NHA.findAll({
+						where: {
+							ID_QUAN: idDistrict
+						}
+					});
+					if(idStyle!=0){
+						checkList.forEach(element => {
+							const checkStyle = await dbContext.STYLENHA.findOne({
+								where: {
+									ID_NHA: element.ID_NHA
+								},
+							})
+							if(checkStyle!= null){
+								result.push(element);
+							}
+						});  
+					}
+					else{
+						result = checkList;
+					}
+				}
+                else{
+					const checkList = await dbContext.NHA.findAll();
+					if(idStyle!=0){
+						checkList.forEach(element => {
+							const checkStyle = await dbContext.STYLENHA.findOne({
+								where: {
+									ID_NHA: element.ID_NHA
+								},
+							})
+							if(checkStyle!= null){
+								result.push(element);
+							}
+						});  
+					}
+				}
+				
+				
+				return result;
 			}
 		},
 		getListCity: {
