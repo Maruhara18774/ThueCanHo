@@ -2,6 +2,8 @@ import { Component } from 'react';
 import Axios from 'axios';
 import SearchBox from '../Components/search-apartment';
 import SelectBar from '../Components/select-bar';
+import './show-apartment.css';
+import InfoCard from '../Components/apartment-info-card';
 
 class ListApartment extends Component {
     constructor(props) {
@@ -21,31 +23,24 @@ class ListApartment extends Component {
     render() {
         return (
 
-            <div>
-                <table>
-                    <tr>
-                        <td colSpan="2">
-                            <SelectBar />
-                        </td>
-                        <td>
-                            <SearchBox />
-                        </td>
-                    </tr>
-                    <tr>
-                        <div className="Apartments">
-                            {this.state.myList.map((val, key) => {
-                                return (
-                                    <div className="AnApartment">
-                                        <hr />
-                                        <h1>{val.THUTU_NHA} - {val.ID_NHA} - {val.ID_TAIKHOAN}</h1>
-                                        <p>Khu tiếp tân: {val.KHUTIEPTAN === true ? "co" : "khong"}</p>
-                                    </div>
-                                )
-                            })}
-                        </div>
-                    </tr>
-                </table>
-
+            <div className="lsApartments">
+                <div className="search">
+                    <div className="box">
+                        <SearchBox list={this.state.myList}/>
+                    </div>
+                    <div className="bar">
+                        <SelectBar list={this.state.myList}/>
+                    </div>
+                </div>
+                <div className="mainListApm">
+                                {this.state.myList.map((val, key) => {
+                                    return (
+                                        <div>
+                                            <InfoCard model={val}/>
+                                        </div>
+                                    )
+                                })}
+                            </div>
 
             </div>
 

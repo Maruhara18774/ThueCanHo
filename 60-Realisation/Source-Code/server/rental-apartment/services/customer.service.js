@@ -108,6 +108,7 @@ module.exports = {
 				return checkDetail;
 			}
 		},
+		/*
         searchApartmentWithText: {
 			rest: {
 				method: "POST",
@@ -147,10 +148,11 @@ module.exports = {
 			},
 			params:{
 				idDistrict: {type:"string"},
-				idStyle: {type:"string"}
+				idStyle: {type:"string"},
+				minBudget: {type: "string"}
 			},
 			async handler({action,params,meta, ... ctx}) {
-                const {idDistrict, idStyle} = params;
+                const {idDistrict, idStyle,minBudget} = params;
 				const result = [];
 				if (idDistrict!= 0){
 					const checkList = await dbContext.NHA.findAll({
@@ -166,12 +168,28 @@ module.exports = {
 								},
 							})
 							if(checkStyle!= null){
-								result.push(element);
+								const checkPrice = await dbContext.BANGGIA.findOne({
+									where: {
+										ID_BANGGIA: element.ID_BANGGIA
+									}
+								})
+								if(checkPrice.MUCGIA_MOT>= minBudget){
+									result.push(element);
+								}
 							}
 						});  
 					}
 					else{
-						result = checkList;
+						checkList.forEach(element => {
+							const checkPrice = await dbContext.BANGGIA.findOne({
+								where: {
+									ID_BANGGIA: element.ID_BANGGIA
+								}
+							})
+							if(checkPrice.MUCGIA_MOT>= minBudget){
+								result.push(element);
+							}
+						});  
 					}
 				}
                 else{
@@ -184,6 +202,25 @@ module.exports = {
 								},
 							})
 							if(checkStyle!= null){
+								const checkPrice = await dbContext.BANGGIA.findOne({
+									where: {
+										ID_BANGGIA: element.ID_BANGGIA
+									}
+								})
+								if(checkPrice.MUCGIA_MOT>= minBudget){
+									result.push(element);
+								}
+							}
+						});  
+					}
+					else{
+						checkList.forEach(element => {
+							const checkPrice = await dbContext.BANGGIA.findOne({
+								where: {
+									ID_BANGGIA: element.ID_BANGGIA
+								}
+							})
+							if(checkPrice.MUCGIA_MOT>= minBudget){
 								result.push(element);
 							}
 						});  
@@ -194,13 +231,13 @@ module.exports = {
 				return result;
 			}
 		},
+		*/
 		getListCity: {
 			rest: {
 				method: "POST",
 				path: "/getListCity"
 			},
 			async handler(ctx){
-				console.log("Im here")
 				const listCity = dbContext.THANHPHO.findAll();
 				
 				return listCity;

@@ -1,0 +1,16 @@
+.apartment-info-card{
+    border-style: solid;
+    border-radius: 10px;
+    border-color: gainsboro;
+    border-width: 1px;
+    position: relative;
+    margin-bottom: 20px;
+    height: 150px;
+}
+.apartment-info-card .imageMain{
+    width: 147px;
+    float: left;
+    position: inherit;
+    z-index: -1;
+    border-radius: 10px;
+}
