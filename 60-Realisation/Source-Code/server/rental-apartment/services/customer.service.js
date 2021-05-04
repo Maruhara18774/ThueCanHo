@@ -108,7 +108,7 @@ module.exports = {
 				return checkDetail;
 			}
 		},
-		/*
+		
         searchApartmentWithText: {
 			rest: {
 				method: "POST",
@@ -118,29 +118,102 @@ module.exports = {
 				text: {type:"string"}
 			},
 			async handler({action,params,meta, ... ctx}) {
-                const {text} = params;
+                var {text} = params;
+				text = text.toUpperCase()
 				const lsWords = text.split(" ");
-				const checkList = await dbContext.NHA.findAll();
-				const result = [];
-				checkList.forEach(element => {
-					if(lswords.some(r => element.ID_NHA.include(r)|| element.TEN_DUONG.include(r))){
-						result.push(element);
-					}
-					else{
-						const checkDistrict = await dbContext.QUAN.findOne({
-							where: {
-								ID_QUAN: element.ID_QUAN
-							}
-						})
-						if(lswords.some(r => checkDistrict.TEN_QUAN.include(r))){
-							result.push(element);
+				const lsApartment = await dbContext.NHA.findAll();
+				const lsDistrict = await dbContext.QUAN.findAll();
+				const lsCity = await dbContext.THANHPHO.findAll();
+				var listName = [];
+				var output = [];
+				lsApartment.forEach(element => {
+					var result = element.ID_NHA + " "+element.SONHA + " " +element.TEN_DUONG +" ";
+					var quan;
+					for(var i=0;i<lsDistrict.length;i++){
+						var element2 = lsDistrict[i];
+						if(element2.ID_QUAN == element.ID_QUAN){
+							quan = element2;
+							result += element2.TEN_QUAN +" ";
+							break;
 						}
 					}
+					for(var i=0;i<lsCity.length;i++){
+						var element2 = lsCity[i];
+						if(element2.ID_THANHPHO == quan.ID_THANHPHO){
+							result += element2.TEN_THANHPHO +" ";
+							break;
+						}
+					}
+					listName.push(result.toUpperCase());
 				});
+				for(var i = 0 ;i<listName.length;i++){
+					const lsWordKey = listName[i].split(" ");
+					var check = false;
+					for(var k = 0;k<lsWordKey.length;k++){
+						const wordKey = lsWordKey[k];
+						for(var j = 0;j<lsWords.length;j++){
+							const word = lsWords[j];
+							if(word == wordKey){
+								check = true;
+								break;
+							}
+							
+						}
+						if(check){
+							break;
+						}
+					}
+					if(check){
+						output.push(lsApartment[i]);
+					}
+				}
 				
-				return result;
+				return output;
 			}
 		},
+		getNameApartment:{
+			rest: {
+				method: "POST",
+				path: "/getNameApartment"
+			},
+			params:{
+				id: {type:"string"}
+			},
+			async handler({action,params,meta, ... ctx}) {
+                var {id} = params;
+				const lsApartment = await dbContext.NHA.findAll();
+				const lsDistrict = await dbContext.QUAN.findAll();
+				const lsCity = await dbContext.THANHPHO.findAll();
+				var quan;
+				var nha;
+				var output = "";
+				for(var i = 0;i<lsApartment.length;i++){
+					const element = lsApartment[i];
+					if(element.ID_NHA == id){
+						nha = element;
+						output += element.ID_NHA + " "+element.SONHA + " " +element.TEN_DUONG +" ";
+						break;
+					}
+				}
+				for(var i = 0;i<lsDistrict.length;i++){
+					const element = lsDistrict[i];
+					if(element.ID_QUAN == nha.ID_QUAN){
+						quan = element;
+						output += element.TEN_QUAN +" ";
+						break;
+					}
+				}
+				for(var i = 0;i<lsCity.length;i++){
+					const element = lsCity[i];
+					if(element.ID_THANHPHO == quan.ID_THANHPHO){
+						output += element.TEN_THANHPHO +" ";
+						break;
+					}
+				}
+				return output;
+			}
+		},
+		
 		searchApartmentWithDetail: {
 			rest: {
 				method: "POST",
@@ -153,85 +226,47 @@ module.exports = {
 			},
 			async handler({action,params,meta, ... ctx}) {
                 const {idDistrict, idStyle,minBudget} = params;
-				const result = [];
-				if (idDistrict!= 0){
-					const checkList = await dbContext.NHA.findAll({
-						where: {
-							ID_QUAN: idDistrict
+				var result = [];
+				if(idDistrict == 0&& idStyle == 0 && minBudget==0){
+					result = await dbContext.NHA.findAll();
+				}
+				else{
+					const lsApartment = await dbContext.NHA.findAll();
+					const lsPrice = await dbContext.BANGGIA.findAll();
+					lsApartment.forEach(element => {
+						for(var i=0;i<lsPrice.length;i++){
+							const element2 = lsPrice[i]; 
+							if((element.ID_BANGGIA == element2.ID_BANGGIA)&&(element2.MUCGIA_MOT>= minBudget)){
+								result.push(element);
+								break;
+							}
 						}
 					});
-					if(idStyle!=0){
-						checkList.forEach(element => {
-							const checkStyle = await dbContext.STYLENHA.findOne({
-								where: {
-									ID_NHA: element.ID_NHA
-								},
-							})
-							if(checkStyle!= null){
-								const checkPrice = await dbContext.BANGGIA.findOne({
-									where: {
-										ID_BANGGIA: element.ID_BANGGIA
-									}
-								})
-								if(checkPrice.MUCGIA_MOT>= minBudget){
-									result.push(element);
-								}
+					if(idDistrict!=0){
+						for(var i = result.length-1;i>=0;i--){
+							var element = result[i];
+							if(element.ID_QUAN != idDistrict){
+								result.pop(element);
 							}
-						});  
+						}
 					}
-					else{
-						checkList.forEach(element => {
-							const checkPrice = await dbContext.BANGGIA.findOne({
-								where: {
-									ID_BANGGIA: element.ID_BANGGIA
+					if(idStyle != 0){
+						const lsStyle = await dbContext.STYLENHA.findAll();
+						for(var i = result.length-1;i>=0;i--){
+							var element = result[i];
+							for(var i=0;i<lsStyle.length;i++) {
+								const element2 = lsStyle[i];
+								if(element.ID_NHA== element2.ID_NHA && element2.ID_STYLE != idStyle){
+									result.pop(element);
 								}
-							})
-							if(checkPrice.MUCGIA_MOT>= minBudget){
-								result.push(element);
 							}
-						});  
+						}
 					}
 				}
-                else{
-					const checkList = await dbContext.NHA.findAll();
-					if(idStyle!=0){
-						checkList.forEach(element => {
-							const checkStyle = await dbContext.STYLENHA.findOne({
-								where: {
-									ID_NHA: element.ID_NHA
-								},
-							})
-							if(checkStyle!= null){
-								const checkPrice = await dbContext.BANGGIA.findOne({
-									where: {
-										ID_BANGGIA: element.ID_BANGGIA
-									}
-								})
-								if(checkPrice.MUCGIA_MOT>= minBudget){
-									result.push(element);
-								}
-							}
-						});  
-					}
-					else{
-						checkList.forEach(element => {
-							const checkPrice = await dbContext.BANGGIA.findOne({
-								where: {
-									ID_BANGGIA: element.ID_BANGGIA
-								}
-							})
-							if(checkPrice.MUCGIA_MOT>= minBudget){
-								result.push(element);
-							}
-						});  
-					}
-				}
-				
 				
 				return result;
 			}
 		},
-		*/
 		getListCity: {
 			rest: {
 				method: "POST",
