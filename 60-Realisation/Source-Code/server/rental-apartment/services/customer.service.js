@@ -212,6 +212,28 @@ module.exports = {
 				return output;
 			}
 		},
+		getApartmentPrice:{
+			rest: {
+				method: "POST",
+				path: "/getApartmentPrice"
+			},
+			params:{
+				idPrice: {type:"string"}
+			},
+			async handler({action,params,meta, ... ctx}) {
+                var {idPrice} = params;
+				const lsPrice = await dbContext.BANGGIA.findAll();
+				var output= 0;
+				for(var i=0;i<lsPrice.length;i++){
+					var element = lsPrice[i];
+					if(element.ID_BANGGIA== idPrice){
+						output = element.MUCGIA_MOT;
+						break;
+					}
+				}
+				return output;
+			}
+		},
 		getAddressApartment:{
 			rest: {
 				method: "POST",

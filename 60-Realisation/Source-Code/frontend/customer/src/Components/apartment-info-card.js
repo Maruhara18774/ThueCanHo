@@ -9,10 +9,12 @@ class InfoCard extends Component {
         this.state={
             image: [],
             name:"",
-            address: ""
+            address: "",
+            price: ""
         }
         this.getName();
         this.getAddress();
+        this.getPrice();
     }
     getImage = ()=>{
         Axios.post('http://localhost:33456/api/customer/getImageOfApartment',{idApartment: this.props.model.ID_NHA}).then(
@@ -36,16 +38,37 @@ class InfoCard extends Component {
                 this.setState(this);
             });
     }
+    getPrice = () => {
+        Axios.post('http://localhost:33456/api/customer/getApartmentPrice',{idPrice: this.props.model.ID_BANGGIA.toString()}).then(
+            (response) => {
+                this.state.price = response.data;
+                this.setState(this);
+            });
+    }
     render() {
         return (
             <div className="apartment-info-card">
-                <img src={imageDefault} className="imageMain"></img>
-                <h5>{this.state.name}</h5>
-                <div>
-                    <i class="fas fa-map-marker-alt"></i>
-                    <p>{this.state.address}</p>
+                <div class="container">
+                    <img src={imageDefault} className="imageMain"></img>
+                    <div>
+                        <div class="row">
+                            <div class="col-md-7 left">
+
+                                <h5 className="title">{this.state.name}</h5>
+                                <p className="tag">Căn hộ</p>
+                                <p className="location">
+                                    <span><i class="fas fa-map-marker-alt"></i></span>
+                                    {this.state.address}
+                                </p>
+                            </div>
+                            <div class="col-md-4 right">
+                                {this.props.model.KHUTIEPTAN === true ? <p className="bonus"><span className="mrg5"><i class="fas fa-clinic-medical"></i></span> Có bàn tiếp tân</p>:<div className="blank"></div>}
+                                <p className="original">{(this.state.price * 110) / 100} VNĐ</p>
+                                <p className="reduce">{this.state.price} VNĐ</p></div>
+                        </div>
+                    </div>
                 </div>
-                <p>Khu tiếp tân: {this.props.model.KHUTIEPTAN === true ? "co" : "khong"}</p>
+
             </div>
         );
     }
