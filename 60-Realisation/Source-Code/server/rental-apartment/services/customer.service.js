@@ -108,44 +108,267 @@ module.exports = {
 				return checkDetail;
 			}
 		},
-        
-		searchApartment: {
+		
+        searchApartmentWithText: {
 			rest: {
 				method: "POST",
-				path: "/searchApartment"
+				path: "/searchApartmentWithText"
+			},
+			params:{
+				text: {type:"string"}
 			},
 			async handler({action,params,meta, ... ctx}) {
-                const {id, idOwner, address} = params;
-                const checkDetail = await dbContext.NHA.findAll({
-                    where: {
-                        [Op.or]:[
-							{ID_NHA: id},
-							{ID_TAIKHOAN: idOwner}
-						]
-                    }
-                });
-                if (checkDetail == null){
-                    return "Không có căn hộ này";
-                }
-                // Create account
-                // 1 54 28
-                // localhost - 1400 
-                // npx sequelize-auto -h localhost -d RENTALAPARTMENT -u sa -x !Passw0rd -p 1400 -e mssql -o "./src/models"    
-				return checkDetail;
+                var {text} = params;
+				text = text.toUpperCase()
+				const lsWords = text.split(" ");
+				const lsApartment = await dbContext.NHA.findAll();
+				const lsDistrict = await dbContext.QUAN.findAll();
+				const lsCity = await dbContext.THANHPHO.findAll();
+				var listName = [];
+				var output = [];
+				lsApartment.forEach(element => {
+					var result = element.ID_NHA + " "+element.SONHA + " " +element.TEN_DUONG +" ";
+					var quan;
+					for(var i=0;i<lsDistrict.length;i++){
+						var element2 = lsDistrict[i];
+						if(element2.ID_QUAN == element.ID_QUAN){
+							quan = element2;
+							result += element2.TEN_QUAN +" ";
+							break;
+						}
+					}
+					for(var i=0;i<lsCity.length;i++){
+						var element2 = lsCity[i];
+						if(element2.ID_THANHPHO == quan.ID_THANHPHO){
+							result += element2.TEN_THANHPHO +" ";
+							break;
+						}
+					}
+					listName.push(result.toUpperCase());
+				});
+				for(var i = 0 ;i<listName.length;i++){
+					const lsWordKey = listName[i].split(" ");
+					var check = false;
+					for(var k = 0;k<lsWordKey.length;k++){
+						const wordKey = lsWordKey[k];
+						for(var j = 0;j<lsWords.length;j++){
+							const word = lsWords[j];
+							if(word == wordKey){
+								check = true;
+								break;
+							}
+							
+						}
+						if(check){
+							break;
+						}
+					}
+					if(check){
+						output.push(lsApartment[i]);
+					}
+				}
+				
+				return output;
+			}
+		},
+		getNameApartment:{
+			rest: {
+				method: "POST",
+				path: "/getNameApartment"
+			},
+			params:{
+				id: {type:"string"}
+			},
+			async handler({action,params,meta, ... ctx}) {
+                var {id} = params;
+				const lsApartment = await dbContext.NHA.findAll();
+				const lsDistrict = await dbContext.QUAN.findAll();
+				const lsCity = await dbContext.THANHPHO.findAll();
+				var quan;
+				var nha;
+				var output = "";
+				for(var i = 0;i<lsApartment.length;i++){
+					const element = lsApartment[i];
+					if(element.ID_NHA == id){
+						nha = element;
+						output += element.ID_NHA +" ";
+						break;
+					}
+				}
+				for(var i = 0;i<lsDistrict.length;i++){
+					const element = lsDistrict[i];
+					if(element.ID_QUAN == nha.ID_QUAN){
+						quan = element;
+						break;
+					}
+				}
+				for(var i = 0;i<lsCity.length;i++){
+					const element = lsCity[i];
+					if(element.ID_THANHPHO == quan.ID_THANHPHO){
+						output += element.TEN_THANHPHO +" ";
+						break;
+					}
+				}
+				return output;
+			}
+		},
+		getApartmentPrice:{
+			rest: {
+				method: "POST",
+				path: "/getApartmentPrice"
+			},
+			params:{
+				idPrice: {type:"string"}
+			},
+			async handler({action,params,meta, ... ctx}) {
+                var {idPrice} = params;
+				const lsPrice = await dbContext.BANGGIA.findAll();
+				var output= 0;
+				for(var i=0;i<lsPrice.length;i++){
+					var element = lsPrice[i];
+					if(element.ID_BANGGIA== idPrice){
+						output = element.MUCGIA_MOT;
+						break;
+					}
+				}
+				return output;
+			}
+		},
+		getAddressApartment:{
+			rest: {
+				method: "POST",
+				path: "/getAddressApartment"
+			},
+			params:{
+				id: {type:"string"}
+			},
+			async handler({action,params,meta, ... ctx}) {
+                var {id} = params;
+				const lsApartment = await dbContext.NHA.findAll();
+				const lsDistrict = await dbContext.QUAN.findAll();
+				const lsCity = await dbContext.THANHPHO.findAll();
+				var quan;
+				var nha;
+				var output = "";
+				for(var i = 0;i<lsApartment.length;i++){
+					const element = lsApartment[i];
+					if(element.ID_NHA == id){
+						nha = element;
+						output += element.TEN_DUONG +" ";
+						break;
+					}
+				}
+				for(var i = 0;i<lsDistrict.length;i++){
+					const element = lsDistrict[i];
+					if(element.ID_QUAN == nha.ID_QUAN){
+						quan = element;
+						output += element.TEN_QUAN +" ";
+						break;
+					}
+				}
+				for(var i = 0;i<lsCity.length;i++){
+					const element = lsCity[i];
+					if(element.ID_THANHPHO == quan.ID_THANHPHO){
+						output += element.TEN_THANHPHO +" ";
+						break;
+					}
+				}
+				return output;
+			}
+		},
+		
+		searchApartmentWithDetail: {
+			rest: {
+				method: "POST",
+				path: "/searchApartmentWithDetail"
+			},
+			params:{
+				idDistrict: {type:"string"},
+				idStyle: {type:"string"},
+				minBudget: {type: "string"}
+			},
+			async handler({action,params,meta, ... ctx}) {
+                const {idDistrict, idStyle,minBudget} = params;
+				var result = [];
+				if(idDistrict == 0&& idStyle == 0 && minBudget==0){
+					result = await dbContext.NHA.findAll();
+				}
+				else{
+					const lsApartment = await dbContext.NHA.findAll();
+					const lsPrice = await dbContext.BANGGIA.findAll();
+					lsApartment.forEach(element => {
+						for(var i=0;i<lsPrice.length;i++){
+							const element2 = lsPrice[i]; 
+							if((element.ID_BANGGIA == element2.ID_BANGGIA)&&(element2.MUCGIA_MOT>= minBudget)){
+								result.push(element);
+								break;
+							}
+						}
+					});
+					if(idDistrict!=0){
+						for(var i = result.length-1;i>=0;i--){
+							var element = result[i];
+							if(element.ID_QUAN != idDistrict){
+								result.pop(element);
+							}
+						}
+					}
+					if(idStyle != 0){
+						const lsStyle = await dbContext.STYLENHA.findAll();
+						for(var i = result.length-1;i>=0;i--){
+							var element = result[i];
+							for(var i=0;i<lsStyle.length;i++) {
+								const element2 = lsStyle[i];
+								if(element.ID_NHA== element2.ID_NHA && element2.ID_STYLE != idStyle){
+									result.pop(element);
+								}
+							}
+						}
+					}
+				}
+				
+				return result;
 			}
 		},
 		getListCity: {
 			rest: {
-				method: "GET",
+				method: "POST",
 				path: "/getListCity"
 			},
 			async handler(ctx){
-				console.log("Im here")
 				const listCity = dbContext.THANHPHO.findAll();
 				
 				return listCity;
 				
 			}
+		},
+		getListDistrict:{
+			rest:{
+				method: "POST",
+				path: "/getListDistrict"
+			},
+			params:{
+				cityId: {type:"string"}
+			},
+			async handler({action,params,meta, ... ctx}){
+				const {cityId} = params;
+                const checkCity = await dbContext.QUAN.findAll({
+                    where: {
+                        ID_THANHPHO: cityId
+                      }
+                });
+				return checkCity;
+			},
+		},
+		getListStyle:{
+			rest:{
+				method: "POST",
+				path: "/getListStyle"
+			},
+			async handler({action,params,meta, ... ctx}){
+                const checkStyle = await dbContext.STYLE.findAll();
+				return checkStyle;
+			},
 		},
 		/**
 		 * Welcome, a username
