@@ -56,6 +56,16 @@ class SelectBar extends Component {
     this.state.minBudget = event.target.value;
     this.setState(this);
   }
+  sortApartment = () => {
+    console.log(this.state.idDistrict + " - " + this.state.idStyle + " - " + this.state.minBudget);
+    Axios.post('http://localhost:33456/api/customer/searchApartmentWithDetail', {
+      "idDistrict": this.state.idDistrict.toString(),
+      "idStyle": this.state.idStyle.toString(),
+      "minBudget": this.state.minBudget.toString()
+    }).then((response) => {
+      this.props.callback(response.data);
+    });
+  }
   render() {
     return (
       <div className="selectBar-zone">
@@ -103,7 +113,7 @@ class SelectBar extends Component {
           <tr className="spacing"/>
           <tr>
             <td colSpan="2">
-            <div className="button">Lọc kết quả</div>
+            <div className="button" onClick={()=>this.sortApartment()}>Lọc kết quả</div>
             </td>
             
           </tr>

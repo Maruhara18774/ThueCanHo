@@ -20,16 +20,20 @@ class ListApartment extends Component {
                 this.setState(this);
             });
     })
+    handleCallback = (newList) =>{
+        this.state.myList = newList;
+        this.setState(this);
+    }
     render() {
         return (
 
             <div className="lsApartments">
                 <div className="search">
                     <div className="box">
-                        <SearchBox list={this.state.myList}/>
+                        <SearchBox callback={this.handleCallback}/>
                     </div>
                     <div className="bar">
-                        <SelectBar list={this.state.myList}/>
+                        <SelectBar callback={this.handleCallback}/>
                     </div>
                 </div>
                 <div className="mainListApm">

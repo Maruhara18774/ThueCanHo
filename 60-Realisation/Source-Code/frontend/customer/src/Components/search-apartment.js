@@ -6,7 +6,6 @@ class SearchBox extends Component{
     constructor(props){
         super(props);
         this.state = {
-            myList : [],
             searchText: ""
         };
         this.getList()
@@ -14,11 +13,9 @@ class SearchBox extends Component{
     getList = () =>{
         Axios.post('http://localhost:33456/api/customer/searchApartmentWithText',{text: this.state.searchText}).then(
             (response) => {
-                this.state.myList = response.data;
-                this.setState(this);
+                this.props.callback(response.data);
             });
         }
-        //https://stackoverflow.com/questions/38394015/how-to-pass-data-from-child-component-to-its-parent-in-reactjs
     setSearchText=(event)=>{
         this.state.searchText=event.target.value;
     }

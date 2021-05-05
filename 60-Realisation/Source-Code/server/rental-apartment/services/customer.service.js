@@ -191,7 +191,48 @@ module.exports = {
 					const element = lsApartment[i];
 					if(element.ID_NHA == id){
 						nha = element;
-						output += element.ID_NHA + " "+element.SONHA + " " +element.TEN_DUONG +" ";
+						output += element.ID_NHA +" ";
+						break;
+					}
+				}
+				for(var i = 0;i<lsDistrict.length;i++){
+					const element = lsDistrict[i];
+					if(element.ID_QUAN == nha.ID_QUAN){
+						quan = element;
+						break;
+					}
+				}
+				for(var i = 0;i<lsCity.length;i++){
+					const element = lsCity[i];
+					if(element.ID_THANHPHO == quan.ID_THANHPHO){
+						output += element.TEN_THANHPHO +" ";
+						break;
+					}
+				}
+				return output;
+			}
+		},
+		getAddressApartment:{
+			rest: {
+				method: "POST",
+				path: "/getAddressApartment"
+			},
+			params:{
+				id: {type:"string"}
+			},
+			async handler({action,params,meta, ... ctx}) {
+                var {id} = params;
+				const lsApartment = await dbContext.NHA.findAll();
+				const lsDistrict = await dbContext.QUAN.findAll();
+				const lsCity = await dbContext.THANHPHO.findAll();
+				var quan;
+				var nha;
+				var output = "";
+				for(var i = 0;i<lsApartment.length;i++){
+					const element = lsApartment[i];
+					if(element.ID_NHA == id){
+						nha = element;
+						output += element.TEN_DUONG +" ";
 						break;
 					}
 				}
