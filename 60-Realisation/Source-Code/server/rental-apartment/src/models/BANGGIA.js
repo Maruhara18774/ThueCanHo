@@ -18,6 +18,10 @@ module.exports = function(sequelize, DataTypes) {
     MUCGIA_BA: {
       type: DataTypes.FLOAT,
       allowNull: true
+    },
+    KHUYENMAI: {
+      type: DataTypes.FLOAT,
+      allowNull: true
     }
   }, {
     sequelize,
@@ -26,7 +30,7 @@ module.exports = function(sequelize, DataTypes) {
     timestamps: false,
     indexes: [
       {
-        name: "PK__BANGGIA__3342FE0584C69EAE",
+        name: "PK__BANGGIA__3342FE05A7F692F3",
         unique: true,
         fields: [
           { name: "ID_BANGGIA" },

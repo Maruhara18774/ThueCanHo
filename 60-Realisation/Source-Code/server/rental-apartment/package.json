@@ -25,9 +25,11 @@
     "moleculer-repl": "^0.6.4"
   },
   "dependencies": {
+    "moleculer": "^0.14.13",
     "moleculer-web": "^0.9.1",
     "nats": "^1.4.12",
-    "moleculer": "^0.14.13"
+    "sequelize": "^6.6.2",
+    "sequelize-auto": "^0.8.2"
   },
   "engines": {
     "node": ">= 10.x.x"

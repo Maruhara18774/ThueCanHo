@@ -58,6 +58,14 @@ module.exports = function(sequelize, DataTypes) {
     GHICHU: {
       type: DataTypes.TEXT,
       allowNull: true
+    },
+    ID_TT_DCH: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      references: {
+        model: 'TRANGTHAIDATCANHO',
+        key: 'ID_TT_DCH'
+      }
     }
   }, {
     sequelize,
@@ -66,7 +74,7 @@ module.exports = function(sequelize, DataTypes) {
     timestamps: false,
     indexes: [
       {
-        name: "PK__DATCANHO__3CB74E530F8189E5",
+        name: "PK__DATCANHO__3CB74E5332A32C1C",
         unique: true,
         fields: [
           { name: "ID_DATCANHO" },
