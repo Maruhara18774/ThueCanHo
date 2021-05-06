@@ -91,6 +91,9 @@ module.exports = {
 				method: "GET",
 				path: "/getDetailApartment"
 			},
+			params:{
+				id: {type: "string"}
+			},
 			async handler({action,params,meta, ... ctx}) {
                 const {id} = params;
                 const checkDetail = await dbContext.NHA.findAll({
@@ -171,47 +174,6 @@ module.exports = {
 				return output;
 			}
 		},
-		getNameApartment:{
-			rest: {
-				method: "POST",
-				path: "/getNameApartment"
-			},
-			params:{
-				id: {type:"string"}
-			},
-			async handler({action,params,meta, ... ctx}) {
-                var {id} = params;
-				const lsApartment = await dbContext.NHA.findAll();
-				const lsDistrict = await dbContext.QUAN.findAll();
-				const lsCity = await dbContext.THANHPHO.findAll();
-				var quan;
-				var nha;
-				var output = "";
-				for(var i = 0;i<lsApartment.length;i++){
-					const element = lsApartment[i];
-					if(element.ID_NHA == id){
-						nha = element;
-						output += element.ID_NHA +" ";
-						break;
-					}
-				}
-				for(var i = 0;i<lsDistrict.length;i++){
-					const element = lsDistrict[i];
-					if(element.ID_QUAN == nha.ID_QUAN){
-						quan = element;
-						break;
-					}
-				}
-				for(var i = 0;i<lsCity.length;i++){
-					const element = lsCity[i];
-					if(element.ID_THANHPHO == quan.ID_THANHPHO){
-						output += element.TEN_THANHPHO +" ";
-						break;
-					}
-				}
-				return output;
-			}
-		},
 		getApartmentPrice:{
 			rest: {
 				method: "POST",
@@ -227,7 +189,7 @@ module.exports = {
 				for(var i=0;i<lsPrice.length;i++){
 					var element = lsPrice[i];
 					if(element.ID_BANGGIA== idPrice){
-						output = element.MUCGIA_MOT;
+						output = element;
 						break;
 					}
 				}
@@ -432,6 +394,7 @@ module.exports = {
 				})
 				return createInfo.ID_TT_TAIKHOAN;
 			},
+		},
 
 		/**
 		 * Welcome, a username
@@ -484,4 +447,4 @@ module.exports = {
 	async stopped() {
 
 	}
-};
+}
