@@ -1,27 +1,27 @@
 const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('CSVC', {
-    ID_CSVC: {
+  return sequelize.define('TRANGTHAIDATCANHO', {
+    ID_TT_DCH: {
       autoIncrement: true,
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true
     },
-    TEN_CSVC: {
-      type: DataTypes.TEXT,
+    TEN_TRANGTHAI: {
+      type: DataTypes.STRING(100),
       allowNull: true
     }
   }, {
     sequelize,
-    tableName: 'CSVC',
+    tableName: 'TRANGTHAIDATCANHO',
     schema: 'dbo',
     timestamps: false,
     indexes: [
       {
-        name: "PK__CSVC__7F9012124080467E",
+        name: "PK__TRANGTHA__28801B351DE758CC",
         unique: true,
         fields: [
-          { name: "ID_CSVC" },
+          { name: "ID_TT_DCH" },
         ]
       },
     ]

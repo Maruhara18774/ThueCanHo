@@ -70,7 +70,7 @@ module.exports = function(sequelize, DataTypes) {
     timestamps: false,
     indexes: [
       {
-        name: "PK__PHONG__C8E949A391024EFD",
+        name: "PK__PHONG__C8E949A3702F1BC3",
         unique: true,
         fields: [
           { name: "ID_PHONG" },

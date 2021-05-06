@@ -28,7 +28,7 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: true
     },
     QUOCTICH: {
-      type: DataTypes.STRING(50),
+      type: DataTypes.STRING(100),
       allowNull: true
     },
     GIOITINH: {
@@ -50,7 +50,7 @@ module.exports = function(sequelize, DataTypes) {
     timestamps: false,
     indexes: [
       {
-        name: "PK__THONGTIN__66F3ACF4E7D4CC57",
+        name: "PK__THONGTIN__66F3ACF46539C585",
         unique: true,
         fields: [
           { name: "ID_TT_TAIKHOAN" },
