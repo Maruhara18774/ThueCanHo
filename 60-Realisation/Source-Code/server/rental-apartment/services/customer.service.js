@@ -370,6 +370,71 @@ module.exports = {
 				return checkStyle;
 			},
 		},
+		savePaymentInfo:{
+			rest:{
+				method: "POST",
+				path: "/savePaymentInfo"
+			},
+			params:{
+				tenKH: {type: "string"},
+				email: {type: "string"},
+				phoneNumber: {type: "string"},
+				maGiayTo: {type: "string"},
+				loaiGiayTo: {type: "string"},
+				quocTich: {type: "string"},
+				gioiTinh: {type: "string"},
+				idTK: {type: "string"},
+			},
+			async handler({action,params,meta, ... ctx}){
+                var {tenKH,email,phoneNumber,maGiayTo,loaiGiayTo,quocTich,gioiTinh,idTK} = params;
+				if(idTK==0){
+					idTK = 1002
+				}
+				const createInfo = await dbContext.THONGTINKHACHHANG.create({
+					TEN_KHACHHANG: tenKH,
+					EMAIL: email,
+					PHONE_NUMBER: phoneNumber,
+					MA_GIAYTOTUYTHAN: maGiayTo,
+					LOAI_GIAYTOTUYTHAN: loaiGiayTo,
+					QUOCTICH: quocTich,
+					GIOITINH: gioiTinh,
+					ID_TAIKHOAN: idTK
+				})
+				return createInfo.ID_TT_TAIKHOAN;
+			},
+		},
+		rentalApartment:{
+			rest:{
+				method: "POST",
+				path: "/rentalApartment"
+			},
+			params:{
+				idNha: {type: "string"},
+				ngayDat: {type: "string"},
+				checkIn: {type: "string"},
+				checkOut: {type: "string"},
+				buaSang: {type: "string"},
+				soGiuongPhu: {type: "string"},
+				ghiChu: {type: "string"},
+			},
+			async handler({action,params,meta, ... ctx}){
+                var {idNha,ngayDat,checkIn,checkOut,buaSang,soGiuongPhu,ghiChu} = params;
+				// Doing
+				const createInfo = await dbContext.THONGTINKHACHHANG.create({
+					TEN_KHACHHANG: tenKH,
+					EMAIL: email,
+					PHONE_NUMBER: phoneNumber,
+					MA_GIAYTOTUYTHAN: maGiayTo,
+					LOAI_GIAYTOTUYTHAN: loaiGiayTo,
+					QUOCTICH: quocTich,
+					GIOITINH: gioiTinh,
+					ID_TAIKHOAN: idTK
+				})
+				return createInfo.ID_TT_TAIKHOAN;
+			},
+
+		},
+
 		/**
 		 * Welcome, a username
 		 *
