@@ -375,13 +375,42 @@ module.exports = {
 				ngayDat: {type: "string"},
 				checkIn: {type: "string"},
 				checkOut: {type: "string"},
+				ngayDen: {type: "string"},
+				ngayDi: {type: "string"},
 				buaSang: {type: "string"},
 				soGiuongPhu: {type: "string"},
 				ghiChu: {type: "string"},
 			},
 			async handler({action,params,meta, ... ctx}){
-                var {idNha,ngayDat,checkIn,checkOut,buaSang,soGiuongPhu,ghiChu} = params;
+                var {idNha,ngayDat,checkIn,checkOut,ngayDen,ngayDi,buaSang,soGiuongPhu,ghiChu} = params;
 				// Doing
+				var apartment;
+				var tienPhong = 0;
+				const checkApartment = await dbContext.NHA.findAll();
+				for(var i=0;i<checkApartment.length;i++){
+					var element = checkApartment[i];
+					if(element.ID_NHA == idNha){
+						
+					}
+				}
+				const checkPriceList = await dbContext.BANGGIA.findAll();
+				for(var i=0;i<checkPriceList.length;i++){
+					var element = checkPriceList[i];
+					if(element.ID_BANGGIA == apartment.ID_BANGGIA){
+						const dayFrom_Day = parseInt(ngayDen.substring(0,3));
+						// 12/02/2021
+						// 0123456789
+						const dayFrom_Month = parseInt(ngayDen.substring(3,5));
+						const dayFrom_Year = parseInt(ngayDen.substring(6,10));
+
+						const dayTo_Day = parseInt(ngayDi.substring(0,3));
+						const dayTo_Month = parseInt(ngayDi.substring(3,5));
+						const dayTo_Year = parseInt(ngayDi.substring(6,10));
+
+						// doing
+					}
+				}
+
 				const createInfo = await dbContext.THONGTINKHACHHANG.create({
 					TEN_KHACHHANG: tenKH,
 					EMAIL: email,
@@ -425,7 +454,6 @@ module.exports = {
 	 * Methods
 	 */
 	methods: {
-
 	},
 
 	/**
