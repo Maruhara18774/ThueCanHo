@@ -27,6 +27,14 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.STRING(5),
       allowNull: true
     },
+    NGAY_DEN: {
+      type: DataTypes.STRING(12),
+      allowNull: true
+    },
+    NGAY_DI: {
+      type: DataTypes.STRING(12),
+      allowNull: true
+    },
     TONGTIEN_PHONG: {
       type: DataTypes.FLOAT,
       allowNull: true
@@ -74,7 +82,7 @@ module.exports = function(sequelize, DataTypes) {
     timestamps: false,
     indexes: [
       {
-        name: "PK__DATCANHO__3CB74E535747615A",
+        name: "PK__DATCANHO__3CB74E5330C6A8BB",
         unique: true,
         fields: [
           { name: "ID_DATCANHO" },
