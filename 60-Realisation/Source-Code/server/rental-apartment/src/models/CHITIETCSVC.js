@@ -5,15 +5,15 @@ module.exports = function(sequelize, DataTypes) {
       autoIncrement: true,
       type: DataTypes.INTEGER,
       allowNull: false,
-      primaryKey: true,
+      primaryKey: true
+    },
+    ID_CSVC: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
       references: {
         model: 'CSVC',
         key: 'ID_CSVC'
       }
-    },
-    ID_CSVC: {
-      type: DataTypes.INTEGER,
-      allowNull: true
     },
     TEN_CSVC: {
       type: DataTypes.TEXT,
@@ -26,7 +26,7 @@ module.exports = function(sequelize, DataTypes) {
     timestamps: false,
     indexes: [
       {
-        name: "PK__CHITIETC__5133F4982F47994D",
+        name: "PK__CHITIETC__5133F49811E0A117",
         unique: true,
         fields: [
           { name: "ID_CT_CSVC" },
