@@ -58,8 +58,8 @@ function initModels(sequelize) {
   CHITIETCSVC.hasMany(CSVCNHA, { as: "CSVCNHAs", foreignKey: "ID_CT_CSVC"});
   NOITHATPHONG.belongsTo(CHITIETNOITHAT, { as: "ID_CT_NOITHAT_CHITIETNOITHAT", foreignKey: "ID_CT_NOITHAT"});
   CHITIETNOITHAT.hasMany(NOITHATPHONG, { as: "NOITHATPHONGs", foreignKey: "ID_CT_NOITHAT"});
-  CHITIETCSVC.belongsTo(CSVC, { as: "ID_CT_CSVC_CSVC", foreignKey: "ID_CT_CSVC"});
-  CSVC.hasOne(CHITIETCSVC, { as: "CHITIETCSVC", foreignKey: "ID_CT_CSVC"});
+  CHITIETCSVC.belongsTo(CSVC, { as: "ID_CSVC_CSVC", foreignKey: "ID_CSVC"});
+  CSVC.hasMany(CHITIETCSVC, { as: "CHITIETCSVCs", foreignKey: "ID_CSVC"});
   PHONG.belongsTo(LOAIGIUONG, { as: "ID_LOAIGIUONG_LOAIGIUONG", foreignKey: "ID_LOAIGIUONG"});
   LOAIGIUONG.hasMany(PHONG, { as: "PHONGs", foreignKey: "ID_LOAIGIUONG"});
   NHA.belongsTo(LOAINHA, { as: "ID_LOAINHA_LOAINHA", foreignKey: "ID_LOAINHA"});

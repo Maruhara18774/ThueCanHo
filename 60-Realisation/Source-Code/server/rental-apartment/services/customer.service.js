@@ -433,7 +433,6 @@ module.exports = {
 				return createInfo.ID_TT_TAIKHOAN;
 			},
 
-		}
 		/**
 		 * Welcome, a username
 		 *
