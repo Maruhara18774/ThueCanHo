@@ -7,6 +7,14 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: false,
       primaryKey: true
     },
+    ID_QUOCGIA: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      references: {
+        model: 'QUOCGIA',
+        key: 'ID_QUOCGIA'
+      }
+    },
     TEN_THANHPHO: {
       type: DataTypes.STRING(100),
       allowNull: true
@@ -18,7 +26,7 @@ module.exports = function(sequelize, DataTypes) {
     timestamps: false,
     indexes: [
       {
-        name: "PK__THANHPHO__F7B256BB917CB8D0",
+        name: "PK__THANHPHO__F7B256BB71A45151",
         unique: true,
         fields: [
           { name: "ID_THANHPHO" },
