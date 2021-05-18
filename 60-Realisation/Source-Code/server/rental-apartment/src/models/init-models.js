@@ -74,8 +74,8 @@ function initModels(sequelize) {
   NHA.hasMany(PHONG, { as: "PHONGs", foreignKey: "ID_NHA"});
   STYLENHA.belongsTo(NHA, { as: "ID_NHA_NHA", foreignKey: "ID_NHA"});
   NHA.hasMany(STYLENHA, { as: "STYLENHAs", foreignKey: "ID_NHA"});
-  CHITIETNOITHAT.belongsTo(NOITHAT, { as: "ID_CT_NOITHAT_NOITHAT", foreignKey: "ID_CT_NOITHAT"});
-  NOITHAT.hasOne(CHITIETNOITHAT, { as: "CHITIETNOITHAT", foreignKey: "ID_CT_NOITHAT"});
+  CHITIETNOITHAT.belongsTo(NOITHAT, { as: "ID_NOITHAT_NOITHAT", foreignKey: "ID_NOITHAT"});
+  NOITHAT.hasMany(CHITIETNOITHAT, { as: "CHITIETNOITHATs", foreignKey: "ID_NOITHAT"});
   HINHANH.belongsTo(PHONG, { as: "ID_PHONG_PHONG", foreignKey: "ID_PHONG"});
   PHONG.hasMany(HINHANH, { as: "HINHANHs", foreignKey: "ID_PHONG"});
   NOITHATPHONG.belongsTo(PHONG, { as: "ID_PHONG_PHONG", foreignKey: "ID_PHONG"});
