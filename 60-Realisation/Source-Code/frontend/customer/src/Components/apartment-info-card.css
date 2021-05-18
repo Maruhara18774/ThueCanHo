@@ -71,3 +71,12 @@
     padding-bottom: 0px;
     margin-bottom: 0px;
 }
+.apartment-info-card-warp{
+    text-decoration: none;
+    color:black;
+}
+.apartment-info-card-warp:hover{
+    color:black;
+    text-decoration:none;
+    cursor:pointer;
+}

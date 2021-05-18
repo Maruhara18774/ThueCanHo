@@ -2,41 +2,36 @@ import { Component } from 'react';
 import Axios from 'axios';
 import './apartment-info-card.css';
 import imageDefault from '../Images/as.jpg';
+import DetailApartment from '../Pages/detail-apartment';
+import {BrowserRouter as Router,Switch,Route, Link} from 'react-router-dom';
 
 class InfoCard extends Component {
     constructor(props) {
         super(props);
         this.state={
             image: [],
-            name:"",
             address: "",
-            price: ""
+            price: [],
+            type: ""
         }
-        this.getName();
         this.getAddress();
-        this.getPrice();
     }
     getImage = ()=>{
-        Axios.post('http://localhost:33456/api/customer/getImageOfApartment',{idApartment: this.props.model.ID_NHA}).then(
+        Axios.post('http://localhost:33456/api/customer/getImageOfApartment',{idApartment: this.props.model.ID_NHA.toString()}).then(
             (response) => {
                 this.state.image = response.data;
                 this.setState(this);
             });
         
     }
-    getName = () =>{
-        Axios.post('http://localhost:33456/api/customer/getNameApartment',{id: this.props.model.ID_NHA}).then(
-            (response) => {
-                this.state.name = response.data;
-                this.setState(this);
-            });
-    }
     getAddress = () =>{
-        Axios.post('http://localhost:33456/api/customer/getAddressApartment',{id: this.props.model.ID_NHA}).then(
+        Axios.post('http://localhost:33456/api/customer/getAddressApartment',{id: this.props.model.ID_NHA.toString()}).then(
             (response) => {
                 this.state.address = response.data;
                 this.setState(this);
             });
+            this.getPrice();
+            this.getType();
     }
     getPrice = () => {
         Axios.post('http://localhost:33456/api/customer/getApartmentPrice',{idPrice: this.props.model.ID_BANGGIA.toString()}).then(
@@ -44,18 +39,36 @@ class InfoCard extends Component {
                 this.state.price = response.data;
                 this.setState(this);
             });
+            
+    }
+    getType = () =>{
+        Axios.post('http://localhost:33456/api/customer/getTypeApartment',{idType: this.props.model.ID_LOAINHA.toString()}).then(
+            (response) => {
+                this.state.type = response.data;
+                this.setState(this);
+            });
+    }
+    getComponent = ()=>{
+        return <DetailApartment/>
     }
     render() {
         return (
-            <div className="apartment-info-card">
+            <a href={"/"+this.props.model.ID_NHA.toString()} className="apartment-info-card-warp">
+                <div className="apartment-info-card" href={"/"+this.props.model.ID_NHA.toString()}>
+                <Router>
+                <Switch>
+                    <Route path={"/"+this.props.model.ID_NHA.toString()}>{this.getComponent}</Route>
+                </Switch>
+                </Router>
+                
                 <div class="container">
                     <img src={imageDefault} className="imageMain"></img>
                     <div>
                         <div class="row">
                             <div class="col-md-7 left">
 
-                                <h5 className="title">{this.state.name}</h5>
-                                <p className="tag">Căn hộ</p>
+                                <h5 className="title">{this.props.model.TEN_NHA}</h5>
+                                <p className="tag">{this.state.type}</p>
                                 <p className="location">
                                     <span><i class="fas fa-map-marker-alt"></i></span>
                                     {this.state.address}
@@ -63,16 +76,19 @@ class InfoCard extends Component {
                             </div>
                             <div class="col-md-4 right">
                                 {this.props.model.KHUTIEPTAN === true ? <p className="bonus"><span className="mrg5"><i class="fas fa-clinic-medical"></i></span> Có bàn tiếp tân</p>:<div className="blank"></div>}
-                                <p className="original">{(this.state.price * 110) / 100} VNĐ</p>
-                                <p className="reduce">{this.state.price} VNĐ</p></div>
+                                <p className="original">{(this.state.price.MUCGIA_MOT * 110) / 100} VNĐ</p>
+                                <p className="reduce">{this.state.price.MUCGIA_MOT} VNĐ</p></div>
                         </div>
                     </div>
                 </div>
 
             </div>
+            </a>
+            
         );
     }
 
 }
+
 
 export default InfoCard;

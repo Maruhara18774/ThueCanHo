@@ -424,6 +424,24 @@ module.exports = {
 				return createInfo.ID_TT_TAIKHOAN;
 			},
 		},
+		getTypeApartment:{
+			rest:{
+				method: "POST",
+				path: "/getTypeApartment"
+			},
+			params:{
+				idType: {type: "string"},
+			},
+			async handler({action,params,meta, ... ctx}){
+                var {idType} = params;
+				const checkType = await dbContext.LOAINHA.findOne({
+					where:{
+						ID_LOAINHA: idType
+					}
+				})
+				return checkType.TEN_LOAINHA;
+			},
+		},
 
 		/**
 		 * Welcome, a username

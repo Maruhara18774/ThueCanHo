@@ -63,6 +63,7 @@ class SelectBar extends Component {
       "idStyle": this.state.idStyle.toString(),
       "minBudget": this.state.minBudget.toString()
     }).then((response) => {
+      console.log(response.data);
       this.props.callback(response.data);
     });
   }
