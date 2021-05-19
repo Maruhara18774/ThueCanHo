@@ -6,6 +6,8 @@ class SelectBar extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      lsCountry:[],
+      idCountry:0,
       lsCity: [],
       idCity: 0,
       lsDistrict: [],
@@ -14,11 +16,19 @@ class SelectBar extends Component {
       idStyle: 0,
       minBudget: 0
     };
-    this.getListCity();
+    this.getListCountry();
     this.getListStyle();
   }
+  getListCountry = () =>{
+
+    Axios.post('http://localhost:33456/api/customer/getListCountry',{}).then(
+            (response) => {
+                this.state.lsCountry = response.data;
+                this.setState(this);
+            });
+  }
   getListCity = () =>{
-    Axios.post('http://localhost:33456/api/customer/getListCity',{}).then(
+    Axios.post('http://localhost:33456/api/customer/getListCity',{countryId: this.state.idCountry}).then(
             (response) => {
                 this.state.lsCity = response.data;
                 this.setState(this);
@@ -38,11 +48,15 @@ class SelectBar extends Component {
                 this.setState(this);
             });
   }
+  changeCountry = (event) =>{
+    this.state.idCountry= event.target.value;
+    this.setState(this);
+    this.getListCity();
+  }
   changeCity = (event) =>{
     this.state.idCity = event.target.value;
     this.setState(this);
     this.getListDistrict();
-    console.log(this.state.lsDistrict)
   }
   changeDistrict = (event)=>{
     this.state.idDistrict = event.target.value;
@@ -70,7 +84,17 @@ class SelectBar extends Component {
   render() {
     return (
       <div className="selectBar-zone">
-        <table className="position-fixed">
+        <table>
+          <tr className="spacing"/>
+          <tr>
+            <td className="title">Quốc gia: </td>
+            <td className="content">
+              <select value={this.state.idCountry} onChange={this.changeCountry}>
+                <option value="0">Chọn quốc gia ...</option>
+                {this.state.lsCountry.map((val, key)=><option value={val.ID_QUOCGIA}>{val.TEN_QUOCGIA}</option>)}
+              </select>
+            </td>
+          </tr>
           <tr className="spacing"/>
           <tr>
             <td className="title">Thành phố: </td>

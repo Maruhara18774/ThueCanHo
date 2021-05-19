@@ -37,6 +37,7 @@ class ListApartment extends Component {
                         <SelectBar callback={this.handleCallback}/>
                     </div>
                 </div>
+                
                 <div className="mainListApm">
                                 {this.state.myList.map((val, key) => {
                                     return (

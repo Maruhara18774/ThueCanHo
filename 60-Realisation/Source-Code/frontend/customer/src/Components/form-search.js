@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './form-search.css';
-import SelectNumberPeople from './input-number-people';
+
 export default class SearchingForm extends Component {
     constructor(props){
         super(props);

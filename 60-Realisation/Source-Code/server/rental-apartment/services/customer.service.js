@@ -259,7 +259,7 @@ module.exports = {
 					const lsApartment = await dbContext.NHA.findAll();
 					const lsPrice = await dbContext.BANGGIA.findAll();
 					lsApartment.forEach(element => {
-						for(var i=0;i<lsPrice.length;i++){
+						for(var i=1;i<lsPrice.length;i++){
 							const element2 = lsPrice[i]; 
 							if((element.ID_BANGGIA == element2.ID_BANGGIA)&&(element2.MUCGIA_MOT>= minBudget)){
 								result.push(element);
@@ -268,7 +268,7 @@ module.exports = {
 						}
 					});
 					if(idDistrict!=0){
-						for(var i = result.length-1;i>=0;i--){
+						for(var i=1;i<result.length;i++){
 							var element = result[i];
 							if(element.ID_QUAN != idDistrict){
 								result.pop(element);
@@ -277,8 +277,9 @@ module.exports = {
 					}
 					if(idStyle != 0){
 						const lsStyle = await dbContext.STYLENHA.findAll();
-						for(var i = result.length-1;i>=0;i--){
+						for(var i=1;i<result.length;i++){
 							var element = result[i];
+							console.log(element);
 							for(var i=0;i<lsStyle.length;i++) {
 								const element2 = lsStyle[i];
 								if(element.ID_NHA== element2.ID_NHA && element2.ID_STYLE != idStyle){
@@ -292,13 +293,32 @@ module.exports = {
 				return result;
 			}
 		},
+		// Select bar - START
+		getListCountry:{
+			rest:{
+				method: "POST",
+				path: "/getListCountry"
+			},
+			async handler({action,params,meta, ... ctx}){
+                const checkCountry = await dbContext.QUOCGIA.findAll();
+				return checkCountry;
+			},
+		},
 		getListCity: {
 			rest: {
 				method: "POST",
 				path: "/getListCity"
 			},
-			async handler(ctx){
-				const listCity = dbContext.THANHPHO.findAll();
+			params:{
+				countryId: {type:"string"}
+			},
+			async handler({action,params,meta, ... ctx}){
+				const {countryId} = params;
+				const listCity = dbContext.THANHPHO.findAll({
+					where:{
+						ID_QUOCGIA: countryId
+					}
+				});
 				
 				return listCity;
 				
@@ -332,6 +352,7 @@ module.exports = {
 				return checkStyle;
 			},
 		},
+		// Select bar - END
 		savePaymentInfo:{
 			rest:{
 				method: "POST",

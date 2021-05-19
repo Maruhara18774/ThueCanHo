@@ -53,36 +53,42 @@ class InfoCard extends Component {
     }
     render() {
         return (
-            <a href={"/"+this.props.model.ID_NHA.toString()} className="apartment-info-card-warp">
-                <div className="apartment-info-card" href={"/"+this.props.model.ID_NHA.toString()}>
-                <Router>
-                <Switch>
-                    <Route path={"/"+this.props.model.ID_NHA.toString()}>{this.getComponent}</Route>
-                </Switch>
-                </Router>
-                
-                <div class="container">
-                    <img src={imageDefault} className="imageMain"></img>
-                    <div>
-                        <div class="row">
-                            <div class="col-md-7 left">
+            <a href={"/" + this.props.model.ID_NHA.toString()} className="apartment-info-card-warp">
+                <div className="apartment-info-card" href={"/" + this.props.model.ID_NHA.toString()}>
+                    <Router>
+                        <Switch>
+                            <Route path={"/" + this.props.model.ID_NHA.toString()}>{this.getComponent}</Route>
+                        </Switch>
+                    </Router>
 
-                                <h5 className="title">{this.props.model.TEN_NHA}</h5>
-                                <p className="tag">{this.state.type}</p>
-                                <p className="location">
-                                    <span><i class="fas fa-map-marker-alt"></i></span>
-                                    {this.state.address}
-                                </p>
+                    <div class="container">
+                        <img src={imageDefault} className="imageMain"></img>
+                        <div>
+                            <div class="row">
+                                <div class="col-md-7 left">
+
+                                    <h5 className="title">{this.props.model.TEN_NHA}</h5>
+                                    <p className="tag">{this.state.type}</p>
+                                    <p className="location">
+                                        <span><i class="fas fa-map-marker-alt mrg5"></i></span>
+                                        {this.state.address}
+                                    </p>
+                                </div>
+                                <div class="col-md-4 right">
+                                    {this.props.model.FREE_CANCEL === true ? <p className="bonus"><span className="mrg5"><i class="fas fa-clinic-medical"></i></span> Miễn phí hủy đặt</p> : <div className="blank"></div>}
+                                    {this.state.price.KHUYENMAI == "0" ? <div>
+                                         <p className="original"> </p>
+                                        <p className="reduce">{this.state.price.MUCGIA_MOT} VNĐ</p>
+                                    </div> : <div>
+                                        <p className="original">{this.state.price.MUCGIA_MOT} VNĐ</p>
+                                        <p className="reduce">{this.state.price.MUCGIA_MOT - this.state.price.KHUYENMAI} VNĐ</p>
+                                    </div>}
+                                </div>
                             </div>
-                            <div class="col-md-4 right">
-                                {this.props.model.KHUTIEPTAN === true ? <p className="bonus"><span className="mrg5"><i class="fas fa-clinic-medical"></i></span> Có bàn tiếp tân</p>:<div className="blank"></div>}
-                                <p className="original">{(this.state.price.MUCGIA_MOT * 110) / 100} VNĐ</p>
-                                <p className="reduce">{this.state.price.MUCGIA_MOT} VNĐ</p></div>
                         </div>
+
                     </div>
                 </div>
-
-            </div>
             </a>
             
         );
