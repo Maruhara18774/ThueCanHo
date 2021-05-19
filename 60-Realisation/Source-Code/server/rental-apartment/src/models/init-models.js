@@ -80,6 +80,8 @@ function initModels(sequelize) {
   PHONG.hasMany(HINHANH, { as: "HINHANHs", foreignKey: "ID_PHONG"});
   NOITHATPHONG.belongsTo(PHONG, { as: "ID_PHONG_PHONG", foreignKey: "ID_PHONG"});
   PHONG.hasMany(NOITHATPHONG, { as: "NOITHATPHONGs", foreignKey: "ID_PHONG"});
+  NHA.belongsTo(QUAN, { as: "ID_QUAN_QUAN", foreignKey: "ID_QUAN"});
+  QUAN.hasMany(NHA, { as: "NHAs", foreignKey: "ID_QUAN"});
   THANHPHO.belongsTo(QUOCGIA, { as: "ID_QUOCGIA_QUOCGIum", foreignKey: "ID_QUOCGIA"});
   QUOCGIA.hasMany(THANHPHO, { as: "THANHPHOs", foreignKey: "ID_QUOCGIA"});
   STYLENHA.belongsTo(STYLE, { as: "ID_STYLE_STYLE", foreignKey: "ID_STYLE"});
@@ -92,6 +94,8 @@ function initModels(sequelize) {
   TAIKHOAN.hasMany(THONGTINCHUHO, { as: "THONGTINCHUHOs", foreignKey: "ID_TAIKHOAN"});
   THONGTINKHACHHANG.belongsTo(TAIKHOAN, { as: "ID_TAIKHOAN_TAIKHOAN", foreignKey: "ID_TAIKHOAN"});
   TAIKHOAN.hasMany(THONGTINKHACHHANG, { as: "THONGTINKHACHHANGs", foreignKey: "ID_TAIKHOAN"});
+  QUAN.belongsTo(THANHPHO, { as: "ID_THANHPHO_THANHPHO", foreignKey: "ID_THANHPHO"});
+  THANHPHO.hasMany(QUAN, { as: "QUANs", foreignKey: "ID_THANHPHO"});
   DATCANHO.belongsTo(TRANGTHAIDATCANHO, { as: "ID_TT_DCH_TRANGTHAIDATCANHO", foreignKey: "ID_TT_DCH"});
   TRANGTHAIDATCANHO.hasMany(DATCANHO, { as: "DATCANHOs", foreignKey: "ID_TT_DCH"});
   NHA.belongsTo(TRANGTHAINHA, { as: "ID_TRANGTHAI_NHA_TRANGTHAINHA", foreignKey: "ID_TRANGTHAI_NHA"});
