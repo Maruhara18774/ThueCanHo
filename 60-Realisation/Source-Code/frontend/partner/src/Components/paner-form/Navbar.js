@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import "../../style/paner-form/Navbar.css";
-import { Button, ButtonLogIn } from "../paner-form/Button";
+import { Button, ButtonLogIn } from "./Button";
 function Navbar() {
   const [click, setClick] = useState(false);
   const [button, setButton] = useState(true);

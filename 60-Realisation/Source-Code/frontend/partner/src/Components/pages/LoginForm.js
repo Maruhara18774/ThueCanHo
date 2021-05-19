@@ -65,7 +65,11 @@ class LoginForm extends Component {
                 <a className="login-form-forgot" href="/#">
                   Forgot your password
                 </a>
-                <button onClick={this.confirmLogin} id="btn-login">Log in</button>
+                <Link to="/registrationDetail">
+                  <button onClick={this.confirmLogin} id="btn-login">
+                    Log in
+                  </button>
+                </Link>
               </div>
               <div className="line-spacing"></div>
 
