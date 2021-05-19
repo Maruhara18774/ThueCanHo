@@ -9,7 +9,11 @@ module.exports = function(sequelize, DataTypes) {
     },
     ID_THANHPHO: {
       type: DataTypes.INTEGER,
-      allowNull: true
+      allowNull: true,
+      references: {
+        model: 'THANHPHO',
+        key: 'ID_THANHPHO'
+      }
     },
     TEN_QUAN: {
       type: DataTypes.STRING(100),
@@ -22,7 +26,7 @@ module.exports = function(sequelize, DataTypes) {
     timestamps: false,
     indexes: [
       {
-        name: "PK__QUAN__E0775F03E6CE4DC0",
+        name: "PK__QUAN__E0775F033E70E4B1",
         unique: true,
         fields: [
           { name: "ID_QUAN" },

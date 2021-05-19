@@ -16,15 +16,15 @@ module.exports = function(sequelize, DataTypes) {
       }
     },
     NGAYDAT: {
-      type: DataTypes.STRING(20),
+      type: DataTypes.DATEONLY,
       allowNull: true
     },
     CHECKIN: {
-      type: DataTypes.STRING(5),
+      type: DataTypes.TIME,
       allowNull: true
     },
     CHECKOUT: {
-      type: DataTypes.STRING(5),
+      type: DataTypes.TIME,
       allowNull: true
     },
     NGAY_DEN: {
@@ -82,7 +82,7 @@ module.exports = function(sequelize, DataTypes) {
     timestamps: false,
     indexes: [
       {
-        name: "PK__DATCANHO__3CB74E5330C6A8BB",
+        name: "PK__DATCANHO__3CB74E5372934F0E",
         unique: true,
         fields: [
           { name: "ID_DATCANHO" },

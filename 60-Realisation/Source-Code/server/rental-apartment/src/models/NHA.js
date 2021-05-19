@@ -5,7 +5,7 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.INTEGER,
       allowNull: false,
       autoIncrement: true,
-      unique: "UQ__NHA__A9654DEA8C242E87"
+      unique: "UQ__NHA__A9654DEAF3512DB4"
     },
     ID_NHA: {
       type: DataTypes.STRING(50),
@@ -37,11 +37,11 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: true
     },
     CHECKIN: {
-      type: DataTypes.STRING(5),
+      type: DataTypes.TIME,
       allowNull: true
     },
     CHECKOUT: {
-      type: DataTypes.STRING(5),
+      type: DataTypes.TIME,
       allowNull: true
     },
     KHOANGCACH_TRUNGTAMTP: {
@@ -70,7 +70,11 @@ module.exports = function(sequelize, DataTypes) {
     },
     ID_QUAN: {
       type: DataTypes.INTEGER,
-      allowNull: true
+      allowNull: true,
+      references: {
+        model: 'QUAN',
+        key: 'ID_QUAN'
+      }
     },
     SO_NGUOI: {
       type: DataTypes.INTEGER,
@@ -103,14 +107,14 @@ module.exports = function(sequelize, DataTypes) {
     timestamps: false,
     indexes: [
       {
-        name: "PK__NHA__253B662C20FC32F6",
+        name: "PK__NHA__253B662CE379FD53",
         unique: true,
         fields: [
           { name: "ID_NHA" },
         ]
       },
       {
-        name: "UQ__NHA__A9654DEA8C242E87",
+        name: "UQ__NHA__A9654DEAF3512DB4",
         unique: true,
         fields: [
           { name: "THUTU_NHA" },
