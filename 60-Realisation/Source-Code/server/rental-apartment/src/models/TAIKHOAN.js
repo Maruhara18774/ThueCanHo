@@ -10,7 +10,7 @@ module.exports = function(sequelize, DataTypes) {
     TEN_TAIKHOAN: {
       type: DataTypes.STRING(100),
       allowNull: true,
-      unique: "UQ__TAIKHOAN__6B714C8E338B0A28"
+      unique: "UQ__TAIKHOAN__6B714C8EF2FE0850"
     },
     MATKHAU: {
       type: DataTypes.STRING(100),
@@ -27,14 +27,14 @@ module.exports = function(sequelize, DataTypes) {
     timestamps: false,
     indexes: [
       {
-        name: "PK__TAIKHOAN__EB942D7FA4384F0F",
+        name: "PK__TAIKHOAN__EB942D7FC3CEC7D2",
         unique: true,
         fields: [
           { name: "ID_TAIKHOAN" },
         ]
       },
       {
-        name: "UQ__TAIKHOAN__6B714C8E338B0A28",
+        name: "UQ__TAIKHOAN__6B714C8EF2FE0850",
         unique: true,
         fields: [
           { name: "TEN_TAIKHOAN" },
