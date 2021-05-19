@@ -15,6 +15,14 @@ module.exports = function(sequelize, DataTypes) {
         key: 'ID_NHA'
       }
     },
+    ID_TT_KHACHHANG: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      references: {
+        model: 'THONGTINKHACHHANG',
+        key: 'ID_TT_KHACHHANG'
+      }
+    },
     NGAYDAT: {
       type: DataTypes.DATEONLY,
       allowNull: true
@@ -82,7 +90,7 @@ module.exports = function(sequelize, DataTypes) {
     timestamps: false,
     indexes: [
       {
-        name: "PK__DATCANHO__3CB74E5372934F0E",
+        name: "PK__DATCANHO__3CB74E533D81A20F",
         unique: true,
         fields: [
           { name: "ID_DATCANHO" },

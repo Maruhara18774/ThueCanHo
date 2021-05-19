@@ -1,7 +1,7 @@
 const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
   return sequelize.define('THONGTINCHUHO', {
-    ID_TT_TAIKHOAN: {
+    ID_TT_CHUHO: {
       autoIncrement: true,
       type: DataTypes.INTEGER,
       allowNull: false,
@@ -58,10 +58,10 @@ module.exports = function(sequelize, DataTypes) {
     timestamps: false,
     indexes: [
       {
-        name: "PK__THONGTIN__66F3ACF478B9C883",
+        name: "PK__THONGTIN__1B5192F2DB6985EE",
         unique: true,
         fields: [
-          { name: "ID_TT_TAIKHOAN" },
+          { name: "ID_TT_CHUHO" },
         ]
       },
     ]
