@@ -206,35 +206,27 @@ module.exports = {
 			},
 			async handler({action,params,meta, ... ctx}) {
                 var {id} = params;
-				const lsApartment = await dbContext.NHA.findAll();
-				const lsDistrict = await dbContext.QUAN.findAll();
-				const lsCity = await dbContext.THANHPHO.findAll();
-				var quan;
-				var nha;
-				var output = "";
-				for(var i = 0;i<lsApartment.length;i++){
-					const element = lsApartment[i];
-					if(element.ID_NHA == id){
-						nha = element;
-						output += element.TEN_DUONG +" ";
-						break;
+				const myApart = await dbContext.NHA.findOne({
+					where:{
+						ID_NHA: id
 					}
-				}
-				for(var i = 0;i<lsDistrict.length;i++){
-					const element = lsDistrict[i];
-					if(element.ID_QUAN == nha.ID_QUAN){
-						quan = element;
-						output += element.TEN_QUAN +" ";
-						break;
+				})
+				const myDistrict = await dbContext.QUAN.findOne({
+					where:{
+						ID_QUAN: myApart.ID_QUAN
 					}
-				}
-				for(var i = 0;i<lsCity.length;i++){
-					const element = lsCity[i];
-					if(element.ID_THANHPHO == quan.ID_THANHPHO){
-						output += element.TEN_THANHPHO +" ";
-						break;
+				})
+				const myCity = await dbContext.THANHPHO.findOne({
+					where:{
+						ID_THANHPHO: myDistrict.ID_THANHPHO
 					}
-				}
+				})
+				const myCountry = await dbContext.QUOCGIA.findOne({
+					where:{
+						ID_QUOCGIA: myCity.ID_QUOCGIA
+					}
+				})
+				const output = myApart.SONHA+" "+myApart.TEN_DUONG+" "+myDistrict.TEN_QUAN+" "+myCity.TEN_THANHPHO+" "+myCountry.TEN_QUOCGIA;
 				return output;
 			}
 		},

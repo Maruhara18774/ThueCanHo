@@ -1,0 +1,38 @@
+.detail-apartment-position{
+    margin: auto;
+    padding-top: 20px;
+}
+.detail-apartment-wrap{
+    margin: auto;
+    width: 1000px;
+    border-style: solid;
+    border-radius: 10px;
+    border-width: 1px;
+    border-color: gainsboro;
+    box-shadow: 5px gainsboro;
+}
+.detail-apartment-wrap .header-left{
+    text-align: left;
+    width: 800px;
+}
+.detail-apartment-wrap .header-right{
+    text-align: right;
+    width: 200px;
+}
+.detail-apartment-wrap .nameApartment{
+    font-size: x-large;
+    font-weight: 600;
+}
+.detail-apartment-wrap .saveApartment{
+    font-size: x-large;
+}
+.detail-apartment-wrap .sticker{
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 8px;
+    padding-right: 8px;
+    background-color: #3380E6;
+    border-radius: 15px;
+    width: fit-content;
+    color: white;
+}

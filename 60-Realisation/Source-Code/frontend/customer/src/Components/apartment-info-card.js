@@ -3,7 +3,7 @@ import Axios from 'axios';
 import './apartment-info-card.css';
 import imageDefault from '../Images/as.jpg';
 import DetailApartment from '../Pages/detail-apartment';
-import {BrowserRouter as Router,Switch,Route, Link} from 'react-router-dom';
+import {BrowserRouter as Router,Switch,Route, Link, BrowserRouter} from 'react-router-dom';
 
 class InfoCard extends Component {
     constructor(props) {
@@ -53,14 +53,10 @@ class InfoCard extends Component {
     }
     render() {
         return (
-            <a href={"/" + this.props.model.ID_NHA.toString()} className="apartment-info-card-warp">
-                <div className="apartment-info-card" href={"/" + this.props.model.ID_NHA.toString()}>
-                    <Router>
-                        <Switch>
-                            <Route path={"/" + this.props.model.ID_NHA.toString()}>{this.getComponent}</Route>
-                        </Switch>
-                    </Router>
-
+            <div>
+                
+                <Link to={"/listApartments/" + this.props.model.ID_NHA.toString()} className="apartment-info-card-warp">
+                <div className="apartment-info-card">
                     <div class="container">
                         <img src={imageDefault} className="imageMain"></img>
                         <div>
@@ -89,8 +85,9 @@ class InfoCard extends Component {
 
                     </div>
                 </div>
-            </a>
-            
+                </Link>
+                
+            </div>
         );
     }
 
