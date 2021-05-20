@@ -69,6 +69,79 @@ module.exports = {
 				
 			}
 		},
+		getListAccount: {
+			rest: {
+				method: "GET",
+				path: "/getListAccount"
+			},
+			async handler() {
+                const checkList = await dbContext.TAIKHOAN.findAll();
+                if (checkList == null){
+                    return "Không có Account nào";
+                } 
+				return checkList;
+			}
+		},		
+		addAccount: {
+			rest: {
+				method: "POST",
+				path: "/addAccount"
+			},
+			params: {
+                username: {type:"string"},
+                password: {type:"string"},
+				role: {type:"string"}
+            },
+			async handler({action,params,meta, ... ctx}) {
+				const {username, password, role} = params;	
+                const createAccount = await dbContext.TAIKHOAN.findOrCreate({
+					where: {TEN_TAIKHOAN: username},
+					defaults: {
+						TEN_TAIKHOAN: username,
+						MATKHAU: password,
+						ROLE_TAIKHOAN: role
+					}
+				});
+				return createAccount;
+			}
+		},
+		getAccountInfo: {
+			rest: {
+				method: "GET",
+				path: "/getAccountInfo/"
+			},
+			async handler() {
+				const {id} =params;
+                const checkList = await dbContext.THONGTINKHACHHANG.findAll({
+					where: {
+						ID_TAIKHOAN: id
+					}
+				});
+                if (checkList == null){
+                    return "Không có Tài khoản này";
+                } 
+				return checkList;
+			}
+		},
+		updateAccount: {
+			rest: {
+				method: "POST",
+				path: "/updateAccount/"
+			},
+			params: {
+				id: {type: "string"},
+                username: {type:"string"},
+                password: {type:"string"},
+				role: {type:"string"}
+            },
+			async handler({action,params,meta, ... ctx}) {
+				const {id, username, password, role} = params;	
+                const updateAccount = await dbContext.TAIKHOAN.findOne({where: {ID_TAIKHOAN: id}})
+				await updateAccount.create({TEN_TAIKHOAN: username, MATKHAU: password, ROLE_TAIKHOAN: role});
+				await updateAccount.save();
+				return updateAccount;
+			}
+		},
         getListApartment: {
 			rest: {
 				method: "GET",
