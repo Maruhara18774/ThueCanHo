@@ -1,0 +1,43 @@
+.booking-position{
+    margin: auto;
+    padding-top: 20px;
+}
+.booking-position .booking-wrap{
+    margin: auto;
+    width: 1000px;
+    border-style: solid;
+    border-radius: 10px;
+    border-width: 1px;
+    border-color: gainsboro;
+    box-shadow: 5px gainsboro;
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+.booking-wrap .progcess table{
+    width: 1000px;
+    color: gainsboro;
+}
+.booking-wrap .progcess table .spacing{
+    width: 70px;
+    border: none;
+    height: 3px;
+    background-color: gainsboro; 
+}
+.booking-wrap .progcess table .active{
+    color:#3380E6;
+}
+.booking-wrap .progcess table .activeSPC {
+    width: 70px;
+    border: none;
+    height: 3px;
+    background-color:#3380E6;
+}
+.booking-wrap .progcess table .done{
+    color:#2ae419cc;
+}
+.booking-wrap .progcess table .doneSPC {
+    width: 70px;
+    border: none;
+    height: 3px;
+    background-color:#2ae419cc;
+}

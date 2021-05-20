@@ -7,6 +7,7 @@ import ListApartment from './Pages/show-apartment';
 import HomePage from './Pages/home'
 import PromotionPage from './Pages/promotion'
 import DetailApartment from './Pages/detail-apartment';
+import BookingForm from './Pages/booking-infor';
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
           <Route path="/promotion" component={PromotionPage}></Route>
           <Route path="/" exact component={HomePage}></Route>
           <Route path="/listApartments/:apartmentId" exact component={DetailApartment}></Route>
+          <Route path="/booking/:apartmentId" exact component={BookingForm}></Route>
         </Switch>
       </BrowserRouter>
       
