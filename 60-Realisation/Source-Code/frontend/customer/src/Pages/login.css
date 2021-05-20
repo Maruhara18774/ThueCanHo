@@ -1,0 +1,46 @@
+.mainZone{
+    padding-top: 50px;
+    padding-bottom: 50px;
+    
+}
+.mainZone .card{
+    border-style: solid;
+    border-color: #3380E6;
+    width: 400px;
+    margin: auto;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    padding-left: 40px;
+    padding-right: 40px;
+    box-shadow: 15px 10px #3380E6;
+}
+.mainZone .card .titleText{
+    color: #3380E6;
+    font-size:x-large;
+    text-align: left;
+}
+.mainZone .card .inputBox{
+    box-sizing: border-box;
+    display: block;
+    width: 100%;
+    border: 3px solid #3380E6;
+    color: #3380E6;
+    background: transparent;
+    border-radius: 15px;
+    padding: 10px 5px 5px 10px;
+}
+.mainZone .card .inputBox:focus{
+    outline: none;
+    border-color: pink;
+}
+.mainZone .card .button{
+    background-color: #3380E6;
+    color: white;
+    border-radius: 15px;
+    padding: 10px 20px 10px 20px;
+    width: fit-content;
+    margin: auto;
+}
+.mainZone .card .button:hover{
+    background-color: pink;
+}
