@@ -28,16 +28,22 @@ class Account extends Component {
         this.setState(this);
     }
 
-    // deleteUser = async id => {
-    //     await axios.delete(`http://localhost:3030/users/${id}`);
-    //     loadUsers();
-    // };
+    deleteUser = () => {
+        Axios.post('http://localhost:33456/api/admin/deleteAccount').then(
+             (res) => {
+                 console.log(res.data);
+             }
+         )
+    };
     render() {
         return (
             <div className="container">
                 <div className="py-4">
                     <h1>Account Management</h1>
                     <div className="row">
+                    <div className="col">
+                            <Link className="btn btn-primary mr-2" to={`/account/add`}>Add</Link>
+                        </div>
                         <div className="col">
                             <div className="input-group mb-3">
                                 <input type="text" className="form-control" placeholder="Tìm kiếm"/>
@@ -45,10 +51,7 @@ class Account extends Component {
                                     <button className="btn btn-primary" type="button"><FaIcon.FaSearch/></button>
                                 </div>
                             </div>
-                        </div>
-                        <div className="col">
-                            <Link className="btn btn-primary mr-2" to={`/account/add`}>Add</Link>
-                        </div>
+                        </div>   
                     </div>
                     <table className="table border shadow">
                         <thead className="thead-dark">
@@ -68,7 +71,7 @@ class Account extends Component {
                                     <td>
                                         <Link className="btn btn-primary mr-2" to={`/account/${val.ID_TAIKHOAN}`}>View</Link>  
                                         <Link className="btn btn-outline-primary mr-2" to={`/account/edit/${val.ID_TAIKHOAN}`}>Edit</Link>
-                                        {/* <Link className="btn btn-danger" onClick={() => deleteUser(val.id)}>Delete</Link> */}
+                                        <Link className="btn btn-danger" onClick={this.deleteUser()}>Delete</Link>
                                     </td>
                                 </tr>
                             ))}

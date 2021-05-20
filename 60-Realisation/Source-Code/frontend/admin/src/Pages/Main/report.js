@@ -1,7 +1,9 @@
 import React,{useState, useEffect}from "react"
 import { ReportData } from '../../SData/reportData'
+import {MonthData} from '../../SData/monthData'
 import { Link } from 'react-router-dom'
 import axios from "axios"
+import * as FaIcon from 'react-icons/fa'
 
 const Report = () => {
     const [apartment, setData] = useState([]);
@@ -19,13 +21,15 @@ const Report = () => {
         await axios.delete(`http://localhost:3030/report/${apartment.id}`);
         loadData();
     };
-
     return (
         <div className="container">
            
                 <div className="py-4">
                     <h1>Report Management</h1>
-                    <div className="row">                     
+                    <div className="row">
+                        <div className="col">
+                            <Link className="btn btn-primary" to={`report/add`}>Add</Link>
+                            </div>                    
                         <div className="col">
                             <div className="input-group mb-3">
                                 <div className="input-group-prepend">
@@ -72,7 +76,6 @@ const Report = () => {
                                     <td>{item.checkOut}</td>
                                     <td>
                                         <Link className="btn btn-info" to={`report/${item.id}`}>View</Link>
-                                        <Link className="btn btn-primary" to={`report/add`}>Add</Link>
                                         <Link className="btn btn-outline-primary" to={`report/edit/${item.id}`}>Edit</Link>
                                         <Link class="btn btn-danger" onClick={() => deleteReport(item.id)}>Delete</Link>
                                     </td>
@@ -80,8 +83,7 @@ const Report = () => {
                             ))}
                         </tbody>
                     </table>
-                </div>
-      
+                </div>   
         </div>
     );
 };

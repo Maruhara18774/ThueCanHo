@@ -19,6 +19,7 @@ class EditAccount extends Component {
         this.setState({ [getName]: getValue });
     }
     onSubmit = (e) => {
+        const {history} = this.props
         e.preventDefault();
         Axios.post('http://localhost:33456/api/admin/updateAccount', {
             "username": this.state.usernameAcc,
@@ -27,6 +28,7 @@ class EditAccount extends Component {
         }).then((res) => {
             console.log(res.data)
         })
+        history.push("/account")
     }
     render() {
         return (
@@ -43,7 +45,7 @@ class EditAccount extends Component {
                         <div className="form-group">
                             <input type="text" className="form-control form-control-lg" name="roleAcc" placeholder="Role" onChange={this.handleChange} />
                         </div>                     
-                        <button className="btn btn-warning btn-block">Update Account</button>
+                        <button className="btn btn-warning btn-block text-white">Update Account</button>
                     </form>
                 </div>
             </div>

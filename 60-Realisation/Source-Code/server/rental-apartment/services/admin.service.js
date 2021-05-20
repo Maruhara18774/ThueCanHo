@@ -10,7 +10,7 @@ const dbContext = require('../src/DBContext')();
 
 
 module.exports = {
-	name: "customer",
+	name: "admin",
 
 	/**
 	 * Settings
@@ -136,12 +136,45 @@ module.exports = {
             },
 			async handler({action,params,meta, ... ctx}) {
 				const {id, username, password, role} = params;	
-                const updateAccount = await dbContext.TAIKHOAN.findOne({where: {ID_TAIKHOAN: id}})
-				await updateAccount.create({TEN_TAIKHOAN: username, MATKHAU: password, ROLE_TAIKHOAN: role});
-				await updateAccount.save();
+                const updateAccount = await dbContext.TAIKHOAN.findOne({where: {ID_TAIKHOAN: id}}).update({TEN_TAIKHOAN: username, MATKHAU: password, ROLE_TAIKHOAN: role});
 				return updateAccount;
 			}
 		},
+		deleteAccount: {
+			rest: {
+				method: "POST",
+				path: "/deleteAccount/"
+			},
+			params: {
+				id: {type: "string"},
+            },
+			async handler({action,params,meta, ... ctx}) {
+				const {id} = params;	
+                const deleteAccount = await dbContext.TAIKHOAN.destroy({
+					where: {ID_TAIKHOAN: id}
+				})
+				return deleteAccount;
+			}
+		},
+		searchAccount:{
+			rest: {
+				method: "POST",
+				path: "/searchAccount"
+			},
+			params: {
+				account: {type: "string"}
+			},
+			async hander({action,params,meta, ...ctx}){
+				var{account} = params
+				account = account.toUpperCase()
+				const lsAccount = await dbContext.TAIKHOAN.findAll();
+				//...
+			}
+		},
+
+
+
+
         getListApartment: {
 			rest: {
 				method: "GET",
