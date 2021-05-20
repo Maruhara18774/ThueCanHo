@@ -1,0 +1,73 @@
+.detail-apartment-position{
+    margin: auto;
+    padding-top: 20px;
+}
+.detail-apartment-wrap{
+    margin: auto;
+    width: 1000px;
+    border-style: solid;
+    border-radius: 10px;
+    border-width: 1px;
+    border-color: gainsboro;
+    box-shadow: 5px gainsboro;
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+.detail-apartment-wrap .header-left{
+    padding-left: 20px;
+    text-align: left;
+    width: 700px;
+    padding-top: 10px;
+}
+.detail-apartment-wrap .header-right{
+    padding-right: 20px;
+    text-align:right;
+    vertical-align: top;
+    width: 300px;
+    padding-top: 10px;
+}
+.detail-apartment-wrap .nameApartment{
+    font-size: x-large;
+    font-weight: 600;
+}
+.detail-apartment-wrap .saveApartment{
+    font-size: x-large;
+}
+.detail-apartment-wrap .sticker{
+    padding-top: 2px;
+    padding-bottom: 2px;
+    padding-left: 20px;
+    padding-right: 20px;
+    background-color: #3380E6;
+    border-radius: 15px;
+    width: fit-content;
+    color: white;
+}
+.detail-apartment-wrap .imageWrapMain{
+    border-radius: 15px;
+}
+.detail-apartment-wrap .imageWrapChild{
+    border-radius: 15px;
+    margin-bottom: 6px;
+}
+.detail-apartment-wrap .priceRental{
+    font-size: x-large;
+    color: orange;
+    margin-top: -20px;
+    font-weight: bold;
+}
+.detail-apartment-wrap .bookNowBtn{
+    background-color: orange;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-right: 60px;
+    padding-left: 60px;
+    color: white;
+    border-radius: 10px;
+    font-weight: bold;
+}
+.detail-apartment-wrap .bookNowBtn:hover{
+    background-color: orangered;
+    text-decoration: none;
+    cursor: pointer;
+}
