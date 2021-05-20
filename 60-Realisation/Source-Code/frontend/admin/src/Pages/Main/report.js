@@ -1,22 +1,8 @@
-<<<<<<< Updated upstream
 import React,{useState, useEffect}from "react"
 import { ReportData } from '../../Components/reportData'
 import { Link } from 'react-router-dom'
 import axios from "axios"
 
-=======
-import React, { useState, useEffect, useMemo } from "react"
-import { Link } from 'react-router-dom'
-import axios from "axios"
-
-//React-Icons
-import * as FaIcon from 'react-icons/fa'
-
-//Data Tĩnh
-import { MonthData } from '../../SData/monthData'
-import { ReportData } from '../../SData/reportData'
-
->>>>>>> Stashed changes
 const Report = () => {
     const [apartment, setData] = useState([]);
 
@@ -33,42 +19,12 @@ const Report = () => {
         await axios.delete(`http://localhost:3030/report/${apartment.id}`);
         loadData();
     };
-<<<<<<< Updated upstream
 
     return (
         <div className="container">
             <div className="container">
                 <div className="py-4">
                     <h1>Report Management</h1>
-=======
-    return (
-        <div className="container">
-           
-                <div className="py-4">
-                    <h1>Report Management</h1>
-                    <div className="row">                     
-                        <div className="col">
-                            <div className="input-group mb-3">
-                                <div className="input-group-prepend">
-                                    <lable className="input-group-text bg-primary text-white">Tháng</lable>
-                                </div>
-                                <select className="custom-select">
-                                    {MonthData.map((item) => (
-                                        <option>{item.label}</option>
-                                    ))}
-                                </select>
-                            </div>
-                        </div>
-                            <div className="col">
-                                <div className="input-group mb-3">
-                                    <input type="text" className="form-control" placeholder="Tìm kiếm"/>
-                                    <div className="input-group-append">
-                                        <button className="btn btn-primary" type="button"><FaIcon.FaSearch/></button>
-                                    </div>
-                                </div>
-                            </div>                
-                    </div>
->>>>>>> Stashed changes
                     <table className="table border shadow">
                         <thead className="thead-dark">
                             <tr>
@@ -93,15 +49,9 @@ const Report = () => {
                                     <td>{item.checkIn}</td>
                                     <td>{item.checkOut}</td>
                                     <td>
-<<<<<<< Updated upstream
                                         <Link className="btn btn-primary mr-2" to={`report/${item.id}`}>View</Link>
                                         <Link className="btn btn-primary mr-2" to={`report/add`}>Add</Link>
                                         <Link className="btn btn-outline-primary mr-2" to={`report/edit/${item.id}`}>Edit</Link>
-=======
-                                        <Link className="btn btn-info" to={`report/${item.id}`}>View</Link>
-                                        <Link className="btn btn-primary" to={`report/add`}>Add</Link>
-                                        <Link className="btn btn-outline-primary" to={`report/edit/${item.id}`}>Edit</Link>
->>>>>>> Stashed changes
                                         <Link class="btn btn-danger" onClick={() => deleteReport(item.id)}>Delete</Link>
                                     </td>
                                 </tr>
@@ -109,11 +59,7 @@ const Report = () => {
                         </tbody>
                     </table>
                 </div>
-<<<<<<< Updated upstream
             </div>
-=======
-      
->>>>>>> Stashed changes
         </div>
     );
 };

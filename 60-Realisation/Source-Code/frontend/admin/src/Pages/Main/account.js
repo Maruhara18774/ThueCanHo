@@ -1,4 +1,4 @@
-<<<<<<< Updated upstream
+
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
@@ -56,7 +56,6 @@ const Account = () => {
 };
 
 export default Account;
-=======
 import React, { Component } from "react";
 import Axios from "axios";
 import { Link } from "react-router-dom";
@@ -141,5 +140,4 @@ class Account extends Component {
 
 export default Account
 
->>>>>>> Stashed changes
 
