@@ -22,6 +22,7 @@ class ListApartment extends Component {
     })
     handleCallback = (newList) =>{
         this.state.myList = newList;
+        console.log("Callback: ");
         this.setState(this);
     }
     render() {
@@ -36,6 +37,7 @@ class ListApartment extends Component {
                         <SelectBar callback={this.handleCallback}/>
                     </div>
                 </div>
+                
                 <div className="mainListApm">
                                 {this.state.myList.map((val, key) => {
                                     return (

@@ -1,7 +1,8 @@
 import {Component,createRef} from 'react';
 import Axios from 'axios';
-import Banner from '../Components/banner'
-import FooterCustom from '../Components/footer'
+import Banner from '../Components/banner';
+import FooterCustom from '../Components/footer';
+import SearchingForm from '../Components/form-search';
 
 
 class HomePage extends Component{
@@ -12,6 +13,7 @@ class HomePage extends Component{
         return (
             <div>
                 <Banner/>
+                <SearchingForm/>
                 <FooterCustom/>
             </div>
             
