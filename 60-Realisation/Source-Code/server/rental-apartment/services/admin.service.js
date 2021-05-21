@@ -47,8 +47,7 @@ module.exports = {
 				const {username, password} = params;
                 if(!username && !password){
                     throw new MoleculerError("Không có người dùng này");
-                }
-				// Test 1: http://localhost:3000/api/user/signin?username=demo1&password=abc123
+				}				
                 const checkUser = await dbContext.TAIKHOAN.findOne({
                     where: {
                         TEN_TAIKHOAN: username,
@@ -156,25 +155,7 @@ module.exports = {
 				return deleteAccount;
 			}
 		},
-		searchAccount:{
-			rest: {
-				method: "POST",
-				path: "/searchAccount"
-			},
-			params: {
-				account: {type: "string"}
-			},
-			async hander({action,params,meta, ...ctx}){
-				var{account} = params
-				account = account.toUpperCase()
-				const lsAccount = await dbContext.TAIKHOAN.findAll();
-				//...
-			}
-		},
-
-
-
-
+		
         getListApartment: {
 			rest: {
 				method: "GET",
