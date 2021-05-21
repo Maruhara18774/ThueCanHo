@@ -25,6 +25,9 @@ class ListApartment extends Component {
         console.log("Callback: ");
         this.setState(this);
     }
+    componentDidMount(){
+        window.scrollTo(0,0);
+    }
     render() {
         return (
 

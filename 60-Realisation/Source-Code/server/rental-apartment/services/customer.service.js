@@ -45,14 +45,12 @@ module.exports = {
             },
 			async handler({action,params,meta, ... ctx}) {
 				const {username, password} = params;
-                if(!username && !password){
-                    throw new MoleculerError("Không có người dùng này");
-                }
 				// Test 1: http://localhost:3000/api/user/signin?username=demo1&password=abc123
                 const checkUser = await dbContext.TAIKHOAN.findOne({
                     where: {
                         TEN_TAIKHOAN: username,
-                        MATKHAU: password
+                        MATKHAU: password,
+						ROLE_TAIKHOAN: 'Customer'
                       }
                 });
 				
@@ -61,7 +59,7 @@ module.exports = {
                 // localhost - 1400 
                 // npx sequelize-auto -h localhost -d RENTALAPARTMENT -u sa -x !Passw0rd -p 1400 -e mssql -o "./src/models"    
 				if (checkUser == null){
-					return "Không có người dùng này";
+					return 0;
 				}
 				else{
 					return checkUser.ID_TAIKHOAN;

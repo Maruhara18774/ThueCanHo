@@ -16,7 +16,7 @@ export default class BookingForm extends Component {
             email: "",
             phone: "",
             giaytotuythanID: "",
-            giaytotuythanType: "",
+            giaytotuythanType: "giấy tờ tùy thân",
             quocTich: "",
             gioiTinh: "",
             idTK: 0,
@@ -33,13 +33,67 @@ export default class BookingForm extends Component {
     nextStep = (current) => {
         this.state.currentStep = current + 1;
         this.setState(this);
+        window.scrollTo(0,0);
     }
     prevStep = (current) => {
         this.state.currentStep = current - 1;
         this.setState(this);
+        window.scrollTo(0,0);
     }
-    handleChange = (input) => e => {
-
+    componentDidMount(){
+        window.scrollTo(0,0);
+    }
+    confirmEmail = () =>{
+        if(!this.state.email.includes("@")||this.state.email ==""){
+            return false;
+        }
+        return true;
+    }
+    confirmPhoneNumber =()=>{
+        if(this.state.phone.length<10||
+            this.state.phone <0||
+            this.state.phone=="")
+            {return false;}
+        return true;
+    }
+    checkInput = () =>{
+        if(this.state.tenKH==""||
+        this.state.email ==""||
+        !this.state.email.includes("@")||
+        this.state.phone==""||
+        this.state.giaytotuythanID==""||
+        this.state.quocTich==""){
+            return false;
+        }
+        return true;
+    }
+    setTenKH = (event) =>{
+        this.state.tenKH=event.target.value;
+        this.setState(this);
+    }
+    setEmail = (event) =>{
+        this.state.email=event.target.value;
+        this.setState(this);
+    }
+    setPhone = (event) =>{
+        this.state.phone=event.target.value;
+        this.setState(this);
+    }
+    setGiaytotuythanID = (event) =>{
+        this.state.giaytotuythanID=event.target.value;
+        this.setState(this);
+    }
+    setGiaytotuythanType = (event) =>{
+        this.state.giaytotuythanType=event.target.value;
+        this.setState(this);
+    }
+    setQuocTich = (event) =>{
+        this.state.quocTich=event.target.value;
+        this.setState(this);
+    }
+    setGioiTinh = (event) =>{
+        this.state.gioiTinh=event.target.value;
+        this.setState(this);
     }
     render() {
         switch (this.state.currentStep) {
@@ -74,8 +128,84 @@ export default class BookingForm extends Component {
                                     </tr>
                                 </table>
                             </div>
-                            Bước 1
-                            <button onClick={() => this.nextStep(this.state.currentStep)}>Next</button>
+                            <hr/>
+                            <div className="inputZone">
+                                <p className="title">Thông tin khách hàng</p>
+                                <form>
+                                        {this.state.tenKH!=""?
+                                        <div class="form-row">
+                                            <label for="FMCustomerName">Họ và tên:</label>
+                                            <input type="text" class="form-control is-valid" id="FMCustomerName" onChange={this.setTenKH} placeholder="Nhập họ và tên ..." required />
+                                            </div>
+                                            : <div class="form-row">
+                                                <label for="FMCustomerName">Họ và tên:</label>
+                                            <input type="text" class="form-control" id="FMCustomerName" onChange={this.setTenKH} placeholder="Nhập họ và tên ..." required />
+                                            </div>}
+                                        <br/>
+                                        {this.confirmEmail()?
+                                        <div class="form-row">
+                                            <label for="FMCustomerEmail">Email:</label>
+                                            <input type="text" class="form-control is-valid" id="FMCustomerEmail" onChange={this.setEmail} placeholder="Nhập email ..." required />
+                                            </div>
+                                            : <div class="form-row">
+                                                <label for="FMCustomerEmail">Email:</label>
+                                            <input type="text" class="form-control" id="FMCustomerEmail" onChange={this.setEmail} placeholder="Nhập email ..." required />
+                                        </div>}
+                                        <br/>
+                                        {this.confirmPhoneNumber()?
+                                        <div class="form-row">
+                                            <label for="FMCustomerPhone">Số điện thoại:</label>
+                                            <input type="number" class="form-control is-valid" id="FMCustomerPhone" onChange={this.setPhone} placeholder="Nhập số điện thoại ..." required />
+                                            </div>
+                                            : <div class="form-row">
+                                                <label for="FMCustomerPhone">Số điện thoại:</label>
+                                            <input type="number" class="form-control" id="FMCustomerPhone" onChange={this.setPhone} placeholder="Nhập số điện thoại ..." required />
+                                        </div>}
+                                        <br/>
+                                        <div class="form-row">
+                                            <label for="FMCustomerHumanType">Loại giấy tờ tùy thân:</label>
+                                            <select value={this.state.giaytotuythanType} onChange={this.setGiaytotuythanType} className="custom-select" id="FMCustomerHumanType">
+                                                <option value="Căng cước công dân" selected>Căn cước công dân</option>
+                                                <option value="Chứng minh nhân dân">Chứng minh nhân dân</option>
+                                                <option value="Hộ chiếu">Hộ chiếu</option>
+                                                <option value="Visa">Visa</option>
+                                            </select>
+                                        </div>
+                                        <br/>
+                                        {this.state.giaytotuythanID!=""?
+                                        <div class="form-row">
+                                            <label for="FMCustomerHumanID">Mã {this.state.giaytotuythanType}:</label>
+                                            <input type="number" class="form-control is-valid" id="FMCustomerHumanID" onChange={this.setGiaytotuythanID} placeholder={"Nhập mã "+this.state.giaytotuythanType+" ..."} required />
+                                            </div>
+                                            : <div class="form-row">
+                                                <label for="FMCustomerHumanID">Mã {this.state.giaytotuythanType}:</label>
+                                            <input type="number" class="form-control" id="FMCustomerHumanID" onChange={this.setGiaytotuythanID} placeholder={"Nhập mã "+this.state.giaytotuythanType+" ..."} required />
+                                        </div>}
+                                        <br/>
+                                        {this.state.quocTich!=""?
+                                        <div class="form-row">
+                                            <label for="FMCustomerCountry">Quốc tịch:</label>
+                                            <input type="text" class="form-control is-valid" id="FMCustomerCountry" onChange={this.setQuocTich} placeholder="Nhập quốc tịch ..." required />
+                                            </div>
+                                            : <div class="form-row">
+                                                <label for="FMCustomerCountry">Quốc tịch:</label>
+                                            <input type="text" class="form-control" id="FMCustomerCountry" onChange={this.setQuocTich} placeholder="Nhập quốc tịch ..." required />
+                                        </div>}
+                                        <br/>
+                                        <div class="form-row">
+                                            <label for="FMCustomerGender">Loại giấy tờ tùy thân:</label>
+                                            <select value={this.state.gioiTinh} onChange={this.setGioiTinh} className="custom-select" id="FMCustomerHumanGender">
+                                                <option value="Nam" selected>Nam</option>
+                                                <option value="Nữ">Nữ</option>
+                                                <option value="Khác">Khác</option>
+                                            </select>
+                                        </div>
+                                </form>
+                                <br/>
+                                {this.checkInput()?
+                                <button type="button" class="btn btn-warning btn-lg" onClick={() => this.nextStep(this.state.currentStep)}>Bước tiếp theo</button>:
+                                <button type="button" class="btn btn-secondary btn-lg" disabled>Hãy điền đủ thông tin ...</button>}
+                            </div>
                         </div>
                     </div>
                 )
