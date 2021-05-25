@@ -9,6 +9,7 @@ export default class BookingForm extends Component {
         this.state = {
             idApartment: document.location.pathname.substring(9),
             apartmentInfo: {},
+            address: "",
             currentStep: 1,
             // TAIKHOAN - Tich diem
             username: "",
@@ -29,7 +30,7 @@ export default class BookingForm extends Component {
             checkOut: "",
             soBuaSang: 0,
             soGiuongPhu: 0,
-
+            ghiChu: ""
         }
         this.getApartmentInfo();
     }
@@ -61,24 +62,14 @@ export default class BookingForm extends Component {
             {return false;}
         return true;
     }
-    confirmTimeInput = (time)=>{
-        if(time==""){
-            return false;
-        }
-        const pointIn = this.state.apartmentInfo.CHECKIN.substring(11,16);
-        const pointOut = this.state.apartmentInfo.CHECKOUT.substring(11,16);
-        const hour = time.substring(0,2);
-        const minutes = time.substring(3,5);
-        if(parseInt(hour)<parseInt(pointIn.substring(0,2))||parseInt(hour)>parseInt(pointOut.substring(0,2))){
-            return false;
-        }
-        if(parseInt(hour)==parseInt(pointIn.substring(0,2))&&parseInt(minutes)<parseInt(pointIn.substring(3,5))){
-            return false;
-        }
-        if(parseInt(hour)==parseInt(pointOut.substring(0,2))&&parseInt(minutes)>parseInt(pointOut.substring(3,5))){
-            return false;
-        }
-        return true;
+    countDate = () =>{
+        var day1 = new Date(this.state.ngayDen);
+        var day2 = new Date(this.state.ngayDi);
+
+        var difference= Math.abs(day2-day1);
+        var days = difference/(1000 * 3600 * 24)
+
+        return days;
     }
     checkInput1 = () =>{
         /*
@@ -94,15 +85,42 @@ export default class BookingForm extends Component {
         return true;
     }
     checkInput2 = () =>{
+        /*
         if(this.state.ngayDen==""||
         this.state.ngayDi==""||
         this.state.checkIn==""||
         this.state.checkOut==""||
-        !this.confirmTimeInput(this.state.checkIn)||
-        !this.confirmTimeInput(this.state.checkOut)){
+        this.state.soBuaSang<0||
+        this.state.soGiuongPhu<0||
+        this.state.soGiuongPhu > parseInt(this.state.apartmentInfo.SO_GIUONGPHU))
+        {
             return false;
         }
+        */
         return true;
+    }
+    checkInput3 = () =>{
+        if(this.state.username==""||this.state.password=="")
+        {
+            alert("Chưa nhập đủ tên đăng nhập/ mật khẩu!");
+        }
+        else{
+            Axios.post('http://localhost:33456/api/customer/signin',{
+                "username": this.state.username,
+                "password": this.state.password
+            }).then((response)=>{
+                this.state.idTK = parseInt(response.data);
+                this.setState(this,()=>{
+                    if(this.state.idTK == 0){
+                        alert("Thông tin đã nhập không đúng!");
+                    }
+                    else{
+                        alert("Đăng nhập thành công");
+                        this.nextStep(this.state.currentStep);
+                    }
+                });
+            });
+        }
     }
     // Input state
     setTenKH = (event) =>{
@@ -150,6 +168,26 @@ export default class BookingForm extends Component {
         this.state.checkOut = event.target.value;
         this.setState(this);
     }
+    setSoBuaSang = (event) =>{
+        this.state.soBuaSang = parseInt(event.target.value);
+        this.setState(this);
+    }
+    setSoGiuongPhu = (event) =>{
+        this.state.soGiuongPhu = parseInt(event.target.value);
+        this.setState(this);
+    }
+    setUsername = (event)=>{
+        this.state.username = event.target.value;
+        this.setState(this);
+    }
+    setPassword = (event)=>{
+        this.state.password = event.target.value;
+        this.setState(this);
+    }
+    setGhiChu = (event) =>{
+        this.state.ghiChu = event.target.value;
+        this.setState(this);
+    }
     getDateNow = ()=>{
         var today = new Date();
         var dd = String(today.getDate()).padStart(2, '0');
@@ -162,13 +200,20 @@ export default class BookingForm extends Component {
         Axios.post("http://localhost:33456/api/customer/getDetailApartment",{id: this.state.idApartment})
         .then(response=>{
             this.state.apartmentInfo = response.data[0];
-            this.setState(this);
+            this.setState(this,()=>{
+                this.getAddress(this.state.apartmentInfo.ID_NHA);
+            });
         })
         
     }
-
+    getAddress = (idNha) =>{
+        Axios.post('http://localhost:33456/api/customer/getAddressApartment',{id: idNha}).then(
+            (response) => {
+                this.state.address = response.data;
+                this.setState(this);
+            });
+    }
     render() {
-        
         switch (this.state.currentStep) {
             case 1:
                 return (
@@ -318,10 +363,10 @@ export default class BookingForm extends Component {
                                 <form>
                                     <div  className="form-row">
                                         <div class="form-group col-md-6">
-                                            <label for="FMBookingDayFrom">Ngày đến:</label>
+                                            <label for="FMBookingDayFrom">Ngày đến</label>
                                             <input type="date" class="form-control is-valid" id="FMBookingDayFrom" min={this.getDateNow()} value={this.getDateNow()} onChange={this.setNgayDen} required />
                                             </div>
-                                        {(this.state.ngayDi!="")&&(this.state.ngayDen=="")?
+                                        {this.state.ngayDi!=""?
                                         <div class="form-group col-md-6">
                                             <label for="FMBookingDayTo">Ngày đi</label>
                                             <input type="date" class="form-control is-valid" id="FMBookingDayTo" min={this.state.ngayDen} onChange={this.setNgayDi} required />
@@ -332,31 +377,59 @@ export default class BookingForm extends Component {
                                             </div>}
                                     </div>
                                     <div  className="form-row">
-                                        {this.confirmTimeInput(this.state.checkIn)?
+                                        {this.state.checkIn!=""?
                                         <div class="form-group col-md-6">
-                                            <label for="FMBookingTimeFrom">Checkin:</label>
-                                            <input type="time" class="form-control is-valid" id="FMBookingTimeFrom" required />
+                                            <label for="FMBookingTimeFrom">Checkin</label>
+                                            <input type="time" class="form-control is-valid" id="FMBookingTimeFrom" onChange={this.setCheckin} required />
                                             </div>
                                             : <div class="form-group col-md-6">
-                                                <label for="FMBookingTimeFrom">Checkin:</label>
-                                            <input type="time" class="form-control" id="FMBookingTimeFrom" required />
+                                                <label for="FMBookingTimeFrom">Checkin</label>
+                                            <input type="time" class="form-control" id="FMBookingTimeFrom" onChange={this.setCheckin} required />
                                             </div>}
-                                        {this.confirmTimeInput(this.state.checkOut)?
+                                        {this.state.checkOut!= ""?
                                         <div class="form-group col-md-6">
                                             <label for="FMBookingTimeTo">Checkout</label>
-                                            <input type="time" class="form-control is-valid" id="FMBookingTimeTo" required />
+                                            <input type="time" class="form-control is-valid" id="FMBookingTimeTo" onChange={this.setCheckout} required />
                                             </div>
                                             : <div class="form-group col-md-6">
                                                 <label for="FMBookingTimeTo">Checkout</label>
                                             <input type="time" class="form-control" id="FMBookingTimeTo" onChange={this.setCheckout} required />
                                             </div>}
                                     </div>
-                                        
+                                    <div className="form-row">
+                                        <div class="form-group col-md-6">
+                                            <label for="FMBookingBrfCount">Số bữa sáng</label>
+                                            <input type="number" class="form-control is-valid" id="FMBookingBrfCount" placeholder="Nhập số bữa sáng ..." defaultValue="0" onChange={this.setSoBuaSang}/>
+                                        </div>
+                                        {this.state.soGiuongPhu <= parseInt(this.state.apartmentInfo.SO_GIUONGPHU) ?
+                                            <div class="form-group col-md-6">
+                                                <label for="FMBookingExBed">Số giường phụ</label>
+                                                <input type="number" class="form-control  is-valid" id="FMBookingExBed" placeholder="Nhập số giường phụ ..." defaultValue="0" onChange={this.setSoGiuongPhu}/>
+                                            </div> :
+                                                <div class="form-group col-md-6">
+                                                    <label for="FMBookingExBed">Số giường phụ</label>
+                                                    <input type="number" class="form-control" id="FMBookingExBed" placeholder="Nhập số giường phụ ..." defaultValue="0" onChange={this.setSoGiuongPhu}/>
+                                                </div>
+                                    }
+                                    </div>
+                                    <div className="form-row">
+                                        <div class="form-group col-md-12">
+                                            <label for="FMBookingNote">Ghi chú</label>
+                                            <textarea class="form-control is-valid" id="FMBookingNote" rows="3" onChange={this.setGhiChu}></textarea>
+                                        </div>
+                                    </div>
+                                    <br/>
+                                    <div className="form-row">
+                                        <div class="form-group col-md-6">
+                                            <button type="button" class="btn btn-secondary btn-lg" onClick={() => this.prevStep(this.state.currentStep)}>Trở về</button>
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            {this.checkInput2() ?
+                                                <button type="button" class="btn btn-warning btn-lg" onClick={() => this.nextStep(this.state.currentStep)}>Bước tiếp theo</button>:
+                                                <button type="button" class="btn btn-secondary btn-lg" disabled>Hãy điền đủ thông tin ...</button>}
+                                        </div>
+                                    </div>
                                 </form>
-                                <br/>
-                                {this.checkInput2()?
-                                <button type="button" class="btn btn-warning btn-lg" onClick={() => this.nextStep(this.state.currentStep)}>Bước tiếp theo</button>:
-                                <button type="button" class="btn btn-secondary btn-lg" disabled>Hãy điền đủ thông tin ...</button>}
                             </div>
                         </div>
                     </div>
@@ -391,9 +464,42 @@ export default class BookingForm extends Component {
                                     </tr>
                                 </table>
                             </div>
-                            Bước 3
-                                <button onClick={() => this.prevStep(this.state.currentStep)}>Previous</button>
-                            <button onClick={() => this.nextStep(this.state.currentStep)}>Next</button>
+                            <hr/>
+                            <div className="inputZone">
+                                <p className="title">Xác nhận đăng nhập</p>
+                                <form>
+                                    <div className="form-row">
+                                        <div class="form-group check col-md-12 ">
+                                            <label for="FMPointUsername">Tên đăng nhập</label>
+                                            <input type="text" class="form-control" id="FMPointUsername" placeholder="Nhập tên đăng nhập ..." onChange={this.setUsername} defaultValue={this.state.username} required />
+                                        </div>
+                                    </div>
+                                    <div className="form-row">
+                                        <div class="form-group check col-md-12">
+                                            <label for="FMPointPassword">Mật khẩu</label>
+                                            <input type="password" class="form-control" id="FMPointPassword" placeholder="Nhập mật khẩu ..." onChange={this.setPassword} defaultValue={this.state.password} required />
+                                        </div>
+                                    </div>
+                                    <div className="form-row">
+                                        <div class="form-group col-md-4">
+                                            <button type="button" class="btn btn-secondary btn-lg" onClick={() => this.prevStep(this.state.currentStep)}>Trở về</button>
+                                        </div>
+                                        {this.state.username!=""&&this.state.password!=""?
+                                        <div class="form-group col-md-4">
+                                        <button type="button" class="btn btn-primary btn-lg" onClick={() => this.checkInput3()}>Xác nhận</button>
+                                    </div>:
+                                    <div class="form-group col-md-4">
+                                    <button type="button" class="btn btn-secondary btn-lg" onClick={() => this.checkInput3()} disabled>Xác nhận</button>
+                                </div>
+                                    }
+                                        
+                                        <div class="form-group col-md-4">
+                                            <button type="button" class="btn btn-warning btn-lg" onClick={() => this.nextStep(this.state.currentStep)}>Bước tiếp theo</button>
+                                        </div>
+                                    </div>
+                                </form>
+                                
+                            </div>
                         </div>
                     </div>
                 )
@@ -427,9 +533,21 @@ export default class BookingForm extends Component {
                                     </tr>
                                 </table>
                             </div>
-                            Bước 4
-                            <button onClick={() => this.prevStep(this.state.currentStep)}>Previous</button>
-                            <button onClick={() => this.nextStep(this.state.currentStep)}>Next</button>
+                            <hr/>
+                            <div className="inputZone">
+                                <p className="title">Chọn quà tặng</p>
+                                <form>
+                                    <br/>
+                                    <div className="form-row">
+                                        <div class="form-group col-md-6">
+                                            <button type="button" class="btn btn-secondary btn-lg" onClick={() => this.prevStep(this.state.currentStep)}>Trở về</button>
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                                <button type="button" class="btn btn-warning btn-lg" onClick={() => this.nextStep(this.state.currentStep)}>Bước tiếp theo</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
                         </div>
                     </div>
                 )
@@ -463,9 +581,88 @@ export default class BookingForm extends Component {
                                     </tr>
                                 </table>
                             </div>
-                            Bước 5
-                            <button onClick={() => this.prevStep(this.state.currentStep)}>Previous</button>
-                            <button onClick={() => this.nextStep(this.state.currentStep)}>Next</button>
+                            <hr/>
+                            <div className="inputZone">
+                                <p className="title">Thông tin khách hàng</p>
+                                <table>
+                                    <tr>
+                                        <td>Tên khách hàng:</td>
+                                        <th>{this.state.tenKH}</th>
+                                    </tr>
+                                    <tr>
+                                        <td>Email:</td>
+                                        <th>{this.state.email}</th>
+                                    </tr>
+                                    <tr>
+                                        <td>Số điện thoại:</td>
+                                        <th>{this.state.phone}</th>
+                                    </tr>
+                                    <tr>
+                                        <td>Giấy tờ tùy thân:</td>
+                                        <th>{this.state.giaytotuythanType} - {this.state.giaytotuythanType}</th>
+                                    </tr>
+                                    <tr>
+                                        <td>Quốc tịch:</td>
+                                        <th>{this.state.quocTich}</th>
+                                    </tr>
+                                    <tr>
+                                        <td>Giới tính:</td>
+                                        <th>{this.state.gioiTinh}</th>
+                                    </tr>
+                                    {this.state.idTK != 0 ?
+                                    <tr>
+                                        <td>Tài khoản tích điểm:</td>
+                                        <th>{this.state.username}</th>
+                                    </tr>:
+                                    <tr> </tr>}
+                                </table>
+
+                                <p className="title">Thông tin thuê căn hộ</p>
+                                <table>
+                                    <tr>
+                                        <td>Tên căn hộ:</td>
+                                        <th>{this.state.apartmentInfo.TEN_NHA}</th>
+                                    </tr>
+                                    <tr>
+                                        <td>Địa chỉ:</td>
+                                        <th>{this.state.address}</th>
+                                    </tr>
+                                    <tr>
+                                        <td>Ngày:</td>
+                                        <th>{this.state.ngayDen} - {this.state.ngayDi} ({this.countDate()} ngày)</th>
+                                    </tr>
+                                    // Doing: Tính tổng tiền nhà
+                                    <tr>
+                                        <td>Thời gian:</td>
+                                        <th>Checkin: {this.state.checkIn} - Checkout: {this.state.checkOut}</th>
+                                    </tr>
+                                    <tr>
+                                        <td>Quốc tịch:</td>
+                                        <th>{this.state.quocTich}</th>
+                                    </tr>
+                                    <tr>
+                                        <td>Giới tính:</td>
+                                        <th>{this.state.gioiTinh}</th>
+                                    </tr>
+                                    {this.state.idTK != 0 ?
+                                    <tr>
+                                        <td>Tài khoản tích điểm:</td>
+                                        <th>{this.state.username}</th>
+                                    </tr>:
+                                    <tr> </tr>}
+                                </table>
+                                <form>
+                                    <br/>
+                                    <div className="form-row">
+                                        <div class="form-group col-md-6">
+                                            <button type="button" class="btn btn-secondary btn-lg" onClick={() => this.prevStep(this.state.currentStep)}>Trở về</button>
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                                <button type="button" class="btn btn-warning btn-lg" onClick={() => this.nextStep(this.state.currentStep)}>Gửi thông tin</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
                         </div>
                     </div>
                 )
