@@ -57,6 +57,49 @@ module.exports = {
 				}
 			},
 		},
+		contactRegistration: {
+			rest: {
+				method: "POST",
+				path: "/registrationDetail/contactRegistration",
+			},
+			params: {
+				fullName: { type: "string" },
+				email: { type: "string" },
+				phoneNumber: { type: "string" },
+				idenCode: { type: "string" },
+				idenType: { type: "string" },
+				country: { type: "string" },
+				gender: { type: "string" },
+				address: { type: "string" },
+				taxCode: { type: "string" },
+			},
+			async handler({ action, params, meta, ...ctx }) {
+				const {
+					fullName,
+					email,
+					phoneNumber,
+					idenCode,
+					idenType,
+					country,
+					gender,
+					address,
+					taxCode,
+				} = params;
+
+				const createUser = await dbContext.THONGTINCHUHO.create({
+					TEN_CHUHO: fullName,
+					EMAIL: email,
+					PHONE_NUMBER: phoneNumber,
+					MA_GIAYTOTUYTHAN: idenCode,
+					LOAI_GIAYTOTUYTHAN: idenType,
+					QUOCTICH: country,
+					GIOITINH: gender,
+					DIACHI: address,
+					MASO_THUE: taxCode,
+				});
+				return createUser;
+			},
+		},
 		register: {
 			rest: {
 				method: "POST",
