@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import "../../App.css";
+import "../../RegistrationDetail.css";
 
 class SelectCustom extends Component {
   state = {

@@ -1,6 +1,7 @@
-import './App.css';
-import Navbar from './components/paner-form/Navbar'
-import MiniNavbar from './components/paner-form/MiniNavbar'
+import React from 'react'
+import '../../RegistrationDetail.css';
+import Navbar from '../paner-form/Navbar'
+import MiniNavbar from '../paner-form/MiniNavbar'
 import { BrowserRouter as Router} from 'react-router-dom';
 
 function RegistrationDetail() {
