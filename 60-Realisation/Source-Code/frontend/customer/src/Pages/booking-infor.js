@@ -11,6 +11,7 @@ export default class BookingForm extends Component {
             apartmentInfo: {},
             address: "",
             currentStep: 1,
+            price: {},
             // TAIKHOAN - Tich diem
             username: "",
             password: "",
@@ -30,7 +31,13 @@ export default class BookingForm extends Component {
             checkOut: "",
             soBuaSang: 0,
             soGiuongPhu: 0,
-            ghiChu: ""
+            ghiChu: "",
+            // TINH TOAN
+            totalPhong: 0,
+            totalBuaSang:0,
+            totalGiuongPhu: 0,
+            phiGTGT:0,
+            total:0
         }
         this.getApartmentInfo();
     }
@@ -38,6 +45,9 @@ export default class BookingForm extends Component {
     nextStep = (current) => {
         this.state.currentStep = current + 1;
         this.setState(this);
+        if(this.state.currentStep == 4){
+            this.calcAll();
+        }
         window.scrollTo(0,0);
     }
     prevStep = (current) => {
@@ -72,7 +82,7 @@ export default class BookingForm extends Component {
         return days;
     }
     checkInput1 = () =>{
-        /*
+        
         if(this.state.tenKH==""||
         this.state.email ==""||
         !this.state.email.includes("@")||
@@ -81,11 +91,11 @@ export default class BookingForm extends Component {
         this.state.quocTich==""){
             return false;
         }
-        */
+        
         return true;
     }
     checkInput2 = () =>{
-        /*
+        
         if(this.state.ngayDen==""||
         this.state.ngayDi==""||
         this.state.checkIn==""||
@@ -96,7 +106,7 @@ export default class BookingForm extends Component {
         {
             return false;
         }
-        */
+        
         return true;
     }
     checkInput3 = () =>{
@@ -121,6 +131,28 @@ export default class BookingForm extends Component {
                 });
             });
         }
+    }
+    calcAll = () =>{
+        var day = this.countDate();
+        if(day<=4){
+            this.state.totalPhong = (day*this.state.price.MUCGIA_MOT)-this.state.price.KHUYENMAI;
+        }
+        else if(day <= 7){
+            this.state.totalPhong = (day*this.state.price.MUCGIA_HAI)-this.state.price.KHUYENMAI;
+        }
+        else{
+            this.state.totalPhong = (day*this.state.price.MUCGIA_BA)-this.state.price.KHUYENMAI;
+        }
+        if(this.state.soBuaSang >0){
+            this.state.totalBuaSang = this.state.soBuaSang * day *this.state.apartmentInfo.PHUPHI_BUASANG;
+        }
+        if(this.state.soGiuongPhu>0){
+            this.state.totalGiuongPhu = this.state.soGiuongPhu*200000;
+        }
+        var tong = this.state.totalPhong+this.state.totalBuaSang+this.state.totalGiuongPhu;
+        this.state.phiGTGT = (tong*10)/100;
+        this.state.total = tong + this.state.phiGTGT;
+        this.setState(this);
     }
     // Input state
     setTenKH = (event) =>{
@@ -202,6 +234,7 @@ export default class BookingForm extends Component {
             this.state.apartmentInfo = response.data[0];
             this.setState(this,()=>{
                 this.getAddress(this.state.apartmentInfo.ID_NHA);
+                this.getApartmentPrice(this.state.apartmentInfo.ID_BANGGIA.toString());
             });
         })
         
@@ -210,6 +243,13 @@ export default class BookingForm extends Component {
         Axios.post('http://localhost:33456/api/customer/getAddressApartment',{id: idNha}).then(
             (response) => {
                 this.state.address = response.data;
+                this.setState(this);
+            });
+    }
+    getApartmentPrice = (idBangGia) =>{
+        Axios.post('http://localhost:33456/api/customer/getApartmentPrice',{idPrice: idBangGia}).then(
+            (response) => {
+                this.state.price = response.data;
                 this.setState(this);
             });
     }
@@ -631,25 +671,34 @@ export default class BookingForm extends Component {
                                         <td>Ngày:</td>
                                         <th>{this.state.ngayDen} - {this.state.ngayDi} ({this.countDate()} ngày)</th>
                                     </tr>
-                                    // Doing: Tính tổng tiền nhà
                                     <tr>
-                                        <td>Thời gian:</td>
-                                        <th>Checkin: {this.state.checkIn} - Checkout: {this.state.checkOut}</th>
+                                        <td>Tiền phòng:</td>
+                                        <th>{this.state.totalPhong}</th>
                                     </tr>
                                     <tr>
-                                        <td>Quốc tịch:</td>
-                                        <th>{this.state.quocTich}</th>
+                                        <td>Số bữa sáng:</td>
+                                        <th>{this.state.soBuaSang}</th>
                                     </tr>
                                     <tr>
-                                        <td>Giới tính:</td>
-                                        <th>{this.state.gioiTinh}</th>
+                                        <td>Tiền bữa sáng:</td>
+                                        <th>{this.state.totalBuaSang}</th>
                                     </tr>
-                                    {this.state.idTK != 0 ?
                                     <tr>
-                                        <td>Tài khoản tích điểm:</td>
-                                        <th>{this.state.username}</th>
-                                    </tr>:
-                                    <tr> </tr>}
+                                        <td>Số giường phụ:</td>
+                                        <th>{this.state.soGiuongPhu}</th>
+                                    </tr>
+                                    <tr>
+                                        <td>Tiền giường phụ:</td>
+                                        <th>{this.state.totalGiuongPhu}</th>
+                                    </tr>
+                                    <tr>
+                                        <td>Phí GTGT:</td>
+                                        <th>{this.state.phiGTGT}</th>
+                                    </tr>
+                                    <tr>
+                                        <td>Tổng cộng:</td>
+                                        <th>{this.state.total}</th>
+                                    </tr>
                                 </table>
                                 <form>
                                     <br/>
@@ -680,8 +729,8 @@ export default class BookingForm extends Component {
                                         <td><i class="fas fa-sign-in-alt done"></i></td>
                                         <td><hr className="doneSPC" /></td>
                                         <td><i class="fas fa-gift done"></i></td>
-                                        <td><hr className="activeSPC" /></td>
-                                        <td><i class="fas fa-money-bill-wave active"></i></td>
+                                        <td><hr className="doneSPC" /></td>
+                                        <td><i class="fas fa-money-bill-wave done"></i></td>
                                     </tr>
                                     <tr>
                                         <th className="done">Cá nhân</th>
@@ -692,11 +741,15 @@ export default class BookingForm extends Component {
                                         <th />
                                         <th className="done">Quà tặng</th>
                                         <th />
-                                        <th className="active">Xác nhận</th>
+                                        <th className="done">Xác nhận</th>
                                     </tr>
                                 </table>
                             </div>
-                            Thành công
+                            <hr/>
+                            <div className="inputZone">
+                                <p className="title">Đặt thuê thành công</p>
+                                <p className="title">Chúng tôi sẽ liên hệ sớm nhất có thể</p>
+                            </div>
                             <Link to="/">Trở về trang chủ</Link>
                         </div>
                     </div>
