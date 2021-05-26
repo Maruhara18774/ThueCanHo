@@ -1,5 +1,13 @@
 import React from 'react';
+import Navbar from '../paner-form/Navbar';
+
 
 export default function Services() {
-  return <h1 className='services'>SERVICES</h1>;
+  return (
+    <>
+      <Navbar/>
+      <div style={{ backgroundImage: "url(/images/img-2.jpg)" }} className='services'>SERVICE</div>
+    </>
+  );
 }
+
