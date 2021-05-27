@@ -1,6 +1,7 @@
 /* eslint-disable react/no-direct-mutation-state */
 import React, { Component ,createRef} from "react";
 import "../../RegistrationDetail.css";
+import { Link } from "react-router-dom";
 import { PropertyData } from "../data/PropertyType";
 import Axios from "axios";
 class GenerationInformation extends Component {
@@ -26,7 +27,7 @@ class GenerationInformation extends Component {
     this.getListCountry();
   }
   createContact =() =>{
-    Axios.post("http://localhost:3000/api/partner/registrationDetail/contactRegistration",{
+    Axios.post("http://localhost:33456/api/partner/registrationDetail/contactRegistration",{
       "fullName": this.fullName.current.value,
       "email" : this.email.current.value,
       "phoneNumber" : this.phoneNumber.current.value,
@@ -40,7 +41,7 @@ class GenerationInformation extends Component {
   };
   getListCountry = () => {
     Axios.post(
-      "http://localhost:3000/api/partner/registrationDetail/getListCountry",
+      "http://localhost:33456/api/partner/registrationDetail/getListCountry",
       {}
     ).then((response) => {
       this.state.lstCountry = response.data;
@@ -49,7 +50,7 @@ class GenerationInformation extends Component {
   };
   getListCity = () => {
     Axios.post(
-      "http://localhost:3000/api/partner/registrationDetail/getListCity",
+      "http://localhost:33456/api/partner/registrationDetail/getListCity",
       { countryId: this.state.idCountry }
     ).then((response) => {
       this.state.lstCity = response.data;
@@ -58,7 +59,7 @@ class GenerationInformation extends Component {
   };
   getListDistrict = () => {
     Axios.post(
-      "http://localhost:3000/api/partner/registrationDetail/getListDistrict",
+      "http://localhost:33456/api/partner/registrationDetail/getListDistrict",
       { cityId: this.state.idCity }
     ).then((response) => {
       this.state.lstDistrict = response.data;
@@ -996,16 +997,9 @@ class GenerationInformation extends Component {
               </div>
             </div>
           </div>
-          <div
-            className="block"
-            style={{
-              marginRight: "0px",
-              marginBottom: "50px",
-              backgroundColor: "red",
-              width: "20px",
-              height: "50px",
-            }}
-          ></div>
+          <div className="block css-contact">
+            <Link to="/registrationDetail/propertyDetail"><button className="btn-contact" onClick={this.createContact}>Save and Continues</button></Link>
+          </div>
         </div>
       </>
     );

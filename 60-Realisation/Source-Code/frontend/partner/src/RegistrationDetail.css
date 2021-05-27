@@ -1123,3 +1123,21 @@ textarea {
   border-top-left-radius: 0px;
   border-bottom-left-radius: 0px;
 }
+.btn-contact {
+  outline: none;
+  box-shadow: none;
+  border: 1px solid rgb(217, 223, 232);
+  width: 250px;
+  height: 40px;
+  font-size: 16px;
+  background-color: white;
+  border-radius: 5px;
+}
+.css-contact {
+  margin-right: 0px;
+  margin-bottom: 50px;
+  width: 100%;
+  display: grid;
+  justify-content: end;
+  height: 50px;
+}

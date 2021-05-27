@@ -15,7 +15,7 @@ class Rooms extends React.Component {
   }
   getListRoom = () => {
     axios
-      .post("http://localhost:3000/partner/registrationDetail/getRoomType", {})
+      .post("http://localhost:33456/partner/registrationDetail/getRoomType", {})
       .then((response) => {
         this.state.lstRoom = response.data;
         this.setState(this);
@@ -24,7 +24,7 @@ class Rooms extends React.Component {
   getListBed = () => {
     axios
       .post(
-        "http://localhost:3000/api/partner/registrationDetail/getBedType",
+        "http://localhost:33456/api/partner/registrationDetail/getBedType",
         {}
       )
       .then((response) => {
