@@ -28,7 +28,7 @@ class Account extends Component {
         this.setState(this);
     }
 
-    deleteUser = () => {
+    deleteUser = (idTK) => {
         Axios.post('http://localhost:33456/api/admin/deleteAccount', { id: idTK.toString()}).then(
              (res) => {
                  console.log(res.data);
