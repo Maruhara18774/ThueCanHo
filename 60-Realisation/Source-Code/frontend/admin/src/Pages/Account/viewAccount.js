@@ -3,12 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import Axios from "axios";
 
 const ViewAccount = () => {
-    const [user, setUser] = useState({
-        name: "",
-        username: "",
-        email: "",
-        phone: "",
-    });
+    const [user, setUser] = useState({});
     const { id } = useParams();
     useEffect(() => {
         loadUser();
