@@ -1,6 +1,5 @@
 .cards {
   padding: 4rem;
-  background: #fff;
 }
 
 h1 {
@@ -49,6 +48,7 @@ h1 {
   width: 100%;
   padding-top: 67%;
   overflow: hidden;
+  margin-bottom: inherit;
 }
 
 .fade-img {
@@ -91,6 +91,7 @@ h1 {
 
 .cards__item__info {
   padding: 20px 30px 30px;
+  background-color: #fff;
 }
 
 .cards__item__text {
