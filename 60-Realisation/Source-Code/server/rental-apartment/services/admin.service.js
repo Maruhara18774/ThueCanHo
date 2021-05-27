@@ -132,7 +132,7 @@ module.exports = {
 			},
 			async handler() {
 				const {id} = params;
-                const checkList = await dbContext.THONGTINKHACHHANG.findOne({
+                const checkList = await dbContext.TAIKHOAN.findOne({
 					where: {
 						ID_TAIKHOAN: id
 					}
