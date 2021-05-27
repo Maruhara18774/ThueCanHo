@@ -74,24 +74,25 @@ export default class BookingForm extends Component {
                     });
                     
                 }
-                alert(this.getDateNow());
-                Axios.post('http://localhost:33456/api/customer/rentalApartment', {
+                const sendData = {
                     idNha: this.state.idApartment,
-                    idTTKH: idTTKH,
+                    idTTKH: idTTKH.toString(),
                     ngayDat: this.getDateNow(),
                     checkIn: this.state.checkIn,
                     checkOut: this.state.checkOut,
                     ngayDen: this.state.ngayDen,
                     ngayDi: this.state.ngayDi,
-                    tongTienPhong: this.state.totalPhong,
-                    buaSang: this.state.soBuaSang,
-                    tongTienBuaSang: this.state.totalBuaSang,
-                    soGiuongPhu: this.state.soGiuongPhu,
-                    tongTienGiuongPhu: this.state.totalGiuongPhu,
-                    phiGTGT: this.state.phiGTGT,
-                    tongTien: this.state.total,
+                    tongTienPhong: this.state.totalPhong.toString(),
+                    buaSang: this.state.soBuaSang.toString(),
+                    tongTienBuaSang: this.state.totalBuaSang.toString(),
+                    soGiuongPhu: this.state.soGiuongPhu.toString(),
+                    tongTienGiuongPhu: this.state.totalGiuongPhu.toString(),
+                    phiGTGT: this.state.phiGTGT.toString(),
+                    tongTien: this.state.total.toString(),
                     ghiChu: this.state.ghiChu,
-                })
+                }
+                console.log(sendData);
+                Axios.post('http://localhost:33456/api/customer/rentalApartment',sendData)
             });
         }
         window.scrollTo(0, 0);

@@ -424,16 +424,6 @@ module.exports = {
 			},
 			async handler({action,params,meta, ... ctx}){
                 var {idNha,idTTKH,ngayDat,checkIn,checkOut,ngayDen,ngayDi,tongTienPhong,buaSang,tongTienBuaSang,soGiuongPhu,tongTienGiuongPhu,phiGTGT,tongTien,ghiChu} = params;
-				// Doing
-				var apartment;
-				const checkApartment = await dbContext.NHA.findAll();
-				for(var i=0;i<checkApartment.length;i++){
-					var element = checkApartment[i];
-					if(element.ID_NHA == idNha){
-						
-					}
-				}
-
 				const createDCH = await dbContext.DATCANHO.create({
 					ID_NHA: idNha,
 					ID_TT_KHACHHANG: idTTKH,
@@ -443,14 +433,14 @@ module.exports = {
 					NGAY_DEN: ngayDen,
 					NGAY_DI: ngayDi,
 					TONGTIEN_PHONG: parseFloat(tongTienPhong),
-					BUA_SANG: parseInt(buaSang),
+					BUASANG: parseInt(buaSang),
 					TONGTIEN_BUASANG: parseFloat(tongTienBuaSang),
 					SO_GIUONGPHU: parseInt(soGiuongPhu),
 					TONGTIEN_GIUONGPHU: parseFloat(tongTienGiuongPhu),
 					PHI_GTGT: parseFloat(phiGTGT),
 					TONGTIEN: parseFloat(tongTien),
 					GHICHU: ghiChu,
-					ID_TT_DCH: 0
+					ID_TT_DCH: 1
 				})
 				return createDCH.ID_DATCANHO;
 			},
