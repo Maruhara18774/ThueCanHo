@@ -1,75 +1,72 @@
 /* eslint-disable react/no-direct-mutation-state */
 import React, { Component, createRef } from "react";
 import "../../RegistrationDetail.css";
-import { PropertyData } from "../data/PropertyType";
 import Axios from "axios";
 import { Link } from "react-router-dom";
 class GenerationInformation extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      idStyle: 0,
       idCountry: 0,
       idCity: 0,
       idDistrict: 0,
-      idStyle: 0,
       lstStyle: [],
       lstCountry: [],
       lstCity: [],
       lstDistrict: [],
     };
-    this.fullName = createRef();
-    this.email = createRef();
-    this.phoneNumber = createRef();
-    this.idenCode = createRef();
-    this.idenType = createRef();
-    this.country = createRef();
-    this.gender = createRef();
-    this.address = createRef();
-    this.taxCode = createRef();
-    this.nameHouse = createRef();
-    this.street = createRef();
-    this.typeProperty = 0;
-    this.yes = true;
-    this.no = false;
-    this.idHouse = createRef();
+    this.idNha = createRef();
+    this.idChuHo = createRef();
+    this.idLoaiNha = createRef();
+    this.tenNha = createRef();
+    this.huyPhong = createRef();
+    this.checkIn = createRef();
+    this.checkOut = createRef();
+    this.khoangCachTT = createRef();
+    this.soTang = createRef();
+    this.buaSang = createRef();
+    this.soNha = createRef();
+    this.tenDuong = createRef();
+    this.dienTich = createRef();
+    this.idQuan = createRef();
+    this.soNguoi = createRef();
+    this.soGiuongPhu = createRef();
+    this.idGia = createRef();
+    this.trangThai = createRef();
     this.getListCountry();
     this.getListStyle();
   }
-  createContact = () => {
-    Axios.post(
-      "http://localhost:33456/api/partner/registrationDetail/contactRegistration",
-      {
-        "fullName": this.fullName.current.value,
-        "email": this.email.current.value,
-        "phoneNumber": this.phoneNumber.current.value,
-        "idenCode": this.idenCode.current.value,
-        "idenType": this.idenType.current.value,
-        "country": this.country.current.value,
-        "gender": this.gender.current.value,
-        "address": this.address.current.value,
-        "taxCode": this.taxCode.current.value,
-      }
-    ).then((response) => {
+  createApartment =() => {
+    Axios.post("http://localhost:33456/api/partner/registrationDetail/createApartment",{
+      "idNha": this.idNha.current.value,
+      "idChuHo": this.idChuHo.current.value,
+      "idLoaiNha": this.state.idStyle,
+      "tenNha": this.tenNha.current.value,
+      "huyPhong": this.huyPhong.current.value,
+      "checkIn": this.checkIn.current.value,
+      "checkOut": this.checkOut.current.value,
+      "khoangCachTT": this.khoangCachTT.current.value,
+      "soTang": this.soTang.current.value,
+      "buaSang": this.buaSang.current.value,
+      "soNha": this.soNha.current.value,
+      "tenDuong": this.tenDuong.current.value,
+      "dienTich": this.dienTich.current.value,
+      "idQuan": this.state.idDistrict,
+      "soNguoi": this.soNguoi.current.value,
+      "soGiuongPhu": this.soGiuongPhu.current.value,
+      "idGia": this.idGia.current.value,
+      "trangThai": this.trangThai.current.value,
+    }).then((response) => {
       console.log(response.data);
     });
-    Axios.post(
-      "http://localhost:33456/api/partner/registrationDetail/createApartment",
-      {
-        "idNha": this.idHouse.current.value,
-        "tenNha": this.nameHouse.current.value,
-        "idQuan": this.state.idDistrict,
-        "tenDuong": this.street.current.value,
-      }
-    ).then((response) => {
-      console.log(response.data);
-    });
-  };
+  }
   getListStyle = () => {
     Axios.post(
       "http://localhost:33456/api/partner/registrationDetail/getListStyle",
       {}
     ).then((response) => {
-      this.state.lstCountry = response.data;
+      this.state.lstStyle = response.data;
       this.setState(this);
     });
   };
@@ -135,7 +132,7 @@ class GenerationInformation extends Component {
                   <span>Property Detail</span>
                 </div>
                 <div className="box__detail__section clearfix css-section">
-                <div className="box-row css-row">
+                  <div className="box-row css-row">
                     <div
                       className="box-column css-box-col"
                       style={{ marginTop: "8px" }}
@@ -160,7 +157,7 @@ class GenerationInformation extends Component {
                             <div className="__inner">
                               <div className="__padder">
                                 <input
-                                  ref={this.idHouse}
+                                  ref={this.idNha}
                                   touched="true"
                                   type="text"
                                   className="css-txt -control"
@@ -206,7 +203,7 @@ class GenerationInformation extends Component {
                             <div className="__inner">
                               <div className="__padder">
                                 <input
-                                  ref={this.nameHouse}
+                                  ref={this.tenNha}
                                   touched="true"
                                   type="text"
                                   className="css-txt -control"
@@ -238,78 +235,26 @@ class GenerationInformation extends Component {
                     </div>
                     <div className="box-column css-col">
                       <div className="radio-group control-container css-radio css-radio-gr">
-                        {PropertyData.map((item, index) => {
-                          return (
-                            <div
-                              ref={this.typeProperty}
-                              key={index}
-                              className={item.cRadio}
-                            >
-                              <input
-                                name={item.inputName}
-                                type={item.type}
-                                value={item.value}
-                                id={item.idInput}
-                              />
-                              <label htmlFor={item.labelName}>
-                                <div className={item.styleSpan}>
-                                  <b>
-                                    <span>{item.nameSpan}</span>
-                                  </b>
-                                  <span>{item.detailSpan}</span>
-                                </div>
-                              </label>
-                            </div>
-                          );
-                        })}
-                        <div
-                          className="c-flexbox css-flexbox"
-                          style={{ marginTop: "16px", marginBottom: "-15px" }}
-                        >
+                        <div className="c-block">
                           <div
-                            className="radio css-btn-radio"
-                            style={{ marginTop: "8px" }}
+                            className="block-select control-container css-select css-radio-gr"
+                            style={{ width: "250px" }}
                           >
-                            <input
-                              name="generalInformation,propertyDetails,propertyType"
-                              type="radio"
-                              value="HOTEL"
-                              id="radio-31"
-                              className="radio-31"
-                            />
-                            <label htmlFor="radio-31">
-                              <div className="css-span">
-                                <b>
-                                  <span>Other</span>
-                                </b>
-                              </div>
-                            </label>
-                          </div>
-                          <div
-                            className="c-block"
-                            style={{ marginLeft: "16px" }}
-                          >
-                            <div
-                              className="block-select control-container css-select css-radio-gr"
-                              style={{ width: "250px" }}
-                            >
-                              <div className="select control-container css-select css-radio-gr">
-                                <div className="select has-value">
+                            <div className="select control-container css-select css-radio-gr">
+                              <div className="select has-value">
                                 <select
-                              className="select-control"
-                              value={this.state.idStyle}
-                              
-                            >
-                              <option value="0" className="select-option">
-                                Select Type
-                              </option>
-                              {this.state.lstStyle.map((item, index) => (
-                                <option value={item.ID_STYLE}>
-                                  {item.TEN_STYLE}
-                                </option>
-                              ))}
-                            </select>
-                                </div>
+                                  className="select-control"
+                                  value={this.state.idStyle}
+                                >
+                                  <option value="0" className="select-option">
+                                    Select Type
+                                  </option>
+                                  {this.state.lstStyle.map((item, index) => (
+                                    <option value={item.ID_STYLE} ref={this.idStyle}>
+                                      {item.TEN_STYLE}
+                                    </option>
+                                  ))}
+                                </select>
                               </div>
                             </div>
                           </div>
@@ -342,7 +287,7 @@ class GenerationInformation extends Component {
                               <div className="__inner">
                                 <div className="__padder --enter-active">
                                   <textarea
-                                    ref={this.street}
+                                    ref={this.tenDuong}
                                     touched="true"
                                     type="text"
                                     className="-control css-textarea"
@@ -395,16 +340,13 @@ class GenerationInformation extends Component {
                               <option value="0" className="select-option">
                                 Select Country...
                               </option>
-                              {this.state.lstCountry.map((item, index) => (
+                              {this.state.lstCountry.map((item) => (
                                 <option value={item.ID_QUOCGIA}>
                                   {item.TEN_QUOCGIA}
                                 </option>
                               ))}
                             </select>
                           </div>
-                          <ul className="css-error --simple">
-                            <li>This section must be fill</li>
-                          </ul>
                         </div>
                       </div>
                       <div className="c-block" style={{ marginTop: "16px" }}>
@@ -432,9 +374,7 @@ class GenerationInformation extends Component {
                               ))}
                             </select>
                           </div>
-                          <ul className="css-error --simple">
-                            <li>This section must be fill</li>
-                          </ul>
+                          
                         </div>
                       </div>
                       <div className="c-block" style={{ marginTop: "16px" }}>
@@ -473,99 +413,311 @@ class GenerationInformation extends Component {
                     className="line css-line"
                     style={{ marginTop: "0px" }}
                   ></div>
-                  <div className="box-row css-row">
-                    <div
-                      className="box-column css-box-col"
-                      style={{ marginTop: "8px" }}
-                    >
-                      <label className="box-label css-label">
-                        <span>Phone Number</span>
-                        <span
-                          className="label-required"
-                          style={{
-                            marginLeft: "3px",
-                            color: "rgb(87, 167, 237)",
-                          }}
-                        >
-                          *
-                        </span>
-                      </label>
+                  
+                </div>
+              </div>
+              <div className="table__title css-row">
+                <div className="detail__column css-col">
+                  <div
+                    className="box__detail css-bx-dtl"
+                    style={{ marginBottom: "30px" }}
+                  >
+                    <div className="box__detail__section header clearfix css-section">
+                      <span>Property Details</span>
                     </div>
-                    <div className="box-column css-bxcol2">
-                      <div className="input-group css-inp">
-                        <div className="input-group__inner">
-                          <div className="input control-container css-radio-gr">
-                            <div className="__inner">
-                              <div className="__padder">
-                                <input
-                                  name="generalInformation,propertyDetails,propertyName"
-                                  touched="true"
-                                  type="text"
-                                  className="css-txt -control"
-                                  value=""
-                                />
+                    <div className="box__detail__section clearfix css-section">
+                      
+                      <div className="box-row css-row">
+                        <div className="box-column css-box-col">
+                          <label className="box-label css-label">
+                            <span>Check-In Time</span>
+                          </label>
+                        </div>
+                        <div
+                          className="box-column css-column"
+                          style={{ marginRight: "20px" }}
+                        >
+                          <label className="box-label css-label">
+                            <span>from</span>
+                            <span
+                              className="label-required"
+                              style={{
+                                marginLeft: "3px",
+                                color: "rgb(87, 167, 237)",
+                              }}
+                            >
+                              *
+                            </span>
+                          </label>
+                          <div className="input-group css-inp">
+                            <div className="input-group__inner">
+                              <div className="timepicker control-container css-radio-gr">
+                                <div className="__inner">
+                                  <div className="__padder">
+                                    <div
+                                      className="time-clock"
+                                      noValidate
+                                      style={{ position: "relative" }}
+                                    >
+                                      <input
+                                      ref={this.checkIn}
+                                        id="time"
+                                        type="time"
+                                        defaultValue="07:30"
+                                        className="time-input css-txt"
+                                      />
+                                    </div>
+                                  </div>
+                                </div>
                               </div>
                             </div>
                           </div>
                         </div>
-                        <ul className="css-error --simple">
-                          <li>
-                            <span>This section must be filled.</span>
-                          </li>
-                        </ul>
                       </div>
-                    </div>
-                  </div>
-                  <div
-                    className="line css-line"
-                    style={{ marginTop: "0px" }}
-                  ></div>
-                  <div className="box-row css-row">
-                    <div
-                      className="box-column css-box-col"
-                      style={{ marginTop: "8px" }}
-                    >
-                      <label className="box-label css-label">
-                        <span>Number Of Rooms</span>
-                        <span
-                          className="label-required"
-                          style={{
-                            marginLeft: "3px",
-                            color: "rgb(87, 167, 237)",
-                          }}
+                      <div className="box-row css-row">
+                        <div className="box-column css-box-col">
+                          <label className="box-label css-label">
+                            <span>Check-Out Time</span>
+                          </label>
+                        </div>
+                        <div
+                          className="box-column css-column"
+                          style={{ marginRight: "20px" }}
                         >
-                          *
-                        </span>
-                      </label>
-                    </div>
-                    <div className="box-column css-box-col">
+                          <label className="box-label css-label">
+                            <span>latest at</span>
+                            <span
+                              className="label-required"
+                              style={{
+                                marginLeft: "3px",
+                                color: "rgb(87, 167, 237)",
+                              }}
+                            >
+                              *
+                            </span>
+                          </label>
+                          <div className="input-group css-inp">
+                            <div className="input-group__inner">
+                              <div className="timepicker control-container css-radio-gr">
+                                <div className="__inner">
+                                  <div className="__padder">
+                                    <div
+                                    ref={this.checkOut}
+                                      className="time-clock"
+                                      noValidate
+                                      style={{ position: "relative" }}
+                                    >
+                                      <input
+                                        id="time"
+                                        type="time"
+                                        defaultValue="07:30"
+                                        className="time-input css-txt"
+                                      />
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                       <div
-                        className="input-group css-number"
-                        style={{ display: "inline-block" }}
+                        className="line css-line"
+                        style={{ marginTop: "0px" }}
+                      ></div>
+                      <div className="box-row css-row">
+                        <div
+                          className="box-column css-box-col"
+                          style={{ marginTop: "8px" }}
+                        >
+                          <label className="box-label css-label">
+                            <span>Distance to City Center</span>
+                            <span
+                              className="label-required"
+                              style={{
+                                marginLeft: "3px",
+                                color: "rgb(87, 167, 237)",
+                              }}
+                            >
+                              *
+                            </span>
+                          </label>
+                        </div>
+                        <div className="box-column css-box-col">
+                          <div
+                            className="input-group css-inp"
+                            style={{ display: "inline-block" }}
+                          >
+                            <div className="input-group__inner">
+                              <div
+                                className="input control-container css-radio-gr"
+                                style={{ width: "130px" }}
+                              >
+                                <div className="__inner">
+                                  <div className="__padder">
+                                    <input
+                                      ref={this.khoangCachTT}
+                                      touched="true"
+                                      type="text"
+                                      className="css-txt -control"
+                                      value=""
+                                    />
+                                  </div>
+                                </div>
+                              </div>
+                              <div className="input-group-addon css-number-2">
+                                <span>km</span>
+                              </div>
+                            </div>
+                            <ul className="css-error --simple">
+                              <li>
+                                <span>This section must be filled.</span>
+                              </li>
+                            </ul>
+                          </div>
+                        </div>
+                      </div>
+                      <div
+                        className="line css-line"
+                        style={{ marginTop: "0px" }}
+                      ></div>
+                      <div className="box-row css-row">
+                        <div
+                          className="box-column css-box-col"
+                          style={{ marginTop: "8px" }}
+                        >
+                          <label className="box-label css-label">
+                            <span>Number of Floors</span>
+                          </label>
+                        </div>
+                        <div className="box-column css-column">
+                          <div className="input-group css-inp">
+                            <div className="input-group__inner">
+                              <div className="input control-container css-radio-gr">
+                                <div className="__inner">
+                                  <div className="__padder">
+                                    <input
+                                      ref={this.soTang}
+                                      touched="true"
+                                      type="text"
+                                      className="css-txt -control"
+                                      value=""
+                                    />
+                                  </div>
+                                </div>
+                              </div>
+                              <div className="input-group-addon css-number-2">
+                                <span>floors</span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div
+                        className="line css-line"
+                        style={{ marginTop: "0px" }}
+                      ></div>
+                      <div className="box-row css-row">
+                        <div
+                          className="box-column css-box-col"
+                          style={{ marginTop: "8px" }}
+                        >
+                          <label className="box-label css-label">
+                            <span>
+                              Additional Breakfast Charge (Exclude Room Rate)
+                            </span>
+                          </label>
+                        </div>
+                        <div className="box-column css-column">
+                          <div className="input-group css-inp">
+                            <div className="input-group__inner">
+                              <div className="input-group-addon css-number-2">
+                                <span>VND</span>
+                              </div>
+                              <div className="input control-container css-radio-gr">
+                                <div className="__inner">
+                                  <div className="__padder">
+                                    <input
+                                      ref={this.buaSang}
+                                      touched="true"
+                                      type="text"
+                                      className="css-txt-2 -control"
+                                    />
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="table__title css-row">
+                <div className="detail__column css-col">
+                  <div
+                    className="box__detail css-bx-dtl"
+                    style={{ marginBottom: "30px" }}
+                  >
+                    <div className="box__detail__section header clearfix css-section">
+                      <span>Property Cancellation Policy</span>
+                      <span
+                        className="label-required"
+                        style={{
+                          marginLeft: "3px",
+                          color: "rgb(87, 167, 237)",
+                        }}
                       >
-                        <div className="input-group__inner">
-                          <div className="input control-container --is-error css-radio-gr">
-                            <div className="__inner">
-                              <div className="__padder">
-                                <input
-                                  name="generalInformation,propertyDetails,numberOfRooms"
-                                  touched="true"
-                                  type="text"
-                                  className="css-txt -control"
-                                  value=""
-                                />
-                              </div>
+                        *
+                      </span>
+                    </div>
+                    <div className="box__detail__section clearfix css-section">
+                      <div className="box-row css-row">
+                        <div
+                          className="box-column css-box-col"
+                          style={{ marginTop: "8px" }}
+                        >
+                          <label className="box-label css-label">
+                            <span>Cancellation Policy</span>
+                          </label>
+                        </div>
+                        <div
+                          className="c-column css-bxcol2"
+                          style={{ marginTop: "-4px" }}
+                        >
+                          <div
+                            touched="true"
+                            value="NO_PAST_NAME"
+                            class="radio-group control-container css-radio css-radio-gr"
+                          >
+                            <div className="radio c-radio--is-inline css-btn-radio">
+                              <input
+                                ref={this.huyPhong}
+                                type="radio"
+                                value="true"
+                                id="radio-9"
+                              />
+                              <label className="" for="radio-9">
+                                <span>Yes</span>
+                              </label>
+                            </div>
+                            <div
+                              className="radio c-radio--is-inline css-btn-radio"
+                              style={{ marginTop: "16px" }}
+                            >
+                              <input
+                                ref={this.huyPhong}
+                                type="radio"
+                                value="false"
+                                id="radio-10"
+                              />
+                              <label className="" for="radio-10">
+                                <span>No</span>
+                              </label>
                             </div>
                           </div>
-                          <div className="input-group-addon css-number-2">
-                            <span>rooms</span>
-                          </div>
                         </div>
-                        <ul className="css-error --simple">
-                          <li>
-                            <span>This section must be filled.</span>
-                          </li>
-                        </ul>
                       </div>
                     </div>
                   </div>
@@ -573,361 +725,10 @@ class GenerationInformation extends Component {
               </div>
             </div>
           </div>
-          <div className="table__title css-row">
-            <div className="detail__column css-col">
-              <div
-                className="box__detail css-bx-dtl"
-                style={{ marginBottom: "30px" }}
-              >
-                <div className="box__detail__section header clearfix css-section">
-                  <span>Main Contact</span>
-                </div>
-                <div className="box__detail__section clearfix css-section">
-                  <div className="box-row css-row">
-                    <div
-                      className="box-column css-box-col"
-                      style={{ marginTop: "8px" }}
-                    >
-                      <label className="box-label css-label">
-                        <span>Full Name</span>
-                        <span className="label-required">*</span>
-                      </label>
-                    </div>
-                    <div className="box-column css-bxcol2">
-                      <div className="input-group css-inp">
-                        <div className="input-group__inner">
-                          <div className="input control-container css-radio-gr">
-                            <div className="__inner">
-                              <div className="__padder">
-                                <input
-                                  ref={this.fullName}
-                                  touched="true"
-                                  type="text"
-                                  className="css-txt -control"
-                                />
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        <ul className="css-error --simple">
-                          <li>
-                            <span>This section must be filled.</span>
-                          </li>
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-                  <div
-                    className="line css-line"
-                    style={{ marginTop: "0px" }}
-                  ></div>
-                  <div className="box-row css-row">
-                    <div
-                      className="box-column css-box-col"
-                      style={{ marginTop: "8px" }}
-                    >
-                      <label className="box-label css-label">
-                        <span>Email</span>
-                        <span className="label-required">*</span>
-                      </label>
-                    </div>
-                    <div className="box-column css-bxcol2">
-                      <div className="input-group css-inp">
-                        <div className="input-group__inner">
-                          <div className="input control-container css-radio-gr">
-                            <div className="__inner">
-                              <div className="__padder">
-                                <input
-                                  ref={this.email}
-                                  touched="true"
-                                  type="email"
-                                  className="css-txt -control"
-                                />
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        <ul className="css-error --simple">
-                          <li>
-                            <span>This section must be filled.</span>
-                          </li>
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-                  <div
-                    className="line css-line"
-                    style={{ marginTop: "0px" }}
-                  ></div>
-                  <div className="box-row css-row">
-                    <div
-                      className="box-column css-box-col"
-                      style={{ marginTop: "8px" }}
-                    >
-                      <label className="box-label css-label">
-                        <span>Phone Number</span>
-                        <span className="label-required">*</span>
-                      </label>
-                    </div>
-                    <div className="box-column css-bxcol2">
-                      <div className="input-group css-inp">
-                        <div className="input-group__inner">
-                          <div className="input control-container css-radio-gr">
-                            <div className="__inner">
-                              <div className="__padder">
-                                <input
-                                  ref={this.phoneNumber}
-                                  touched="true"
-                                  type="text"
-                                  className="css-txt -control"
-                                />
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        <ul className="css-error --simple">
-                          <li>
-                            <span>This section must be filled.</span>
-                          </li>
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-                  <div
-                    className="line css-line"
-                    style={{ marginTop: "0px" }}
-                  ></div>
-                  <div className="box-row css-row">
-                    <div
-                      className="box-column css-box-col"
-                      style={{ marginTop: "8px" }}
-                    >
-                      <label className="box-label css-label">
-                        <span>Identification Code</span>
-                        <span className="label-required">*</span>
-                      </label>
-                    </div>
-                    <div className="box-column css-bxcol2">
-                      <div className="input-group css-inp">
-                        <div className="input-group__inner">
-                          <div className="input control-container css-radio-gr">
-                            <div className="__inner">
-                              <div className="__padder">
-                                <input
-                                  ref={this.idenCode}
-                                  touched="true"
-                                  type="text"
-                                  className="css-txt -control"
-                                />
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        <ul className="css-error --simple">
-                          <li>
-                            <span>This section must be filled.</span>
-                          </li>
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-                  <div
-                    className="line css-line"
-                    style={{ marginTop: "0px" }}
-                  ></div>
-                  <div className="box-row css-row">
-                    <div
-                      className="box-column css-box-col"
-                      style={{ marginTop: "8px" }}
-                    >
-                      <label className="box-label css-label">
-                        <span>Identification Type</span>
-                        <span className="label-required">*</span>
-                      </label>
-                    </div>
-                    <div className="box-column css-bxcol2">
-                      <div className="input-group css-inp">
-                        <div className="input-group__inner">
-                          <div className="input control-container css-radio-gr">
-                            <div className="__inner">
-                              <div className="__padder">
-                                <input
-                                  ref={this.idenType}
-                                  touched="true"
-                                  type="text"
-                                  className="css-txt -control"
-                                />
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        <ul className="css-error --simple">
-                          <li>
-                            <span>This section must be filled.</span>
-                          </li>
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-                  <div
-                    className="line css-line"
-                    style={{ marginTop: "0px" }}
-                  ></div>
-                  <div className="box-row css-row">
-                    <div
-                      className="box-column css-box-col"
-                      style={{ marginTop: "8px" }}
-                    >
-                      <label className="box-label css-label">
-                        <span>Country</span>
-                        <span className="label-required">*</span>
-                      </label>
-                    </div>
-                    <div className="box-column css-bxcol2">
-                      <div className="input-group css-inp">
-                        <div className="input-group__inner">
-                          <div className="input control-container css-radio-gr">
-                            <div className="__inner">
-                              <div className="__padder">
-                                <input
-                                  ref={this.country}
-                                  touched="true"
-                                  type="text"
-                                  className="css-txt -control"
-                                />
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        <ul className="css-error --simple">
-                          <li>
-                            <span>This section must be filled.</span>
-                          </li>
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-                  <div
-                    className="line css-line"
-                    style={{ marginTop: "0px" }}
-                  ></div>
-                  <div className="box-row css-row">
-                    <div
-                      className="box-column css-box-col"
-                      style={{ marginTop: "8px" }}
-                    >
-                      <label className="box-label css-label">
-                        <span>Gender</span>
-                        <span className="label-required">*</span>
-                      </label>
-                    </div>
-                    <div className="box-column css-bxcol2">
-                      <div className="input-group css-inp">
-                        <div className="input-group__inner">
-                          <div className="input control-container css-radio-gr">
-                            <div className="__inner">
-                              <div className="__padder">
-                                <input
-                                  ref={this.gender}
-                                  touched="true"
-                                  type="text"
-                                  className="css-txt -control"
-                                />
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        <ul className="css-error --simple">
-                          <li>
-                            <span>This section must be filled.</span>
-                          </li>
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-                  <div
-                    className="line css-line"
-                    style={{ marginTop: "0px" }}
-                  ></div>
-                  <div className="box-row css-row">
-                    <div
-                      className="box-column css-box-col"
-                      style={{ marginTop: "8px" }}
-                    >
-                      <label className="box-label css-label">
-                        <span>Address</span>
-                        <span className="label-required">*</span>
-                      </label>
-                    </div>
-                    <div className="box-column css-bxcol2">
-                      <div className="input-group css-inp">
-                        <div className="input-group__inner">
-                          <div className="input control-container css-radio-gr">
-                            <div className="__inner">
-                              <div className="__padder">
-                                <input
-                                  ref={this.address}
-                                  touched="true"
-                                  type="text"
-                                  className="css-txt -control"
-                                />
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        <ul className="css-error --simple">
-                          <li>
-                            <span>This section must be filled.</span>
-                          </li>
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-                  <div
-                    className="line css-line"
-                    style={{ marginTop: "0px" }}
-                  ></div>
-                  <div className="box-row css-row">
-                    <div
-                      className="box-column css-box-col"
-                      style={{ marginTop: "8px" }}
-                    >
-                      <label className="box-label css-label">
-                        <span>Tax Code</span>
-                        <span className="label-required">*</span>
-                      </label>
-                    </div>
-                    <div className="box-column css-bxcol2">
-                      <div className="input-group css-inp">
-                        <div className="input-group__inner">
-                          <div className="input control-container css-radio-gr">
-                            <div className="__inner">
-                              <div className="__padder">
-                                <input
-                                  ref={this.taxCode}
-                                  touched="true"
-                                  type="text"
-                                  className="css-txt -control"
-                                />
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        <ul className="css-error --simple">
-                          <li>
-                            <span>This section must be filled.</span>
-                          </li>
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+
           <div className="block css-contact">
             <Link to="/registrationDetail/propertyDetail">
-              <button className="btn-contact" onClick={this.createContact}>
+              <button className="btn-contact" onClick={this.createApartment}>
                 Save and Continues
               </button>
             </Link>

@@ -1,9 +1,20 @@
+import MainContact from '../pages/MainContact'
 import GenerationInformation from '../pages/GenerationInformation'
-import PropertyDetail from '../pages/PropertyDetail'
 import PropertyFacilities from '../pages/PropertyFacilities'
 import Rooms from '../pages/Rooms'
 import RoomFacilities from '../pages/RoomFacilities'
 const SidebarData = [
+  {
+    key: 1,
+    cFlexbox: 'flexbox-sidebar css-nb',
+    cText: 'text css-nb-text',
+    cNumber: 'bagde__number bagde__color bagde__pill css-bagde',
+    title: 'Main Contact',
+    number: 1,
+    path: "/registrationDetail/mainContact",
+    main: () => <MainContact/>,
+    exact: true
+  },
   {
     key: 1,
     cFlexbox: 'flexbox-sidebar css-nb',
@@ -14,16 +25,6 @@ const SidebarData = [
     path: "/registrationDetail/generationInformation",
     main: () => <GenerationInformation/>,
     exact: true
-  },
-  {
-    key: 2,
-    cFlexbox: 'flexbox-sidebar css-nb',
-    cText: 'text css-nb-text',
-    cNumber: 'bagde__number bagde__color bagde__pill css-bagde',
-    title: 'Property Detail',
-    number: 1,
-    path: "/registrationDetail/propertyDetail",
-    main: () => <PropertyDetail/>,
   },
   {
     key: 3,
