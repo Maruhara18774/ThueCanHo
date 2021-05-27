@@ -72,7 +72,7 @@ class Account extends Component {
                                     <td>
                                         <Link className="btn btn-primary mx-1" to={`/account/${val.ID_TAIKHOAN}`}>View</Link>  
                                         <Link className="btn btn-outline-primary mx-1" to={`/account/edit/${val.ID_TAIKHOAN}`}>Edit</Link>
-                                        <Link className="btn btn-danger mx-1" onClick={this.deleteUser()}>Delete</Link>
+                                        <Link className="btn btn-danger mx-1" onClick={() => this.deleteUser(val.ID_TAIKHOAN)}>Delete</Link>
                                     </td>
                                 </tr>
                             ))}
