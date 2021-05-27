@@ -321,7 +321,26 @@ module.exports = {
 				return createApartment;
 			},
 		},
-
+		createPrice: {
+			rest: {
+				method: "POST",
+				path: "/registrationDetail/createPrice",
+			},
+			params: {
+				firstPrice: {type: "number"},
+				secondPrice: {type: "number"},
+				thirdPrice: {type: "number"}
+			},
+			async handler({ action, params, meta, ...ctx }) {
+				const { firstPrice, secondPrice, thirdPrice } = params;
+				const create = await dbContext.BANGGIA.create({
+					MUCGIA_MOT: firstPrice,
+					MUCGIA_HAI: secondPrice,
+					MUCGIA_BA: thirdPrice,
+				});
+				return create;
+			},
+		},
 		/**
 		 * Welcome, a username
 		 *

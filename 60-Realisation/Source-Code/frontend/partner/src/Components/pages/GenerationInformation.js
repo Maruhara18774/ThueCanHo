@@ -34,33 +34,52 @@ class GenerationInformation extends Component {
     this.soGiuongPhu = createRef();
     this.idGia = createRef();
     this.trangThai = createRef();
+
+    //Price
+    this.firstPrice = createRef();
+    this.secondPrice = createRef();
+    this.thirdPrice = createRef();
+
     this.getListCountry();
     this.getListStyle();
   }
-  createApartment =() => {
-    Axios.post("http://localhost:33456/api/partner/registrationDetail/createApartment",{
-      "idNha": this.idNha.current.value,
-      "idChuHo": this.idChuHo.current.value,
-      "idLoaiNha": this.state.idStyle,
-      "tenNha": this.tenNha.current.value,
-      "huyPhong": this.huyPhong.current.value,
-      "checkIn": this.checkIn.current.value,
-      "checkOut": this.checkOut.current.value,
-      "khoangCachTT": this.khoangCachTT.current.value,
-      "soTang": this.soTang.current.value,
-      "buaSang": this.buaSang.current.value,
-      "soNha": this.soNha.current.value,
-      "tenDuong": this.tenDuong.current.value,
-      "dienTich": this.dienTich.current.value,
-      "idQuan": this.state.idDistrict,
-      "soNguoi": this.soNguoi.current.value,
-      "soGiuongPhu": this.soGiuongPhu.current.value,
-      "idGia": this.idGia.current.value,
-      "trangThai": this.trangThai.current.value,
-    }).then((response) => {
+  createApartment = () => {
+    Axios.post(
+      "http://localhost:33456/api/partner/registrationDetail/createApartment",
+      {
+        idNha: this.idNha.current.value,
+        idChuHo: this.idChuHo.current.value,
+        idLoaiNha: this.state.idStyle,
+        tenNha: this.tenNha.current.value,
+        huyPhong: this.huyPhong.current.value,
+        checkIn: this.checkIn.current.value,
+        checkOut: this.checkOut.current.value,
+        khoangCachTT: this.khoangCachTT.current.value,
+        soTang: this.soTang.current.value,
+        buaSang: this.buaSang.current.value,
+        soNha: this.soNha.current.value,
+        tenDuong: this.tenDuong.current.value,
+        dienTich: this.dienTich.current.value,
+        idQuan: this.state.idDistrict,
+        soNguoi: this.soNguoi.current.value,
+        soGiuongPhu: this.soGiuongPhu.current.value,
+        idGia: this.idGia.current.value,
+        trangThai: this.trangThai.current.value,
+      }
+    ).then((response) => {
       console.log(response.data);
     });
-  }
+    Axios.post(
+      "http://localhost:3000/api/partner/registrationDetail/createPrice",
+      {
+        firstPrice: this.firstPrice.current.value,
+        secondPrice: this.secondPrice.current.value,
+        thirdPrice: this.thirdPrice.current.value,
+      }
+    ).then((response) => {
+      console.log(response.data);
+    });
+  };
   getListStyle = () => {
     Axios.post(
       "http://localhost:33456/api/partner/registrationDetail/getListStyle",
@@ -250,7 +269,10 @@ class GenerationInformation extends Component {
                                     Select Type
                                   </option>
                                   {this.state.lstStyle.map((item, index) => (
-                                    <option value={item.ID_STYLE} ref={this.idStyle}>
+                                    <option
+                                      value={item.ID_STYLE}
+                                      ref={this.idStyle}
+                                    >
                                       {item.TEN_STYLE}
                                     </option>
                                   ))}
@@ -275,7 +297,34 @@ class GenerationInformation extends Component {
                         <span>Property Address</span>
                       </label>
                     </div>
+
                     <div className="c-column css-col">
+                      <div className="c-block" style={{ marginTop: "16px" }}>
+                        <label className="c-label css-label">
+                          <span>Apartment Number</span>
+                          <span className="label-required">*</span>
+                        </label>
+                        <div className="input-group css-inp">
+                          <div className="input-group__inner">
+                            <div className="input control-container css-radio-gr">
+                              <div className="__inner">
+                                <div className="__padder --enter-active">
+                                  <input
+                                    ref={this.soNha}
+                                    touched="true"
+                                    type="text"
+                                    className="-control css-txt"
+                                    style={{
+                                      resize: "vertical",
+                                      width: "332px",
+                                    }}
+                                  />
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                       <div className="c-block" style={{ marginTop: "16px" }}>
                         <label className="c-label css-label">
                           <span>Street Address</span>
@@ -374,7 +423,6 @@ class GenerationInformation extends Component {
                               ))}
                             </select>
                           </div>
-                          
                         </div>
                       </div>
                       <div className="c-block" style={{ marginTop: "16px" }}>
@@ -413,7 +461,6 @@ class GenerationInformation extends Component {
                     className="line css-line"
                     style={{ marginTop: "0px" }}
                   ></div>
-                  
                 </div>
               </div>
               <div className="table__title css-row">
@@ -426,7 +473,6 @@ class GenerationInformation extends Component {
                       <span>Property Details</span>
                     </div>
                     <div className="box__detail__section clearfix css-section">
-                      
                       <div className="box-row css-row">
                         <div className="box-column css-box-col">
                           <label className="box-label css-label">
@@ -460,7 +506,7 @@ class GenerationInformation extends Component {
                                       style={{ position: "relative" }}
                                     >
                                       <input
-                                      ref={this.checkIn}
+                                        ref={this.checkIn}
                                         id="time"
                                         type="time"
                                         defaultValue="07:30"
@@ -502,7 +548,7 @@ class GenerationInformation extends Component {
                                 <div className="__inner">
                                   <div className="__padder">
                                     <div
-                                    ref={this.checkOut}
+                                      ref={this.checkOut}
                                       className="time-clock"
                                       noValidate
                                       style={{ position: "relative" }}
@@ -715,6 +761,156 @@ class GenerationInformation extends Component {
                               <label className="" for="radio-10">
                                 <span>No</span>
                               </label>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="table__title css-row">
+                <div className="detail__column css-col">
+                  <div
+                    className="box__detail css-bx-dtl"
+                    style={{ marginBottom: "30px" }}
+                  >
+                    <div className="box__detail__section header clearfix css-section">
+                      <span>Prices Details</span>
+                      <span
+                        className="label-required"
+                        style={{
+                          marginLeft: "3px",
+                          color: "rgb(87, 167, 237)",
+                        }}
+                      >
+                        *
+                      </span>
+                    </div>
+                    <div className="box__detail__section clearfix css-section">
+                      {/* Check-In Check-Out Time */}
+                      <div className="box-row css-row">
+                        <div className="box-column css-box-col">
+                          <label className="box-label css-label">
+                            <span>Price</span>
+                          </label>
+                        </div>
+                        <div
+                          className="box-column css-column"
+                          style={{ marginRight: "20px" }}
+                        >
+                          <label className="box-label css-label">
+                            <span>First Price</span>
+                            <span
+                              className="label-required"
+                              style={{
+                                marginLeft: "3px",
+                                color: "rgb(87, 167, 237)",
+                              }}
+                            >
+                              *
+                            </span>
+                          </label>
+                          <div className="input-group css-inp">
+                            <div className="input-group__inner">
+                              <div className="timepicker control-container css-radio-gr">
+                                <div className="__inner">
+                                  <div className="__padder">
+                                    <input
+                                      style={{ width: "250px" }}
+                                      ref={this.firstPrice}
+                                      id="time"
+                                      type="number"
+                                      defaultValue="07:30"
+                                      className="-control css-txt"
+                                    />
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="box-row css-row">
+                        <div className="box-column css-box-col"></div>
+                        <div
+                          className="box-column css-column"
+                          style={{ marginRight: "20px" }}
+                        >
+                          <label className="box-label css-label">
+                            <span>Second Price</span>
+                            <span
+                              className="label-required"
+                              style={{
+                                marginLeft: "3px",
+                                color: "rgb(87, 167, 237)",
+                              }}
+                            >
+                              *
+                            </span>
+                          </label>
+                          <div className="input-group css-inp">
+                            <div className="input-group__inner">
+                              <div className="timepicker control-container css-radio-gr">
+                                <div className="__inner">
+                                  <div className="__padder">
+                                    <div
+                                      className="time-clock"
+                                      noValidate
+                                      style={{ position: "relative" }}
+                                    >
+                                      <input
+                                        style={{ width: "250px" }}
+                                        ref={this.secondPrice}
+                                        type="number"
+                                        className="-control css-txt"
+                                      />
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="box-row css-row">
+                        <div className="box-column css-box-col"></div>
+                        <div
+                          className="box-column css-column"
+                          style={{ marginRight: "20px" }}
+                        >
+                          <label className="box-label css-label">
+                            <span>Third Price</span>
+                            <span
+                              className="label-required"
+                              style={{
+                                marginLeft: "3px",
+                                color: "rgb(87, 167, 237)",
+                              }}
+                            >
+                              *
+                            </span>
+                          </label>
+                          <div className="input-group css-inp">
+                            <div className="input-group__inner">
+                              <div className="timepicker control-container css-radio-gr">
+                                <div className="__inner">
+                                  <div className="__padder">
+                                    <div
+                                      className="time-clock"
+                                      noValidate
+                                      style={{ position: "relative" }}
+                                    >
+                                      <input
+                                        style={{ width: "250px" }}
+                                        ref={this.thirdPrice}
+                                        type="number"
+                                        className="-control css-txt"
+                                      />
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
                             </div>
                           </div>
                         </div>
