@@ -397,7 +397,7 @@ module.exports = {
 					GIOITINH: gioiTinh,
 					ID_TAIKHOAN: idTK
 				})
-				return null;
+				return createInfo.ID_TT_KHACHHANG;
 			},
 		},
 		rentalApartment:{

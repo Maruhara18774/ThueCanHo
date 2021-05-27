@@ -49,53 +49,55 @@ export default class BookingForm extends Component {
             this.calcAll();
         }
         if (this.state.currentStep == 6) {
-            var idTTKH = 0;
-            Axios.post('http://localhost:33456/api/customer/searchPaymentInfo', {
-                maGiayTo: this.state.giaytotuythanID,
-                loaiGiayTo: this.state.giaytotuythanType,
-            }).then((response) => {
-                idTTKH = response.data;
-                if (idTTKH == 0) {
-                    Axios.post('http://localhost:33456/api/customer/savePaymentInfo', {
-                        tenKH: this.state.tenKH,
-                        email: this.state.email,
-                        phoneNumber: this.state.phone,
-                        maGiayTo: this.state.giaytotuythanID,
-                        loaiGiayTo: this.state.giaytotuythanType,
-                        quocTich: this.state.quocTich,
-                        gioiTinh: this.state.gioiTinh,
-                        idTK: this.state.idTK,
-                    });
-                    Axios.post('http://localhost:33456/api/customer/searchPaymentInfo', {
-                        maGiayTo: this.state.giaytotuythanID,
-                        loaiGiayTo: this.state.giaytotuythanType,
-                    }).then((response) => {
-                        idTTKH = response.data;
-                    });
-                    
-                }
-                const sendData = {
-                    idNha: this.state.idApartment,
-                    idTTKH: idTTKH.toString(),
-                    ngayDat: this.getDateNow(),
-                    checkIn: this.state.checkIn,
-                    checkOut: this.state.checkOut,
-                    ngayDen: this.state.ngayDen,
-                    ngayDi: this.state.ngayDi,
-                    tongTienPhong: this.state.totalPhong.toString(),
-                    buaSang: this.state.soBuaSang.toString(),
-                    tongTienBuaSang: this.state.totalBuaSang.toString(),
-                    soGiuongPhu: this.state.soGiuongPhu.toString(),
-                    tongTienGiuongPhu: this.state.totalGiuongPhu.toString(),
-                    phiGTGT: this.state.phiGTGT.toString(),
-                    tongTien: this.state.total.toString(),
-                    ghiChu: this.state.ghiChu,
-                }
-                console.log(sendData);
-                Axios.post('http://localhost:33456/api/customer/rentalApartment',sendData)
-            });
+            var idTTKH = this.searchIDTTKH(this.state.giaytotuythanID,this.state.giaytotuythanType);
+            if (idTTKH == 0) {
+                idTTKH = this.createTTKH();
+                alert(idTTKH);
+            }
+            const sendData = {
+                idNha: this.state.idApartment,
+                //idTTKH: idTTKH.toString(),
+                idTTKH: "2",
+                ngayDat: this.getDateNow(),
+                checkIn: this.state.checkIn,
+                checkOut: this.state.checkOut,
+                ngayDen: this.state.ngayDen,
+                ngayDi: this.state.ngayDi,
+                tongTienPhong: this.state.totalPhong.toString(),
+                buaSang: this.state.soBuaSang.toString(),
+                tongTienBuaSang: this.state.totalBuaSang.toString(),
+                soGiuongPhu: this.state.soGiuongPhu.toString(),
+                tongTienGiuongPhu: this.state.totalGiuongPhu.toString(),
+                phiGTGT: this.state.phiGTGT.toString(),
+                tongTien: this.state.total.toString(),
+                ghiChu: this.state.ghiChu,
+            }
+            console.log(sendData);
+            Axios.post('http://localhost:33456/api/customer/rentalApartment',sendData);
         }
         window.scrollTo(0, 0);
+    }
+    searchIDTTKH = async (id, type)=>{
+        await Axios.post('http://localhost:33456/api/customer/searchPaymentInfo', {
+                maGiayTo: id,
+                loaiGiayTo: type,
+            }).then((response)=>{
+                return parseInt(response.data);
+            })
+    }
+    createTTKH = async () =>{
+        const sendKH = {
+            tenKH: this.state.tenKH,
+            email: this.state.email,
+            phoneNumber: this.state.phone,
+            maGiayTo: this.state.giaytotuythanID,
+            loaiGiayTo: this.state.giaytotuythanType,
+            quocTich: this.state.quocTich,
+            gioiTinh: this.state.gioiTinh,
+            idTK: this.state.idTK.toString(),
+        };
+        const response = await Axios.post('http://localhost:33456/api/customer/savePaymentInfo', sendKH);
+        return parseInt(response.data);
     }
     prevStep = (current) => {
         this.state.currentStep = current - 1;
