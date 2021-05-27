@@ -14,7 +14,7 @@ const ViewAccount = () => {
         loadUser();
     }, []);
     const loadUser = async () => {
-        const res = await Axios.get(`http://localhost:3030/users/${id}`);
+        const res = await Axios.get(`http://localhost:33456/api/admin/getAccountInfo?id=${id}`);
         setUser(res.data);
     };
     return (
@@ -23,10 +23,9 @@ const ViewAccount = () => {
             <h1 className="display-4">User Id: {id}</h1>
             <hr />
             <ul className="list-group w-50">
-                <li className="list-group-item">Name: {user.name}</li>
-                <li className="list-group-item">Username: {user.username}</li>
-                <li className="list-group-item">Email: {user.email}</li>
-                <li className="list-group-item">Phone: {user.phone}</li>
+                <li className="list-group-item">Username: {user.TEN_TAIKHOAN}</li>
+                <li className="list-group-item">Email: {user.MATKHAU}</li>
+                <li className="list-group-item">Role: {user.ROLE_TAIKHOAN}</li>
             </ul>
         </div>
     );
