@@ -228,7 +228,7 @@ module.exports = {
 				const { countryId } = params;
 				const listCity = dbContext.THANHPHO.findAll({
 					where: {
-						ID_THANHPHO: countryId,
+						ID_QUOCGIA: countryId,
 					},
 				});
 				return listCity;
@@ -259,23 +259,66 @@ module.exports = {
 			},
 			params: {
 				idNha: { type: "string" },
+				idChuHo: { type: "number" },
+				idLoaiNha: { type: "number" },
 				tenNha: { type: "string" },
-				ngayDat: { type: "string" },
-				checkIn: { type: "string" },
-				checkOut: { type: "string" },
-				khoangCachTT: { type: "string" },
-				soTang: { type: "string" },
-				buaSang: { type: "string" },
+				huyPhong: { type: "boolean" },
+				checkIn: { type: "string", format: "time" },
+				checkOut: { type: "string", format: "time" },
+				khoangCachTT: { type: "number" },
+				soTang: { type: "number" },
+				buaSang: { type: "number" },
 				soNha: { type: "string" },
 				tenDuong: { type: "string" },
-				dienTich: { type: "string" },
-				soNguoi: { type: "string" },
-				soGiuongPhu: { type: "string" },
-				ghiChu: { type: "string" },
+				dienTich: { type: "number" },
+				idQuan: { type: "number" },
+				soNguoi: { type: "number" },
+				soGiuongPhu: { type: "number" },
+				idGia: { type: "number" },
+				trangThai: { type: "number" },
 			},
 			async handler({ action, params, meta, ...ctx }) {
-				const getType = await dbContext.LOAIPHONG.findAll();
-				return getType;
+				const {
+					idNha,
+					idChuHo,
+					idLoaiNha,
+					tenNha,
+					huyPhong,
+					checkIn,
+					checkOut,
+					khoangCachTT,
+					soTang,
+					buaSang,
+					soNha,
+					tenDuong,
+					dienTich,
+					idQuan,
+					soNguoi,
+					soGiuongPhu,
+					idGia,
+					trangThai,
+				} = params;
+				const createApartment = await dbContext.NHA.create({
+					ID_NHA: idNha,
+					ID_TT_CHUHO: idChuHo,
+					ID_LOAINHA: idLoaiNha,
+					TEN_NHA: tenNha,
+					FREE_CANCEL: huyPhong,
+					CHECKIN: checkIn,
+					CHECKOUT: checkOut,
+					KHOANGCACH_TRUNGTAMTP: khoangCachTT,
+					SOTANG: soTang,
+					PHUPHI_BUASANG: buaSang,
+					SONHA: soNha,
+					TEN_DUONG: tenDuong,
+					DIENTICH: dienTich,
+					ID_QUAN: idQuan,
+					SO_NGUOI: soNguoi,
+					SO_GIUONGPHU: soGiuongPhu,
+					ID_BANGGIA: idGia,
+					ID_TRANGTHAI_NHA: trangThai
+				});
+				return createApartment;
 			},
 		},
 
