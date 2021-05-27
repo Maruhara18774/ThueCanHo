@@ -130,7 +130,7 @@ module.exports = {
 				method: "GET",
 				path: "/getAccountInfo/"
 			},
-			async handler() {
+			async handler({action,params,meta, ... ctx}) {
 				const {id} = params;
                 const checkList = await dbContext.TAIKHOAN.findOne({
 					where: {
