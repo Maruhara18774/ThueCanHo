@@ -24,7 +24,7 @@ const ViewAccount = () => {
             <hr />
             <ul className="list-group w-50">
                 <li className="list-group-item">Username: {user.TEN_TAIKHOAN}</li>
-                <li className="list-group-item">Email: {user.PASSWORD}</li>
+                <li className="list-group-item">Password: {user.PASSWORD}</li>
                 <li className="list-group-item">Role: {user.ROLE_TAIKHOAN}</li>
             </ul>
         </div>
