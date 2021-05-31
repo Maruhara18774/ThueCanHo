@@ -129,7 +129,7 @@ class SelectBar extends Component {
           <tr>
             <td className="title">Mức giá từ: </td>
             <td className="content">
-              <input type="range" class="form-range" min="0" max="1000000" range="50000" onChange={this.getMinBudget}/>
+              <input type="range" class="form-range" min="0" max="20000000" range="200000" onChange={this.getMinBudget}/>
             </td>
           </tr>
           <tr>

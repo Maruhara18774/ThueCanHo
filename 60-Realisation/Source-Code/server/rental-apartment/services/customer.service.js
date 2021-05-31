@@ -242,41 +242,49 @@ module.exports = {
 			async handler({action,params,meta, ... ctx}) {
                 const {idDistrict, idStyle,minBudget} = params;
 				var result = [];
-				if(idDistrict == 0&& idStyle == 0 && minBudget==0){
-					result = await dbContext.NHA.findAll();
+				if(idDistrict!= "0"){
+					const lsApart = await dbContext.NHA.findAll({
+						where:{
+							ID_QUAN: idDistrict
+						},
+						include:["ID_QUAN_QUAN","STYLENHAs","ID_BANGGIA_BANGGIum"]
+					})
+					if(idStyle!="0"){
+						lsApart.forEach(item =>{
+							var price = parseFloat(item.ID_BANGGIA_BANGGIum.MUCGIA_MOT) - parseFloat(item.ID_BANGGIA_BANGGIum.KHUYENMAI);
+							if(item.STYLENHAs[0].ID_STYLE.toString() == idStyle&&price>parseFloat(minBudget)){
+								result.push(item);
+							}
+						})
+					}
+					else{
+						lsApart.forEach(item =>{
+							var price = parseFloat(item.ID_BANGGIA_BANGGIum.MUCGIA_MOT) - parseFloat(item.ID_BANGGIA_BANGGIum.KHUYENMAI);
+							if(price>parseFloat(minBudget)){
+								result.push(item);
+							}
+						})
+					}
 				}
 				else{
-					const lsApartment = await dbContext.NHA.findAll();
-					const lsPrice = await dbContext.BANGGIA.findAll();
-					lsApartment.forEach(element => {
-						for(var i=1;i<lsPrice.length;i++){
-							const element2 = lsPrice[i]; 
-							if((element.ID_BANGGIA == element2.ID_BANGGIA)&&(element2.MUCGIA_MOT>= minBudget)){
-								result.push(element);
-								break;
+					const lsApart = await dbContext.NHA.findAll({
+						include:["ID_QUAN_QUAN","STYLENHAs","ID_BANGGIA_BANGGIum"]
+					})
+					if(idStyle!="0"){
+						lsApart.forEach(item =>{
+							var price = parseFloat(item.ID_BANGGIA_BANGGIum.MUCGIA_MOT) - parseFloat(item.ID_BANGGIA_BANGGIum.KHUYENMAI);
+							if(item.STYLENHAs[0].ID_STYLE.toString() == idStyle&&price>parseFloat(minBudget)){
+								result.push(item);
 							}
-						}
-					});
-					if(idDistrict!=0){
-						for(var i=1;i<result.length;i++){
-							var element = result[i];
-							if(element.ID_QUAN != idDistrict){
-								result.pop(element);
-							}
-						}
+						})
 					}
-					if(idStyle != 0){
-						const lsStyle = await dbContext.STYLENHA.findAll();
-						for(var i=1;i<result.length;i++){
-							var element = result[i];
-							console.log(element);
-							for(var i=0;i<lsStyle.length;i++) {
-								const element2 = lsStyle[i];
-								if(element.ID_NHA== element2.ID_NHA && element2.ID_STYLE != idStyle){
-									result.pop(element);
-								}
+					else{
+						lsApart.forEach(item =>{
+							var price = parseFloat(item.ID_BANGGIA_BANGGIum.MUCGIA_MOT) - parseFloat(item.ID_BANGGIA_BANGGIum.KHUYENMAI);
+							if(price>parseFloat(minBudget)){
+								result.push(item);
 							}
-						}
+						})
 					}
 				}
 				

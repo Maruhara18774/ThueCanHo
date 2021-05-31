@@ -41,15 +41,18 @@ class ListApartment extends Component {
                     </div>
                 </div>
                 
+                {this.state.myList.length == 0?
+                <div className="mainListApm">Không có kết quả</div>:
                 <div className="mainListApm">
-                                {this.state.myList.map((val, key) => {
-                                    return (
-                                        <div>
-                                            <InfoCard model={val}/>
-                                        </div>
-                                    )
-                                })}
-                            </div>
+                        {this.state.myList.map((val, key) => {
+                    return (
+                        <div>
+                            <InfoCard model={val}/>
+                        </div>
+                    )
+                })}
+            </div>
+}
 
             </div>
 
