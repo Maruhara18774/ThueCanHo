@@ -16,6 +16,7 @@ export default class BookingForm extends Component {
             username: "",
             password: "",
             // THONGTINKHACHHANG
+            idTTKH: 0,
             tenKH: "",
             email: "",
             phone: "",
@@ -49,45 +50,45 @@ export default class BookingForm extends Component {
             this.calcAll();
         }
         if (this.state.currentStep == 6) {
-            var idTTKH = this.checkTTKH();
-            alert(idTTKH);
-            const sendData = {
-                idNha: this.state.idApartment,
-                //idTTKH: idTTKH.toString(),
-                idTTKH: idTTKH.toString(),
-                ngayDat: this.getDateNow(),
-                checkIn: this.state.checkIn,
-                checkOut: this.state.checkOut,
-                ngayDen: this.state.ngayDen,
-                ngayDi: this.state.ngayDi,
-                tongTienPhong: this.state.totalPhong.toString(),
-                buaSang: this.state.soBuaSang.toString(),
-                tongTienBuaSang: this.state.totalBuaSang.toString(),
-                soGiuongPhu: this.state.soGiuongPhu.toString(),
-                tongTienGiuongPhu: this.state.totalGiuongPhu.toString(),
-                phiGTGT: this.state.phiGTGT.toString(),
-                tongTien: this.state.total.toString(),
-                ghiChu: this.state.ghiChu,
-            }
-            console.log(sendData);
-            Axios.post('http://localhost:33456/api/customer/rentalApartment',sendData);
+            const sendKH = {
+                tenKH: this.state.tenKH,
+                email: this.state.email,
+                phoneNumber: this.state.phone,
+                maGiayTo: this.state.giaytotuythanID,
+                loaiGiayTo: this.state.giaytotuythanType,
+                quocTich: this.state.quocTich,
+                gioiTinh: this.state.gioiTinh,
+                idTK: this.state.idTK.toString(),
+            };
+            Axios.post('http://localhost:33456/api/customer/savePaymentInfo', sendKH).then(
+                (response)=>{
+                    this.state.idTTKH = parseInt(response.data);
+                    this.setState(this,()=> {console.log(this.state.idTTKH)});
+                    const sendData = {
+                        idNha: this.state.idApartment,
+                        //idTTKH: idTTKH.toString(),
+                        idTTKH: this.state.idTTKH.toString(),
+                        ngayDat: this.getDateNow(),
+                        checkIn: this.state.checkIn,
+                        checkOut: this.state.checkOut,
+                        ngayDen: this.state.ngayDen,
+                        ngayDi: this.state.ngayDi,
+                        tongTienPhong: this.state.totalPhong.toString(),
+                        buaSang: this.state.soBuaSang.toString(),
+                        tongTienBuaSang: this.state.totalBuaSang.toString(),
+                        soGiuongPhu: this.state.soGiuongPhu.toString(),
+                        tongTienGiuongPhu: this.state.totalGiuongPhu.toString(),
+                        phiGTGT: this.state.phiGTGT.toString(),
+                        tongTien: this.state.total.toString(),
+                        ghiChu: this.state.ghiChu,
+                    }
+                    console.log(sendData);
+                    Axios.post('http://localhost:33456/api/customer/rentalApartment',sendData);
+                }
+            )
+            
         }
         window.scrollTo(0, 0);
-    }
-
-    checkTTKH = async () =>{
-        const sendKH = {
-            tenKH: this.state.tenKH,
-            email: this.state.email,
-            phoneNumber: this.state.phone,
-            maGiayTo: this.state.giaytotuythanID,
-            loaiGiayTo: this.state.giaytotuythanType,
-            quocTich: this.state.quocTich,
-            gioiTinh: this.state.gioiTinh,
-            idTK: this.state.idTK.toString(),
-        };
-        const response = await Axios.post('http://localhost:33456/api/customer/savePaymentInfo', sendKH);
-        return parseInt(response.data);
     }
     prevStep = (current) => {
         this.state.currentStep = current - 1;
