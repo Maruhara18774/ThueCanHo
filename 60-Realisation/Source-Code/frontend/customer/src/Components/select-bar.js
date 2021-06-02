@@ -61,14 +61,17 @@ class SelectBar extends Component {
   changeDistrict = (event)=>{
     this.state.idDistrict = event.target.value;
     this.setState(this);
+    this.sortApartment();
   }
   changeStyle = (event)=>{
     this.state.idStyle = event.target.value;
     this.setState(this);
+    this.sortApartment();
   }
   getMinBudget =(event)=>{
     this.state.minBudget = event.target.value;
     this.setState(this);
+    this.sortApartment();
   }
   sortApartment = () => {
     console.log(this.state.idDistrict + " - " + this.state.idStyle + " - " + this.state.minBudget);
@@ -134,13 +137,6 @@ class SelectBar extends Component {
           </tr>
           <tr>
             <td colSpan="2" className="content"><b className="emphasis">{this.state.minBudget} VND</b> trở lên.</td>
-          </tr>
-          <tr className="spacing"/>
-          <tr>
-            <td colSpan="2">
-            <div className="button" onClick={()=>this.sortApartment()}>Lọc kết quả</div>
-            </td>
-            
           </tr>
           <tr className="spacing"/>
         </table>

@@ -49,15 +49,12 @@ export default class BookingForm extends Component {
             this.calcAll();
         }
         if (this.state.currentStep == 6) {
-            var idTTKH = this.searchIDTTKH(this.state.giaytotuythanID,this.state.giaytotuythanType);
-            if (idTTKH == 0) {
-                idTTKH = this.createTTKH();
-                alert(idTTKH);
-            }
+            var idTTKH = this.checkTTKH();
+            alert(idTTKH);
             const sendData = {
                 idNha: this.state.idApartment,
                 //idTTKH: idTTKH.toString(),
-                idTTKH: "2",
+                idTTKH: idTTKH.toString(),
                 ngayDat: this.getDateNow(),
                 checkIn: this.state.checkIn,
                 checkOut: this.state.checkOut,
@@ -77,15 +74,8 @@ export default class BookingForm extends Component {
         }
         window.scrollTo(0, 0);
     }
-    searchIDTTKH = async (id, type)=>{
-        await Axios.post('http://localhost:33456/api/customer/searchPaymentInfo', {
-                maGiayTo: id,
-                loaiGiayTo: type,
-            }).then((response)=>{
-                return parseInt(response.data);
-            })
-    }
-    createTTKH = async () =>{
+
+    checkTTKH = async () =>{
         const sendKH = {
             tenKH: this.state.tenKH,
             email: this.state.email,
@@ -139,7 +129,6 @@ export default class BookingForm extends Component {
             this.state.quocTich == "") {
             return false;
         }
-
         return true;
     }
     checkInput2 = () => {

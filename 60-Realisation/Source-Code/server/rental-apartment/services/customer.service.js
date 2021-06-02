@@ -350,31 +350,6 @@ module.exports = {
 				return checkStyle;
 			},
 		},
-		searchPaymentInfo:{
-			rest:{
-				method: "POST",
-				path: "/searchPaymentInfo"
-			},
-			params:{
-				maGiayTo: {type: "string"},
-				loaiGiayTo: {type: "string"},
-			},
-			async handler({action,params,meta, ... ctx}){
-                var {maGiayTo,loaiGiayTo} = params;
-				var result = 0;
-				const checkInfo = await dbContext.THONGTINKHACHHANG.findOne({
-					where:{
-						MA_GIAYTOTUYTHAN: maGiayTo,
-						LOAI_GIAYTOTUYTHAN: loaiGiayTo,
-					}
-				});
-				if(checkInfo != null){
-					result = checkInfo.ID_TT_KHACHHANG;
-				}
-				return result;
-			},
-		},
-		// Select bar - END
 		savePaymentInfo:{
 			rest:{
 				method: "POST",
@@ -392,20 +367,31 @@ module.exports = {
 			},
 			async handler({action,params,meta, ... ctx}){
                 var {tenKH,email,phoneNumber,maGiayTo,loaiGiayTo,quocTich,gioiTinh,idTK} = params;
-				if(idTK==0){
-					idTK = 1002
+				if(parseInt(idTK)==0){
+					idTK = 1002;
 				}
-				const createInfo = await dbContext.THONGTINKHACHHANG.create({
-					TEN_KHACHHANG: tenKH,
-					EMAIL: email,
-					PHONE_NUMBER: phoneNumber,
-					MA_GIAYTOTUYTHAN: maGiayTo,
-					LOAI_GIAYTOTUYTHAN: loaiGiayTo,
-					QUOCTICH: quocTich,
-					GIOITINH: gioiTinh,
-					ID_TAIKHOAN: idTK
-				})
-				return createInfo.ID_TT_KHACHHANG;
+				const checkInfo = await dbContext.THONGTINKHACHHANG.findOne({
+					where:{
+						MA_GIAYTOTUYTHAN: maGiayTo,
+						LOAI_GIAYTOTUYTHAN: loaiGiayTo,
+					}
+				});
+				if(checkInfo ==null){
+					const createInfo = await dbContext.THONGTINKHACHHANG.create({
+						TEN_KHACHHANG: tenKH,
+						EMAIL: email,
+						PHONE_NUMBER: phoneNumber,
+						MA_GIAYTOTUYTHAN: maGiayTo,
+						LOAI_GIAYTOTUYTHAN: loaiGiayTo,
+						QUOCTICH: quocTich,
+						GIOITINH: gioiTinh,
+						ID_TAIKHOAN: parseInt(idTK)
+					})
+					return createInfo.ID_TT_KHACHHANG;
+				}
+				else{
+					return checkInfo.ID_TT_KHACHHANG;
+				}
 			},
 		},
 		rentalApartment:{
