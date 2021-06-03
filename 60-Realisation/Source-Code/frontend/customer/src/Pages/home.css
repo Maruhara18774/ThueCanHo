@@ -1,0 +1,24 @@
+.other-content-home{
+    margin: auto;
+    padding-left: 20%;
+    padding-right: 20%;
+}
+.other-content-home .content{
+    margin-top: 50px;
+    margin-bottom: 50px;
+}
+.other-content-home .content .payment-partner{
+    text-align: left;
+    padding-right: 20px;
+    padding-top: 50px;
+}
+.other-content-home .expand-button{
+    text-align: center;
+    color: #3380E6;
+}
+.other-content-home .expand-button:hover{
+    text-align: center;
+    color: #245d9e;
+    text-decoration: underline;
+    cursor: pointer;
+}
