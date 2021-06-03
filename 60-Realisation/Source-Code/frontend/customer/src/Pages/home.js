@@ -1,9 +1,8 @@
 import {Component,createRef} from 'react';
-import Axios from 'axios';
 import Banner from '../Components/banner';
 import FooterCustom from '../Components/footer';
 import SearchingForm from '../Components/form-search';
-
+import WhyTravelokaPartial from '../Components/why-traveloka';
 
 class HomePage extends Component{
     constructor(props){
@@ -13,7 +12,7 @@ class HomePage extends Component{
         return (
             <div>
                 <Banner/>
-                <SearchingForm/>
+                    <WhyTravelokaPartial/>
                 <FooterCustom/>
             </div>
             
@@ -23,3 +22,4 @@ class HomePage extends Component{
 }
 
 export default HomePage;
+// <SearchingForm/>
