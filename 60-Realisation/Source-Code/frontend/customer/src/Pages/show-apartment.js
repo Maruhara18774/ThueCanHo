@@ -22,7 +22,6 @@ class ListApartment extends Component {
     })
     handleCallback = (newList) =>{
         this.state.myList = newList;
-        console.log("Callback: ");
         this.setState(this);
     }
     componentDidMount(){

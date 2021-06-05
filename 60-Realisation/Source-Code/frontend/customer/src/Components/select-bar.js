@@ -77,11 +77,15 @@ class SelectBar extends Component {
     console.log(this.state.idDistrict + " - " + this.state.idStyle + " - " + this.state.minBudget);
     Axios.post('http://localhost:33456/api/customer/searchApartmentWithDetail', {
       "idDistrict": this.state.idDistrict.toString(),
-      "idStyle": this.state.idStyle.toString(),
-      "minBudget": this.state.minBudget.toString()
+      "idStyle": this.state.idStyle.toString()
     }).then((response) => {
-      console.log(response.data);
-      this.props.callback(response.data);
+      var arr = response.data;
+      arr.forEach(item => {
+        if((parseFloat(item.ID_BANGGIA_BANGGIum.MUCGIA_MOT) - parseFloat(item.ID_BANGGIA_BANGGIum.KHUYENMAI))<parseFloat(this.state.minBudget)){
+          arr.pop(item)
+        }
+      });
+      this.props.callback(arr);
     });
   }
   render() {

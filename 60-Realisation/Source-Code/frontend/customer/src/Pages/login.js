@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import Axios from 'axios';
 import './login.css'
 import {BrowserRouter as Router,Switch,Route, Link, BrowserRouter} from 'react-router-dom';
+import NavbarLogged from '../Components/nav-bar-logged';
 
 
 class Login extends Component{
@@ -30,7 +31,9 @@ class Login extends Component{
                 if(this.state.id != 0){
                     this.state.errorName="";
                     this.setState(this);
-                    ReactDOM.render(<BrowserRouter><Link to={'/customerInfor/'+this.state.id.toString()} className="gray-text mrl20">Xin chào <b>{this.loginNameRef.current.value}</b>!</Link></BrowserRouter>, document.getElementById('loginInfo'));
+                    ReactDOM.render(
+                        <NavbarLogged id= {this.state.id.toString()} name={this.loginNameRef.current.value}/>
+                        , document.getElementById('main-nav-bar'));
                     this.props.history.push('/apaLst');
                 }
                 else{

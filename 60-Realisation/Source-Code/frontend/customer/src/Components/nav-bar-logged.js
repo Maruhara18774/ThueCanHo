@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import './nav-bar.css'
 
-class Navbar extends Component {
+class NavbarLogged extends Component {
   constructor(props) {
     super(props);
   }
@@ -46,9 +46,7 @@ class Navbar extends Component {
           </ul>
           <ul class="navbar-nav flex-row ml-md-auto d-none d-md-flex">
             <li class="nav-item active">
-              <Link to="/login" className="gray-text mrl20" id="loginInfo"><span className="sea-text mrl5"><i class="far fa-user"></i></span>Đăng nhập</Link>
-              <Link to="/register" className="register-btn">Đăng ký</Link>
-            </li>
+              <Link to={'/customerInfor/'+this.props.id.toString()} className="gray-text mrl20">Xin chào <b>{this.props.name}</b>!</Link>            </li>
           </ul>
         </div>
       </nav>
@@ -56,4 +54,4 @@ class Navbar extends Component {
   }
 }
 
-export default Navbar;
+export default NavbarLogged;

@@ -236,11 +236,10 @@ module.exports = {
 			},
 			params:{
 				idDistrict: {type:"string"},
-				idStyle: {type:"string"},
-				minBudget: {type: "string"}
+				idStyle: {type:"string"}
 			},
 			async handler({action,params,meta, ... ctx}) {
-                const {idDistrict, idStyle,minBudget} = params;
+                const {idDistrict, idStyle} = params;
 				var result = [];
 				if(idDistrict!= "0"){
 					const lsApart = await dbContext.NHA.findAll({
@@ -251,18 +250,14 @@ module.exports = {
 					})
 					if(idStyle!="0"){
 						lsApart.forEach(item =>{
-							var price = parseFloat(item.ID_BANGGIA_BANGGIum.MUCGIA_MOT) - parseFloat(item.ID_BANGGIA_BANGGIum.KHUYENMAI);
-							if(item.STYLENHAs[0].ID_STYLE.toString() == idStyle&&price>parseFloat(minBudget)){
+							if(item.STYLENHAs[0].ID_STYLE.toString() == idStyle){
 								result.push(item);
 							}
 						})
 					}
 					else{
 						lsApart.forEach(item =>{
-							var price = parseFloat(item.ID_BANGGIA_BANGGIum.MUCGIA_MOT) - parseFloat(item.ID_BANGGIA_BANGGIum.KHUYENMAI);
-							if(price>parseFloat(minBudget)){
 								result.push(item);
-							}
 						})
 					}
 				}
@@ -272,18 +267,15 @@ module.exports = {
 					})
 					if(idStyle!="0"){
 						lsApart.forEach(item =>{
-							var price = parseFloat(item.ID_BANGGIA_BANGGIum.MUCGIA_MOT) - parseFloat(item.ID_BANGGIA_BANGGIum.KHUYENMAI);
-							if(item.STYLENHAs[0].ID_STYLE.toString() == idStyle&&price>parseFloat(minBudget)){
+							if(item.STYLENHAs[0].ID_STYLE.toString() == idStyle){
 								result.push(item);
 							}
 						})
 					}
 					else{
 						lsApart.forEach(item =>{
-							var price = parseFloat(item.ID_BANGGIA_BANGGIum.MUCGIA_MOT) - parseFloat(item.ID_BANGGIA_BANGGIum.KHUYENMAI);
-							if(price>parseFloat(minBudget)){
 								result.push(item);
-							}
+							
 						})
 					}
 				}

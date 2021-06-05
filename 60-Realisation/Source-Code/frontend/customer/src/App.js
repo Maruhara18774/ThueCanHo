@@ -8,17 +8,23 @@ import HomePage from './Pages/home'
 import PromotionPage from './Pages/promotion'
 import DetailApartment from './Pages/detail-apartment';
 import BookingForm from './Pages/booking-infor';
+import RegisterForm from './Pages/register';
+import CustomerInfoPage from './Pages/customer-info';
 
 function App() {
   return (
     <div className="App">
       <BrowserRouter>
         <div class="fixed-top">
-          <Navbar/>
+          <div className="main-nav-bar">
+            <Navbar/>
+          </div>
+          
         </div>
         <Switch>
           <Route path="/login" component={Login}></Route>
-          <Route path="/customerInfor/:accountID" component={Login} ></Route>
+          <Route path="/register" component={RegisterForm}></Route>
+          <Route path="/customerInfor/:accountID" component={CustomerInfoPage} ></Route>
           <Route path="/apaLst" component={ListApartment}></Route>
           <Route path="/promotion" component={PromotionPage}></Route>
           <Route path="/" exact component={HomePage}></Route>
