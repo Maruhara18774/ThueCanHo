@@ -17,7 +17,11 @@ module.exports = function(sequelize, DataTypes) {
     },
     ID_NHA: {
       type: DataTypes.STRING(50),
-      allowNull: true
+      allowNull: true,
+      references: {
+        model: 'NHA',
+        key: 'ID_NHA'
+      }
     },
     SOLUONG: {
       type: DataTypes.INTEGER,
@@ -30,7 +34,7 @@ module.exports = function(sequelize, DataTypes) {
     timestamps: false,
     indexes: [
       {
-        name: "PK__CSVCNHA__4BFFADB9326ABBEF",
+        name: "PK__CSVCNHA__4BFFADB9C8AC2D4D",
         unique: true,
         fields: [
           { name: "ID_CSVC_NHA" },
