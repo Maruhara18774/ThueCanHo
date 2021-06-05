@@ -5,7 +5,7 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.INTEGER,
       allowNull: false,
       autoIncrement: true,
-      unique: "UQ__NHA__A9654DEAC3495FD9"
+      unique: "UQ__NHA__A9654DEA046A9109"
     },
     ID_NHA: {
       type: DataTypes.STRING(50),
@@ -56,6 +56,10 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.FLOAT,
       allowNull: true
     },
+    PHUPHI_GIUONGPHU: {
+      type: DataTypes.FLOAT,
+      allowNull: true
+    },
     SONHA: {
       type: DataTypes.STRING(150),
       allowNull: true
@@ -84,13 +88,13 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.INTEGER,
       allowNull: true
     },
-    ID_BANGGIA: {
-      type: DataTypes.INTEGER,
-      allowNull: true,
-      references: {
-        model: 'BANGGIA',
-        key: 'ID_BANGGIA'
-      }
+    GIA: {
+      type: DataTypes.FLOAT,
+      allowNull: true
+    },
+    KHUYENMAI: {
+      type: DataTypes.FLOAT,
+      allowNull: true
     },
     ID_TRANGTHAI_NHA: {
       type: DataTypes.INTEGER,
@@ -107,14 +111,14 @@ module.exports = function(sequelize, DataTypes) {
     timestamps: false,
     indexes: [
       {
-        name: "PK__NHA__253B662CA8228E9F",
+        name: "PK__NHA__253B662CB17AD777",
         unique: true,
         fields: [
           { name: "ID_NHA" },
         ]
       },
       {
-        name: "UQ__NHA__A9654DEAC3495FD9",
+        name: "UQ__NHA__A9654DEA046A9109",
         unique: true,
         fields: [
           { name: "THUTU_NHA" },

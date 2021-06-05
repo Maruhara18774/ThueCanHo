@@ -1,27 +1,35 @@
 const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('CSVC', {
-    ID_CSVC: {
+  return sequelize.define('HINHANHNHA', {
+    ID_HINHANHNHA: {
       autoIncrement: true,
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true
     },
-    TEN_CSVC: {
+    ID_NHA: {
+      type: DataTypes.STRING(50),
+      allowNull: true,
+      references: {
+        model: 'NHA',
+        key: 'ID_NHA'
+      }
+    },
+    HINHANH: {
       type: DataTypes.TEXT,
       allowNull: true
     }
   }, {
     sequelize,
-    tableName: 'CSVC',
+    tableName: 'HINHANHNHA',
     schema: 'dbo',
     timestamps: false,
     indexes: [
       {
-        name: "PK__CSVC__7F90121273896CDC",
+        name: "PK__HINHANHN__B4B8C4966BFB214D",
         unique: true,
         fields: [
-          { name: "ID_CSVC" },
+          { name: "ID_HINHANHNHA" },
         ]
       },
     ]
