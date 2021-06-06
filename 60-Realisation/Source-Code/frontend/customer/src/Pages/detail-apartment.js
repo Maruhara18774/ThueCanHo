@@ -21,10 +21,8 @@ export default class DetailApartment extends Component {
             apartmentInfo: {},
             lsImage: [imageDefault,image1,image2,image3,image4,image5,image6,image7,image8],
             imgActive: 0,
-            typeApartment: "",
             address: "",
-            numStar: 5,
-            price: 0,
+            numStar: 5
         }
         this.getApartmentInfo();
     }
@@ -32,20 +30,11 @@ export default class DetailApartment extends Component {
         Axios.post('http://localhost:33456/api/customer/getDetailApartment',{id: this.state.idApartment}).then(
             (response) => {
                 this.state.apartmentInfo = response.data[0];
-                console.log(response.data);
+                console.log(this.state.apartmentInfo)
                 this.setState(this,()=>{
-                    this.getType(this.state.apartmentInfo.ID_LOAINHA.toString());
                     this.getAddress(this.state.apartmentInfo.ID_NHA.toString());
-                    this.getPrice(this.state.apartmentInfo.ID_BANGGIA.toString());
+                    
                 });
-            });
-    }
-    getType = (idLoaiNha) =>{
-        console.log(this.state.apartmentInfo.ID_LOAINHA);
-        Axios.post('http://localhost:33456/api/customer/getTypeApartment',{idType: idLoaiNha}).then(
-            (response) => {
-                this.state.typeApartment = response.data;
-                this.setState(this);
             });
     }
     getAddress = (idNha) =>{
@@ -54,14 +43,6 @@ export default class DetailApartment extends Component {
                 this.state.address = response.data;
                 this.setState(this);
             });
-    }
-    getPrice = (idPrice) => {
-        Axios.post('http://localhost:33456/api/customer/getApartmentPrice',{idPrice: idPrice}).then(
-            (response) => {
-                this.state.price = response.data;
-                this.setState(this);
-            });
-            
     }
     componentDidMount(){
         window.scrollTo(0,0);
@@ -629,7 +610,6 @@ export default class DetailApartment extends Component {
     }
 
     render() {
-        this.getType();
         return (
             <div className="detail-apartment-position">
                 <div className="detail-apartment-wrap">
@@ -638,7 +618,7 @@ export default class DetailApartment extends Component {
                             <tr>
                                 <td className="header-left">
                                     <p className="nameApartment">{this.state.apartmentInfo.TEN_NHA}</p>
-                                    <p className = "sticker">{this.state.typeApartment}</p>
+                                    <p className = "sticker">Biệt thự</p>
                                     <p className="location">
                                         <span><i class="fas fa-map-marker-alt mrg5"></i></span>
                                         {this.state.address}
@@ -684,12 +664,13 @@ export default class DetailApartment extends Component {
                                 </td>
                                 <td  className="header-right">
                                     <p>Giá mỗi đêm từ</p>
-                                    <p className="priceRental">{this.state.price.MUCGIA_MOT - this.state.price.KHUYENMAI} VND</p>
+                                    <p className="priceRental">{this.state.apartmentInfo.GIA - this.state.apartmentInfo.KHUYENMAI} VND</p>
                                     <Link to={"/booking/" + this.state.idApartment} className="bookNowBtn">Đặt ngay</Link>
                                 </td>
                             </tr>
                         </table>
                     </div>
+                    <hr/>
                 </div>
             </div>
         )

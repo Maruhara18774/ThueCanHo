@@ -79,7 +79,7 @@ class SelectBar extends Component {
     })
     
     this.state.lsShow.forEach(item => {
-        if((parseFloat(item.GIA) - parseFloat(item.KHUYENMAI))>=parseFloat(this.state.minBudget)){
+        if((parseFloat(item.GIA) - parseFloat(item.KHUYENMAI))<parseFloat(this.state.minBudget)){
           
           this.state.lsShow.pop(item)
         }

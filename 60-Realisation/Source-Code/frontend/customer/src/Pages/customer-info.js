@@ -10,4 +10,4 @@ export class CustomerInfoPage extends Component {
     }
 }
 
-export default CustomerInfoPage
+export default CustomerInfoPage;

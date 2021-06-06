@@ -90,14 +90,16 @@ module.exports = {
 				path: "/getDetailApartment"
 			},
 			params:{
-				id: {type: "string"}
+				id: {type: "string"},
+				
 			},
 			async handler({action,params,meta, ... ctx}) {
                 const {id} = params;
                 const checkDetail = await dbContext.NHA.findAll({
                     where: {
                         ID_NHA: id
-                    }
+                    },
+					include:["ID_LOAINHA_LOAINHA"]
                 });
                 if (checkDetail == null){
                     return "Không có căn hộ này";

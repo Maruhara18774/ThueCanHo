@@ -33,7 +33,7 @@ class Login extends Component{
                     this.setState(this);
                     ReactDOM.render(
                         <NavbarLogged id= {this.state.id.toString()} name={this.loginNameRef.current.value}/>
-                        , document.getElementById('main-nav-bar'));
+                        , document.getElementById('loginInfo'));
                     this.props.history.push('/apaLst');
                 }
                 else{

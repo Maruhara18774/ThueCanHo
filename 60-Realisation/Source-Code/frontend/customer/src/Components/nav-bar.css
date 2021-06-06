@@ -34,3 +34,14 @@
     color: white;
     text-decoration: none;
 }
+.logout-btn{
+    background-color: transparent;
+    border-style: solid;
+    color: tomato;
+    border-color: tomato;
+    border-radius: 10px;
+}
+.logout-btn:hover{
+    color: #3380E6;
+    border-color: #3380E6;
+}

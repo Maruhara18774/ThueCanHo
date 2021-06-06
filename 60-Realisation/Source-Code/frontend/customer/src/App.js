@@ -16,20 +16,17 @@ function App() {
     <div className="App">
       <BrowserRouter>
         <div class="fixed-top">
-          <div className="main-nav-bar">
             <Navbar/>
-          </div>
-          
         </div>
         <Switch>
           <Route path="/login" component={Login}></Route>
           <Route path="/register" component={RegisterForm}></Route>
-          <Route path="/customerInfor/:accountID" component={CustomerInfoPage} ></Route>
           <Route path="/apaLst" component={ListApartment}></Route>
           <Route path="/promotion" component={PromotionPage}></Route>
           <Route path="/" exact component={HomePage}></Route>
           <Route path="/listApartments/:apartmentId" exact component={DetailApartment}></Route>
           <Route path="/booking/:apartmentId" exact component={BookingForm}></Route>
+          <Route path="/customerInfor/:accountID" exact component={CustomerInfoPage} ></Route>
         </Switch>
       </BrowserRouter>
       
