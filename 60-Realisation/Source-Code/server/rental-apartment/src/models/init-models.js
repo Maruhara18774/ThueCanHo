@@ -1,5 +1,4 @@
 var DataTypes = require("sequelize").DataTypes;
-var _BANGGIA = require("./BANGGIA");
 var _CHITIETCSVC = require("./CHITIETCSVC");
 var _CHITIETNOITHAT = require("./CHITIETNOITHAT");
 var _CSVC = require("./CSVC");
@@ -7,6 +6,7 @@ var _CSVCNHA = require("./CSVCNHA");
 var _DANHGIA = require("./DANHGIA");
 var _DATCANHO = require("./DATCANHO");
 var _HINHANH = require("./HINHANH");
+var _HINHANHNHA = require("./HINHANHNHA");
 var _LOAIGIUONG = require("./LOAIGIUONG");
 var _LOAINHA = require("./LOAINHA");
 var _LOAIPHONG = require("./LOAIPHONG");
@@ -26,7 +26,6 @@ var _TRANGTHAIDATCANHO = require("./TRANGTHAIDATCANHO");
 var _TRANGTHAINHA = require("./TRANGTHAINHA");
 
 function initModels(sequelize) {
-  var BANGGIA = _BANGGIA(sequelize, DataTypes);
   var CHITIETCSVC = _CHITIETCSVC(sequelize, DataTypes);
   var CHITIETNOITHAT = _CHITIETNOITHAT(sequelize, DataTypes);
   var CSVC = _CSVC(sequelize, DataTypes);
@@ -34,6 +33,7 @@ function initModels(sequelize) {
   var DANHGIA = _DANHGIA(sequelize, DataTypes);
   var DATCANHO = _DATCANHO(sequelize, DataTypes);
   var HINHANH = _HINHANH(sequelize, DataTypes);
+  var HINHANHNHA = _HINHANHNHA(sequelize, DataTypes);
   var LOAIGIUONG = _LOAIGIUONG(sequelize, DataTypes);
   var LOAINHA = _LOAINHA(sequelize, DataTypes);
   var LOAIPHONG = _LOAIPHONG(sequelize, DataTypes);
@@ -52,8 +52,6 @@ function initModels(sequelize) {
   var TRANGTHAIDATCANHO = _TRANGTHAIDATCANHO(sequelize, DataTypes);
   var TRANGTHAINHA = _TRANGTHAINHA(sequelize, DataTypes);
 
-  NHA.belongsTo(BANGGIA, { as: "ID_BANGGIA_BANGGIum", foreignKey: "ID_BANGGIA"});
-  BANGGIA.hasMany(NHA, { as: "NHAs", foreignKey: "ID_BANGGIA"});
   CSVCNHA.belongsTo(CHITIETCSVC, { as: "ID_CT_CSVC_CHITIETCSVC", foreignKey: "ID_CT_CSVC"});
   CHITIETCSVC.hasMany(CSVCNHA, { as: "CSVCNHAs", foreignKey: "ID_CT_CSVC"});
   NOITHATPHONG.belongsTo(CHITIETNOITHAT, { as: "ID_CT_NOITHAT_CHITIETNOITHAT", foreignKey: "ID_CT_NOITHAT"});
@@ -66,10 +64,14 @@ function initModels(sequelize) {
   LOAINHA.hasMany(NHA, { as: "NHAs", foreignKey: "ID_LOAINHA"});
   PHONG.belongsTo(LOAIPHONG, { as: "ID_LOAIPHONG_LOAIPHONG", foreignKey: "ID_LOAIPHONG"});
   LOAIPHONG.hasMany(PHONG, { as: "PHONGs", foreignKey: "ID_LOAIPHONG"});
-  DANHGIA.belongsTo(NHA, { as: "THUTU_NHA_NHA", foreignKey: "THUTU_NHA"});
-  NHA.hasMany(DANHGIA, { as: "DANHGIa", foreignKey: "THUTU_NHA"});
+  CSVCNHA.belongsTo(NHA, { as: "ID_NHA_NHA", foreignKey: "ID_NHA"});
+  NHA.hasMany(CSVCNHA, { as: "CSVCNHAs", foreignKey: "ID_NHA"});
+  DANHGIA.belongsTo(NHA, { as: "ID_NHA_NHA", foreignKey: "ID_NHA"});
+  NHA.hasMany(DANHGIA, { as: "DANHGIa", foreignKey: "ID_NHA"});
   DATCANHO.belongsTo(NHA, { as: "ID_NHA_NHA", foreignKey: "ID_NHA"});
   NHA.hasMany(DATCANHO, { as: "DATCANHOs", foreignKey: "ID_NHA"});
+  HINHANHNHA.belongsTo(NHA, { as: "ID_NHA_NHA", foreignKey: "ID_NHA"});
+  NHA.hasMany(HINHANHNHA, { as: "HINHANHNHAs", foreignKey: "ID_NHA"});
   PHONG.belongsTo(NHA, { as: "ID_NHA_NHA", foreignKey: "ID_NHA"});
   NHA.hasMany(PHONG, { as: "PHONGs", foreignKey: "ID_NHA"});
   STYLENHA.belongsTo(NHA, { as: "ID_NHA_NHA", foreignKey: "ID_NHA"});
@@ -104,7 +106,6 @@ function initModels(sequelize) {
   TRANGTHAINHA.hasMany(NHA, { as: "NHAs", foreignKey: "ID_TRANGTHAI_NHA"});
 
   return {
-    BANGGIA,
     CHITIETCSVC,
     CHITIETNOITHAT,
     CSVC,
@@ -112,6 +113,7 @@ function initModels(sequelize) {
     DANHGIA,
     DATCANHO,
     HINHANH,
+    HINHANHNHA,
     LOAIGIUONG,
     LOAINHA,
     LOAIPHONG,

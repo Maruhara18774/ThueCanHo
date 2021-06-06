@@ -47,10 +47,6 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.SMALLINT,
       allowNull: true
     },
-    GIAGIUONG_PHU: {
-      type: DataTypes.FLOAT,
-      allowNull: true
-    },
     CHIEUDAI_PHONG: {
       type: DataTypes.FLOAT,
       allowNull: true
@@ -62,6 +58,10 @@ module.exports = function(sequelize, DataTypes) {
     SOLUONG: {
       type: DataTypes.SMALLINT,
       allowNull: true
+    },
+    MOTA: {
+      type: DataTypes.TEXT,
+      allowNull: true
     }
   }, {
     sequelize,
@@ -70,7 +70,7 @@ module.exports = function(sequelize, DataTypes) {
     timestamps: false,
     indexes: [
       {
-        name: "PK__PHONG__C8E949A3C603B697",
+        name: "PK__PHONG__C8E949A37F99128B",
         unique: true,
         fields: [
           { name: "ID_PHONG" },

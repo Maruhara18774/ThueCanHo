@@ -69,6 +69,20 @@ module.exports = {
 				
 			}
 		},
+		/*-------------------------------[Get] List of Account------------------------------*/
+		getListAccount: {
+			rest: {
+				method: "GET",
+				path: "/getListAccount"
+			},
+			async handler() {
+                const checkList = await dbContext.TAIKHOAN.findAll();
+                if (checkList == null){
+                    return "Không có Tài khoản nào";
+                }
+				return checkList;
+			}
+		},
         getListApartment: {
 			rest: {
 				method: "GET",
@@ -84,6 +98,84 @@ module.exports = {
                 // localhost - 1400 
                 // npx sequelize-auto -h localhost -d RENTALAPARTMENT -u sa -x !Passw0rd -p 1400 -e mssql -o "./src/models"    
 				return checkList;
+			}
+		},
+		/*-------------------------------[Post] AddAccount------------------------------*/
+		addAccount: {
+			rest: {
+				method: "POST",
+				path: "/addAccount"
+			},
+			params: {
+                username: {type:"string"},
+                password: {type:"string"},
+				role: {type:"string"}
+            },
+			async handler({action,params,meta, ... ctx}) {
+				const {username, password, role} = params;	
+                const createAccount = await dbContext.TAIKHOAN.findOrCreate({
+					where: {TEN_TAIKHOAN: username},
+					defaults: {
+						TEN_TAIKHOAN: username,
+						MATKHAU: password,
+						ROLE_TAIKHOAN: role
+					}
+				});
+				return createAccount;
+			}
+		},
+		/*-------------------------------[Get] AccountInfo------------------------------*/
+		getAccountInfo: {
+			rest: {
+				method: "GET",
+				path: "/getAccountInfo/"
+			},
+			async handler({action,params,meta, ... ctx}) {
+				const {id} = params;
+                const checkList = await dbContext.TAIKHOAN.findOne({
+					where: {
+						ID_TAIKHOAN: id
+					}
+				});
+                if (checkList == null){
+                    return "Không có Tài khoản này";
+                } 
+				return checkList;
+			}
+		},
+		/*-------------------------------[Post] UpdateAccount------------------------------*/
+		updateAccount: {
+			rest: {
+				method: "POST",
+				path: "/updateAccount/"
+			},
+			params: {
+				id: {type: "string"},
+                username: {type:"string"},
+                password: {type:"string"},
+				role: {type:"string"}
+            },
+			async handler({action,params,meta, ... ctx}) {
+				const {id, username, password, role} = params;	
+                const updateAccount = await dbContext.TAIKHOAN.findOne({where: {ID_TAIKHOAN: id}}).update({TEN_TAIKHOAN: username, MATKHAU: password, ROLE_TAIKHOAN: role});
+				return updateAccount;
+			}
+		},
+		/*-------------------------------[Post] DeleteAccount------------------------------*/
+		deleteAccount: {
+			rest: {
+				method: "POST",
+				path: "/deleteAccount/"
+			},
+			params: {
+				id: {type: "string"},
+            },
+			async handler({action,params,meta, ... ctx}) {
+				const {id} = params;	
+                const deleteAccount = await dbContext.TAIKHOAN.destroy({
+					where: {ID_TAIKHOAN: id}
+				})
+				return deleteAccount;
 			}
 		},
         getDetailApartment: {

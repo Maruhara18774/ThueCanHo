@@ -32,7 +32,7 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: true
     },
     GIOITINH: {
-      type: DataTypes.STRING(10),
+      type: DataTypes.BOOLEAN,
       allowNull: true
     },
     DIACHI: {
@@ -58,7 +58,7 @@ module.exports = function(sequelize, DataTypes) {
     timestamps: false,
     indexes: [
       {
-        name: "PK__THONGTIN__1B5192F2DB6985EE",
+        name: "PK__THONGTIN__1B5192F2B3CB1B83",
         unique: true,
         fields: [
           { name: "ID_TT_CHUHO" },

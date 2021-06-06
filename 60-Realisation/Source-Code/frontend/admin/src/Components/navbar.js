@@ -1,45 +1,36 @@
-import React, {useState} from 'react'
-import {Link} from 'react-router-dom'
-import * as FaIcons from 'react-icons/fa'
-import * as AiIcons from 'react-icons/ai'
-import { SidebarData } from './sidebarData'
-import './navbar.css'
-import { IconContext} from 'react-icons'
+import React, { Component } from 'react'
+import { Link  } from 'react-router-dom'
+import * as FaIcon from 'react-icons/fa'
 
-function Navbar() {
-    const [sidebar, setSidebar] = useState(false)
+import 'bootstrap/dist/css/bootstrap.css'
 
-    //Hàm xử lí đóng / mở Sidebar
-    const showSidebar = () => setSidebar(!sidebar)
-    return (
-        <>
-        <IconContext.Provider value={{color: '#fff'}}>
-        <div className="navbar">
-            <Link to="#" className="menu-bars">
-                <FaIcons.FaBars onClick={showSidebar}/>
-            </Link>
-        </div>
-        <nav className={sidebar ? 'nav-menu active': 'nav-menu'}>
-            <ul className='nav-menu-items' onClick={showSidebar}>
-                <li className='navbar-toggle'>
-                    <Link to="#" className='menu-bars'>
-                        <FaIcons.FaAngleLeft/>
-                    </Link>
-                </li>
-                {SidebarData.map((item, index) => {
-                    return (
-                        <li key={index} className= {item.cName}>
-                            <Link to={item.path}>
-                                {item.icon}
-                                <span>{item.title}</span>
-                            </Link>
-                        </li>
-                    )
-                })}
-            </ul>
-        </nav>
-        </IconContext.Provider>
-        </>
-    )
+export default class Navbar extends Component {
+    render() {
+        return (
+            <div>
+                <nav className="navbar navbar-expand-lg navbar-dark bg-primary">
+                    <div className="container">
+                        <Link to ="/" className="navbar-brand">ADMIN MANAGER</Link>
+                        <div className="collapse navbar-collapse">
+                        <ul className="navbar-nav mr-auto">
+                                <li className="nav-item">
+                                    <Link className="nav-link" to="/account"><FaIcon.FaUserAlt className="mx-1" />Account</Link>
+                                </li>
+                                <li className="nav-item">
+                                    <Link className="nav-link" to="/trending"><FaIcon.FaSortAmountUp className="mx-1" />Trending</Link>
+                                </li>
+                                <li className="nav-item">
+                                    <Link className="nav-link" to="/review"><FaIcon.FaStarHalfAlt className="mx-1" />Rating</Link>
+                                </li>
+                                <li className="nav-item">
+                                    <Link className="nav-link" to="/report"><FaIcon.FaFileAlt className="mx-1" />Report</Link>
+                                </li>
+                            </ul>
+                        </div>
+                        <Link className="btn btn-outline-light" to="/login">Logout</Link>
+                    </div>
+                </nav>
+            </div>
+        )
+    }
 }
-export default Navbar
