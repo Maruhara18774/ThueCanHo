@@ -22,7 +22,8 @@ export default class DetailApartment extends Component {
             lsImage: [imageDefault,image1,image2,image3,image4,image5,image6,image7,image8],
             imgActive: 0,
             address: "",
-            numStar: 5
+            numStar: 5,
+            lsRoom: []
         }
         this.getApartmentInfo();
     }
@@ -30,10 +31,9 @@ export default class DetailApartment extends Component {
         Axios.post('http://localhost:33456/api/customer/getDetailApartment',{id: this.state.idApartment}).then(
             (response) => {
                 this.state.apartmentInfo = response.data[0];
-                console.log(this.state.apartmentInfo)
                 this.setState(this,()=>{
                     this.getAddress(this.state.apartmentInfo.ID_NHA.toString());
-                    
+                    this.getListRoom(this.state.apartmentInfo.ID_NHA.toString());
                 });
             });
     }
@@ -41,6 +41,14 @@ export default class DetailApartment extends Component {
         Axios.post('http://localhost:33456/api/customer/getAddressApartment',{id: idNha}).then(
             (response) => {
                 this.state.address = response.data;
+                this.setState(this);
+            });
+    }
+    getListRoom =(idNha)=>{
+        Axios.post('http://localhost:33456/api/customer/getListRoom',{idApartment: idNha}).then(
+            (response) => {
+                this.state.lsRoom = response.data;
+                console.log(response.data)
                 this.setState(this);
             });
     }
@@ -658,7 +666,7 @@ export default class DetailApartment extends Component {
                         <table>
                             <tr>
                                 <td className="header-left">
-                                    <p>Traveloka</p>
+                                    <p>Đánh giá</p>
                                     <p> {this.renderRateStar()}
                                     </p>
                                 </td>
@@ -670,7 +678,30 @@ export default class DetailApartment extends Component {
                             </tr>
                         </table>
                     </div>
-                    <hr/>
+                </div>
+                <div className="detail-apartment-wrap">
+                    <div className="room">
+                            {this.state.lsRoom.map((val,key)=>{
+                                return(
+                                <div className="roomzone-wrap"> 
+                                    <table>
+                                        <tr>
+                                            <th colSpan="4"><h3>{val.TEN_PHONG}</h3></th>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <img src={this.state.lsImage[0]} height="300px"/>
+                                            </td>
+                                            <td className="contain">
+                                                <p>{val.ID_LOAIPHONG_LOAIPHONG.TEN_LOAIPHONG}</p>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    
+                                </div>
+                                )
+                            })}
+                        </div>
                 </div>
             </div>
         )

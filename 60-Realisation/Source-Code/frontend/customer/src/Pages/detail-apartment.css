@@ -2,6 +2,7 @@
     margin: auto;
     padding-top: 20px;
     padding-bottom: 20px;
+    background-color: silver;
 }
 .detail-apartment-wrap{
     margin: auto;
@@ -13,6 +14,8 @@
     box-shadow: 5px gainsboro;
     padding-top: 20px;
     padding-bottom: 20px;
+    background-color: white;
+    margin-bottom: 20px;
 }
 .detail-apartment-wrap .header-left{
     padding-left: 20px;
@@ -71,4 +74,31 @@
     background-color: orangered;
     text-decoration: none;
     cursor: pointer;
+}
+.detail-apartment-wrap .room{
+    margin: 10px 10px 10px 10px;
+}
+.detail-apartment-wrap .room .roomzone-wrap{
+    border-style: solid;
+    border-width: 1px;
+    border-color: gainsboro;
+    border-radius: 10px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    margin-left: 20px;
+    margin-right: 20px;
+}
+.detail-apartment-wrap .room .roomzone-wrap table{
+    width: 100%;
+    text-align: start;
+    margin: 10px 10px 10px 10px;
+}
+.detail-apartment-wrap .room .roomzone-wrap .contain{
+    width: 70%;
+}
+.detail-apartment-wrap .room .roomzone-wrap img{
+    width: 100%;
+    border-radius: 10px;
+    margin-left: -5px;
+    margin-top: 10px;
 }

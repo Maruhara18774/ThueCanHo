@@ -435,6 +435,25 @@ module.exports = {
 				return checkType.TEN_LOAINHA;
 			},
 		},
+		getListRoom:{
+			rest:{
+				method: "POST",
+				path: "/getListRoom"
+			},
+			params:{
+				idApartment: {type: "string"},
+			},
+			async handler({action,params,meta, ... ctx}){
+                var {idApartment} = params;
+				const lsRoom = await dbContext.PHONG.findAll({
+					where:{
+						ID_NHA: idApartment
+					},
+					include:["ID_LOAIPHONG_LOAIPHONG","ID_LOAIGIUONG_LOAIGIUONG"]
+				})
+				return lsRoom;
+			},
+		},
 
 		/**
 		 * Welcome, a username
