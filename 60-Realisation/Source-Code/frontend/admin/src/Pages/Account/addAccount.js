@@ -1,55 +1,67 @@
-
 import Axios from 'axios'
-import { useHistory } from "react-router-dom";
 import React, { Component } from "react";
+
+import * as FaIcons from 'react-icons/fa'
+
+import Button from 'react-bootstrap/Button'
+import Modal from 'react-bootstrap/Modal'
 
 class AddAccount extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            usernameAcc: "",
-            passwordAcc: "",
-            roleAcc: "",
+            username: "",
+            password: "",
+            role: [{id: 1, title: "Admin"}, {id: 2, title: "Customer"}, {id: 3, title: "Partner"}],
         }
     }
 
     handleChange =(e) => {
-        const getName= e.target.name;
-        const getValue = e.target.value;
-        this.setState({[getName]: getValue});
+        this.setState({[e.target.name]: e.target.value});
+    }
+    changeRole = (e) => {
+        this.state.role.title = e.target.value
+        this.setState(this)
     }
     onSubmit = (e) => {     
-        const {history} =this.props
-        
+        const {history} = this.props
         e.preventDefault();
         Axios.post('http://localhost:33456/api/admin/addAccount', {
-            "username": this.state.usernameAcc,
-            "password": this.state.passwordAcc,
-            "role": this.state.roleAcc
+            "username": this.state.username,
+            "password": this.state.password,
+            "role": this.state.role.title
         }).then((res)=>{
             console.log(res.data)
+            alert("Adding Success!")
         })
-        history.push('/account')
+        history.push("/account")
     }
     render() {
-        return (
+        return (       
             <div className="container">
                 <div className="w-75 mx-auto shadow p-5">
                     <h2 className="text-center mb-4">Add Account</h2>
                     <form onSubmit={this.onSubmit}>
                         <div className="form-group">
-                            <input type="text" className="form-control form-control-lg" placeholder="Enter Username" name="usernameAcc" onChange={this.handleChange} />
+                            <label>Username</label>
+                            <input type="text" className="form-control form-control-lg" name="username" onChange={this.handleChange} />
                         </div>
 
                         <div className="form-group">
-                            <input type="text" className="form-control form-control-lg" placeholder="Enter Password" name="passwordAcc" onChange={this.handleChange} />
+                            <label>Password</label>
+                            <input type="text" className="form-control form-control-lg" name="password" onChange={this.handleChange} />
                         </div>
 
                         <div className="form-group">
-                            <input type="text" className="form-control form-control-lg" placeholder="Enter Role" name="roleAcc" onChange={this.handleChange} />
+                            <label>Role</label>
+                            <select className="form-control form-control-lg" value ={this.state.role.title} onChange={this.changeRole}>
+                                {this.state.role.map((val, index) => 
+                                    <option key={val.id} value={val.title}>{val.title}</option>
+                                )}
+                            </select>
                         </div>
 
-                        <button className="btn btn-primary btn-block">Add Account</button>
+                        <button className="btn btn-warning btn-block text-white">Add Account</button>
                     </form>
                 </div>
             </div>
@@ -58,3 +70,5 @@ class AddAccount extends Component {
 }
 
 export default AddAccount;
+
+

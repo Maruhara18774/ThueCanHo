@@ -14,7 +14,7 @@ const ViewAccount = () => {
     };
     return (
         <div className="container py-4">
-            <Link className="btn btn-primary" to="/account">Back to Home</Link>
+            <Link className="btn btn-primary" to="/account">Back to Account</Link>
             <h1 className="display-4">User Id: {id}</h1>
             <hr />
             <ul className="list-group w-50">

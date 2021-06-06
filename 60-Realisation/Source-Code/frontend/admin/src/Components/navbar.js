@@ -2,8 +2,6 @@ import React, { Component } from 'react'
 import { Link  } from 'react-router-dom'
 import * as FaIcon from 'react-icons/fa'
 
-import 'bootstrap/dist/css/bootstrap.css'
-
 export default class Navbar extends Component {
     render() {
         return (
@@ -15,7 +13,7 @@ export default class Navbar extends Component {
                         <ul className="navbar-nav mr-auto">
                                 <li className="nav-item">
                                     <Link className="nav-link" to="/account"><FaIcon.FaUserAlt className="mx-1" />Account</Link>
-                                </li>
+                                </li>             
                                 <li className="nav-item">
                                     <Link className="nav-link" to="/trending"><FaIcon.FaSortAmountUp className="mx-1" />Trending</Link>
                                 </li>
@@ -24,6 +22,9 @@ export default class Navbar extends Component {
                                 </li>
                                 <li className="nav-item">
                                     <Link className="nav-link" to="/report"><FaIcon.FaFileAlt className="mx-1" />Report</Link>
+                                </li>
+                                <li className="nav-item">
+                                    <Link className="nav-link" to="/location"><FaIcon.FaCity className="mx-1" />Location</Link>
                                 </li>
                             </ul>
                         </div>

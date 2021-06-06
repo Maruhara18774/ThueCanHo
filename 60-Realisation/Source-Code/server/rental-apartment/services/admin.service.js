@@ -83,23 +83,6 @@ module.exports = {
 				return checkList;
 			}
 		},
-        getListApartment: {
-			rest: {
-				method: "GET",
-				path: "/getListApartment"
-			},
-			async handler() {
-                const checkList = await dbContext.NHA.findAll();
-                if (checkList == null){
-                    return "Không có căn hộ nào";
-                }
-                // Create account
-                // 1 54 28
-                // localhost - 1400 
-                // npx sequelize-auto -h localhost -d RENTALAPARTMENT -u sa -x !Passw0rd -p 1400 -e mssql -o "./src/models"    
-				return checkList;
-			}
-		},
 		/*-------------------------------[Post] AddAccount------------------------------*/
 		addAccount: {
 			rest: {
@@ -124,7 +107,25 @@ module.exports = {
 				return createAccount;
 			}
 		},
-		/*-------------------------------[Get] AccountInfo------------------------------*/
+		/*-------------------------------[Get] Account by ID------------------------------*/
+		getIdAccount: {
+			rest: {
+				method: "GET",
+				path: "/getIdAccount/"
+			},
+			async handler({action,params,meta, ... ctx}) {
+				const {id} = params;
+                const checkAccount = await dbContext.TAIKHOAN.findOne({
+					where: {
+						ID_TAIKHOAN: id
+					}
+				});
+                if (checkAccount == null){
+                    return "Không có Tài khoản này";
+                } 
+				return checkAccount;
+			}
+		},
 		getAccountInfo: {
 			rest: {
 				method: "GET",
@@ -150,15 +151,17 @@ module.exports = {
 				path: "/updateAccount/"
 			},
 			params: {
-				id: {type: "string"},
                 username: {type:"string"},
                 password: {type:"string"},
 				role: {type:"string"}
             },
 			async handler({action,params,meta, ... ctx}) {
-				const {id, username, password, role} = params;	
-                const updateAccount = await dbContext.TAIKHOAN.findOne({where: {ID_TAIKHOAN: id}}).update({TEN_TAIKHOAN: username, MATKHAU: password, ROLE_TAIKHOAN: role});
-				return updateAccount;
+				const {username, password, role} = params;				 	
+                const updateAccount = await dbContext.TAIKHOAN.findOne({where: {TEN_TAIKHOAN: username}}).update({TEN_TAIKHOAN: username, MATKHAU: password, ROLE_TAIKHOAN: role});
+				if (updateAccount == null){
+					 return "Không có Tài khoản này";
+				}
+				return updateAccount;						
 			}
 		},
 		/*-------------------------------[Post] DeleteAccount------------------------------*/
@@ -178,29 +181,103 @@ module.exports = {
 				return deleteAccount;
 			}
 		},
-        getDetailApartment: {
+		/*-------------------------------[Get] List of District------------------------------*/
+		getListDistrict: {
 			rest: {
 				method: "GET",
-				path: "/getDetailApartment"
+				path: "/getListDistrict"
 			},
 			async handler({action,params,meta, ... ctx}) {
-                const {id} = params;
-                const checkDetail = await dbContext.NHA.findAll({
-                    where: {
-                        ID_NHA: id
-                    }
-                });
-                if (checkDetail == null){
-                    return "Không có căn hộ này";
-                }
-                // Create account
-                // 1 54 28
-                // localhost - 1400 
-                // npx sequelize-auto -h localhost -d RENTALAPARTMENT -u sa -x !Passw0rd -p 1400 -e mssql -o "./src/models"    
-				return checkDetail;
+                const lstQuan = await dbContext.QUAN.findAll()
+				return lstQuan
 			}
 		},
-
+		/*-------------------------------[Get] List of Nation------------------------------*/
+		getListCountry: {
+			rest: {
+				method: "GET",
+				path: "/getListCountry"
+			},		
+			async handler({action,params,meta, ... ctx}) {
+                const lstQuocGia = await dbContext.QUOCGIA.findAll()
+				return lstQuocGia
+			}
+		},
+		/*-------------------------------[Get] List of City------------------------------*/
+		getListCity: {
+			rest: {
+				method: "GET",
+				path: "/getListCity"
+			},
+			async handler({action,params,meta, ... ctx}) {
+                const lstThanhPho = await dbContext.THANHPHO.findAll()
+				return lstThanhPho
+			}
+		},
+		/*-------------------------------[Post] Add District------------------------------*/
+		addDistrict: {
+			rest: {
+				method: "POST",
+				path: "/addDistrict"
+			},
+			params: {
+                districtName: {type:"string"},
+				idCity: {type:"string"}
+            },
+			async handler({action,params,meta, ... ctx}) {
+				const {districtName, idCity} = params;	
+                const createDistrict = await dbContext.QUAN.findOrCreate({
+					where: {TEN_QUAN: districtName},
+					defaults: {
+						TEN_QUAN: districtName,
+						ID_THANHPHO: idCity				
+					}
+				});
+				return createDistrict;
+			}
+		},
+		/*-------------------------------[Post] Add Nation ------------------------------*/
+		addCountry: {
+			rest: {
+				method: "POST",
+				path: "/addCountry"
+			},
+			params: {
+                countryName: {type:"string"},
+            },
+			async handler({action,params,meta, ... ctx}) {
+				const {countryName} = params;	
+                const createCountry = await dbContext.QUOCGIA.findOrCreate({
+					where: {TEN_QUOCGIA: countryName},
+					defaults: {
+						TEN_QUOCGIA: countryName,		
+					}
+				});
+				return createCountry;
+			}
+		},
+		/*-------------------------------[Post] Add City ------------------------------*/
+		addCity: {
+			rest: {
+				method: "POST",
+				path: "/addCity"
+			},
+			params: {         
+                cityName: {type:"string"},
+				idCountry: {type:"string"}
+            },
+			async handler({action,params,meta, ... ctx}) {
+				const {cityName, idCountry} = params;	
+                const createCity = await dbContext.THANHPHO.findOrCreate({
+					where: {TEN_THANHPHO: cityName},
+					defaults: {
+						TEN_THANHPHO: cityName,
+						ID_QUOCGIA: idCountry
+					}
+				});
+				return createCity;
+			}
+		},
 		/**
 		 * Welcome, a username
 		 *
