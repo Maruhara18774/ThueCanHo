@@ -11,7 +11,6 @@ class InfoCard extends Component {
         this.state={
             image: [],
             address: "",
-            price: [],
             type: ""
         }
         this.getAddress();
@@ -30,16 +29,7 @@ class InfoCard extends Component {
                 this.state.address = response.data;
                 this.setState(this);
             });
-            this.getPrice();
             this.getType();
-    }
-    getPrice = () => {
-        Axios.post('http://localhost:33456/api/customer/getApartmentPrice',{idPrice: this.props.model.ID_BANGGIA.toString()}).then(
-            (response) => {
-                this.state.price = response.data;
-                this.setState(this);
-            });
-            
     }
     getType = () =>{
         Axios.post('http://localhost:33456/api/customer/getTypeApartment',{idType: this.props.model.ID_LOAINHA.toString()}).then(
@@ -72,12 +62,12 @@ class InfoCard extends Component {
                                 </div>
                                 <div class="col-md-4 right">
                                     {this.props.model.FREE_CANCEL === true ? <p className="bonus"><span className="mrg5"><i class="fas fa-clinic-medical"></i></span> Miễn phí hủy đặt</p> : <div className="blank"></div>}
-                                    {this.state.price.KHUYENMAI == "0" ? <div>
+                                    {this.props.model.KHUYENMAI == "0" ? <div>
                                          <p className="original"> </p>
-                                        <p className="reduce">{this.state.price.MUCGIA_MOT} VNĐ</p>
+                                        <p className="reduce">{this.props.model.GIA} VNĐ</p>
                                     </div> : <div>
-                                        <p className="original">{this.state.price.MUCGIA_MOT} VNĐ</p>
-                                        <p className="reduce">{this.state.price.MUCGIA_MOT - this.state.price.KHUYENMAI} VNĐ</p>
+                                        <p className="original">{this.props.model.GIA} VNĐ</p>
+                                        <p className="reduce">{this.props.model.GIA - this.props.model.KHUYENMAI} VNĐ</p>
                                     </div>}
                                 </div>
                             </div>

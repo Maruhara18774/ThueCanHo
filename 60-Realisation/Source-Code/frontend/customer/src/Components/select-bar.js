@@ -14,10 +14,13 @@ class SelectBar extends Component {
       idDistrict: 0,
       lsStyle:[],
       idStyle: 0,
-      minBudget: 0
+      minBudget: 0,
+      lsShow: [],
+      lsFull: []
     };
     this.getListCountry();
     this.getListStyle();
+    this.sortApartment();
   }
   getListCountry = () =>{
 
@@ -70,8 +73,20 @@ class SelectBar extends Component {
   }
   getMinBudget =(event)=>{
     this.state.minBudget = event.target.value;
-    this.setState(this);
-    this.sortApartment();
+    this.state.lsShow = [];
+    this.state.lsFull.forEach(item=>{
+      this.state.lsShow.push(item);
+    })
+    
+    this.state.lsShow.forEach(item => {
+        if((parseFloat(item.GIA) - parseFloat(item.KHUYENMAI))>=parseFloat(this.state.minBudget)){
+          
+          this.state.lsShow.pop(item)
+        }
+      });
+      
+      this.setState(this);
+      this.props.callback(this.state.lsShow);
   }
   sortApartment = () => {
     console.log(this.state.idDistrict + " - " + this.state.idStyle + " - " + this.state.minBudget);
@@ -79,13 +94,9 @@ class SelectBar extends Component {
       "idDistrict": this.state.idDistrict.toString(),
       "idStyle": this.state.idStyle.toString()
     }).then((response) => {
-      var arr = response.data;
-      arr.forEach(item => {
-        if((parseFloat(item.ID_BANGGIA_BANGGIum.MUCGIA_MOT) - parseFloat(item.ID_BANGGIA_BANGGIum.KHUYENMAI))<parseFloat(this.state.minBudget)){
-          arr.pop(item)
-        }
-      });
-      this.props.callback(arr);
+      this.state.lsFull = response.data;
+      this.setState(this);
+      this.props.callback(this.state.lsFull);
     });
   }
   render() {

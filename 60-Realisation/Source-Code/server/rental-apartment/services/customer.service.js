@@ -172,28 +172,6 @@ module.exports = {
 				return output;
 			}
 		},
-		getApartmentPrice:{
-			rest: {
-				method: "POST",
-				path: "/getApartmentPrice"
-			},
-			params:{
-				idPrice: {type:"string"}
-			},
-			async handler({action,params,meta, ... ctx}) {
-                var {idPrice} = params;
-				const lsPrice = await dbContext.BANGGIA.findAll();
-				var output= 0;
-				for(var i=0;i<lsPrice.length;i++){
-					var element = lsPrice[i];
-					if(element.ID_BANGGIA== idPrice){
-						output = element;
-						break;
-					}
-				}
-				return output;
-			}
-		},
 		getAddressApartment:{
 			rest: {
 				method: "POST",
@@ -246,7 +224,7 @@ module.exports = {
 						where:{
 							ID_QUAN: idDistrict
 						},
-						include:["ID_QUAN_QUAN","STYLENHAs","ID_BANGGIA_BANGGIum"]
+						include:["ID_QUAN_QUAN","STYLENHAs"]
 					})
 					if(idStyle!="0"){
 						lsApart.forEach(item =>{
@@ -263,7 +241,7 @@ module.exports = {
 				}
 				else{
 					const lsApart = await dbContext.NHA.findAll({
-						include:["ID_QUAN_QUAN","STYLENHAs","ID_BANGGIA_BANGGIum"]
+						include:["ID_QUAN_QUAN","STYLENHAs"]
 					})
 					if(idStyle!="0"){
 						lsApart.forEach(item =>{
@@ -368,6 +346,12 @@ module.exports = {
 						LOAI_GIAYTOTUYTHAN: loaiGiayTo,
 					}
 				});
+				if (gioiTinh == "Nam"){
+					gioiTinh = false;
+				}
+				else{
+					gioiTinh = true;
+				}
 				if(checkInfo ==null){
 					const createInfo = await dbContext.THONGTINKHACHHANG.create({
 						TEN_KHACHHANG: tenKH,

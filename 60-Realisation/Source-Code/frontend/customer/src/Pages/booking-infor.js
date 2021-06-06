@@ -134,20 +134,12 @@ export default class BookingForm extends Component {
     }
     calcAll = async () => {
         var day = this.countDate();
-        if (day <= 4) {
-            this.state.totalPhong = (day * this.state.price.MUCGIA_MOT) - this.state.price.KHUYENMAI;
-        }
-        else if (day <= 7) {
-            this.state.totalPhong = (day * this.state.price.MUCGIA_HAI) - this.state.price.KHUYENMAI;
-        }
-        else {
-            this.state.totalPhong = (day * this.state.price.MUCGIA_BA) - this.state.price.KHUYENMAI;
-        }
+        this.state.totalPhong = this.state.apartmentInfo.GIA;
         if (this.state.soBuaSang > 0) {
             this.state.totalBuaSang = this.state.soBuaSang * day * this.state.apartmentInfo.PHUPHI_BUASANG;
         }
         if (this.state.soGiuongPhu > 0) {
-            this.state.totalGiuongPhu = this.state.soGiuongPhu * 200000;
+            this.state.totalGiuongPhu = this.state.soGiuongPhu * this.state.apartmentInfo.PHUPHI_GIUONGPHU;
         }
         var tong = this.state.totalPhong + this.state.totalBuaSang + this.state.totalGiuongPhu;
         this.state.phiGTGT = (tong * 10) / 100;
@@ -240,7 +232,7 @@ export default class BookingForm extends Component {
                 this.state.apartmentInfo = response.data[0];
                 this.setState(this, () => {
                     this.getAddress(this.state.apartmentInfo.ID_NHA);
-                    this.getApartmentPrice(this.state.apartmentInfo.ID_BANGGIA.toString());
+                    this.state.price= this.state.apartmentInfo.GIA;
                 });
             })
 
@@ -249,13 +241,6 @@ export default class BookingForm extends Component {
         Axios.post('http://localhost:33456/api/customer/getAddressApartment', { id: idNha }).then(
             (response) => {
                 this.state.address = response.data;
-                this.setState(this);
-            });
-    }
-    getApartmentPrice = (idBangGia) => {
-        Axios.post('http://localhost:33456/api/customer/getApartmentPrice', { idPrice: idBangGia }).then(
-            (response) => {
-                this.state.price = response.data;
                 this.setState(this);
             });
     }
