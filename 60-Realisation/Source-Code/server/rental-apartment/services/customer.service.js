@@ -45,14 +45,12 @@ module.exports = {
             },
 			async handler({action,params,meta, ... ctx}) {
 				const {username, password} = params;
-                if(!username && !password){
-                    throw new MoleculerError("Không có người dùng này");
-                }
 				// Test 1: http://localhost:3000/api/user/signin?username=demo1&password=abc123
                 const checkUser = await dbContext.TAIKHOAN.findOne({
                     where: {
                         TEN_TAIKHOAN: username,
-                        MATKHAU: password
+                        MATKHAU: password,
+						ROLE_TAIKHOAN: 'Customer'
                       }
                 });
 				
@@ -61,7 +59,7 @@ module.exports = {
                 // localhost - 1400 
                 // npx sequelize-auto -h localhost -d RENTALAPARTMENT -u sa -x !Passw0rd -p 1400 -e mssql -o "./src/models"    
 				if (checkUser == null){
-					return "Không có người dùng này";
+					return 0;
 				}
 				else{
 					return checkUser.ID_TAIKHOAN;
@@ -344,6 +342,30 @@ module.exports = {
 				return checkStyle;
 			},
 		},
+		searchPaymentInfo:{
+			rest:{
+				method: "POST",
+				path: "/searchPaymentInfo"
+			},
+			params:{
+				maGiayTo: {type: "string"},
+				loaiGiayTo: {type: "string"},
+			},
+			async handler({action,params,meta, ... ctx}){
+                var {maGiayTo,loaiGiayTo} = params;
+				var result = 0;
+				const checkInfo = await dbContext.THONGTINKHACHHANG.findOne({
+					where:{
+						MA_GIAYTOTUYTHAN: maGiayTo,
+						LOAI_GIAYTOTUYTHAN: loaiGiayTo,
+					}
+				});
+				if(checkInfo != null){
+					result = checkInfo.ID_TT_KHACHHANG;
+				}
+				return result;
+			},
+		},
 		// Select bar - END
 		savePaymentInfo:{
 			rest:{
@@ -375,7 +397,7 @@ module.exports = {
 					GIOITINH: gioiTinh,
 					ID_TAIKHOAN: idTK
 				})
-				return createInfo.ID_TT_TAIKHOAN;
+				return null;
 			},
 		},
 		rentalApartment:{
@@ -385,56 +407,42 @@ module.exports = {
 			},
 			params:{
 				idNha: {type: "string"},
+				idTTKH: {type: "string"},
 				ngayDat: {type: "string"},
 				checkIn: {type: "string"},
 				checkOut: {type: "string"},
 				ngayDen: {type: "string"},
 				ngayDi: {type: "string"},
+				tongTienPhong: {type: "string"},
 				buaSang: {type: "string"},
+				tongTienBuaSang: {type: "string"},
 				soGiuongPhu: {type: "string"},
+				tongTienGiuongPhu:{type: "string"},
+				phiGTGT: {type: "string"},
+				tongTien: {type: "string"},
 				ghiChu: {type: "string"},
 			},
 			async handler({action,params,meta, ... ctx}){
-                var {idNha,ngayDat,checkIn,checkOut,ngayDen,ngayDi,buaSang,soGiuongPhu,ghiChu} = params;
-				// Doing
-				var apartment;
-				var tienPhong = 0;
-				const checkApartment = await dbContext.NHA.findAll();
-				for(var i=0;i<checkApartment.length;i++){
-					var element = checkApartment[i];
-					if(element.ID_NHA == idNha){
-						
-					}
-				}
-				const checkPriceList = await dbContext.BANGGIA.findAll();
-				for(var i=0;i<checkPriceList.length;i++){
-					var element = checkPriceList[i];
-					if(element.ID_BANGGIA == apartment.ID_BANGGIA){
-						const dayFrom_Day = parseInt(ngayDen.substring(0,3));
-						// 12/02/2021
-						// 0123456789
-						const dayFrom_Month = parseInt(ngayDen.substring(3,5));
-						const dayFrom_Year = parseInt(ngayDen.substring(6,10));
-
-						const dayTo_Day = parseInt(ngayDi.substring(0,3));
-						const dayTo_Month = parseInt(ngayDi.substring(3,5));
-						const dayTo_Year = parseInt(ngayDi.substring(6,10));
-
-						// doing
-					}
-				}
-
-				const createInfo = await dbContext.THONGTINKHACHHANG.create({
-					TEN_KHACHHANG: tenKH,
-					EMAIL: email,
-					PHONE_NUMBER: phoneNumber,
-					MA_GIAYTOTUYTHAN: maGiayTo,
-					LOAI_GIAYTOTUYTHAN: loaiGiayTo,
-					QUOCTICH: quocTich,
-					GIOITINH: gioiTinh,
-					ID_TAIKHOAN: idTK
+                var {idNha,idTTKH,ngayDat,checkIn,checkOut,ngayDen,ngayDi,tongTienPhong,buaSang,tongTienBuaSang,soGiuongPhu,tongTienGiuongPhu,phiGTGT,tongTien,ghiChu} = params;
+				const createDCH = await dbContext.DATCANHO.create({
+					ID_NHA: idNha,
+					ID_TT_KHACHHANG: idTTKH,
+					NGAYDAT: ngayDat,
+					CHECKIN: checkIn,
+					CHECKOUT: checkOut,
+					NGAY_DEN: ngayDen,
+					NGAY_DI: ngayDi,
+					TONGTIEN_PHONG: parseFloat(tongTienPhong),
+					BUASANG: parseInt(buaSang),
+					TONGTIEN_BUASANG: parseFloat(tongTienBuaSang),
+					SO_GIUONGPHU: parseInt(soGiuongPhu),
+					TONGTIEN_GIUONGPHU: parseFloat(tongTienGiuongPhu),
+					PHI_GTGT: parseFloat(phiGTGT),
+					TONGTIEN: parseFloat(tongTien),
+					GHICHU: ghiChu,
+					ID_TT_DCH: 1
 				})
-				return createInfo.ID_TT_TAIKHOAN;
+				return createDCH.ID_DATCANHO;
 			},
 		},
 		getTypeApartment:{

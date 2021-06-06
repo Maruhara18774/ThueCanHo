@@ -63,6 +63,9 @@ export default class DetailApartment extends Component {
             });
             
     }
+    componentDidMount(){
+        window.scrollTo(0,0);
+    }
     componentDidUpdate() {
         setTimeout(()=>this.changeImgActive(this.state.imgActive),6000);
     }

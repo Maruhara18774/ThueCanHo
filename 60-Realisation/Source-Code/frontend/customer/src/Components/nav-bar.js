@@ -46,7 +46,7 @@ class Navbar extends Component {
           </ul>
           <ul class="navbar-nav flex-row ml-md-auto d-none d-md-flex">
             <li class="nav-item active">
-              <Link to="/login" className="gray-text mrl20"><span className="sea-text mrl5"><i class="far fa-user"></i></span>Đăng nhập</Link>
+              <Link to="/login" className="gray-text mrl20" id="loginInfo"><span className="sea-text mrl5"><i class="far fa-user"></i></span>Đăng nhập</Link>
             </li>
           </ul>
         </div>

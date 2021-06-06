@@ -41,3 +41,15 @@
     height: 3px;
     background-color:#2ae419cc;
 }
+.booking-wrap .inputZone{
+    width: 700px;
+    margin:auto;
+}
+.booking-wrap .inputZone .title{
+    font-size: x-large;
+    color: #3380E6;
+    font-weight: bold;
+}
+.booking-wrap .inputZone .check{
+    text-align: left;
+}

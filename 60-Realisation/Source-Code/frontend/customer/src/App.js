@@ -18,6 +18,7 @@ function App() {
         </div>
         <Switch>
           <Route path="/login" component={Login}></Route>
+          <Route path="/customerInfor/:accountID" component={Login} ></Route>
           <Route path="/apaLst" component={ListApartment}></Route>
           <Route path="/promotion" component={PromotionPage}></Route>
           <Route path="/" exact component={HomePage}></Route>
