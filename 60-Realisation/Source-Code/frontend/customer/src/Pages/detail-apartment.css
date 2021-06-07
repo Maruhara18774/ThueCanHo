@@ -75,30 +75,39 @@
     text-decoration: none;
     cursor: pointer;
 }
-.detail-apartment-wrap .room{
-    margin: 10px 10px 10px 10px;
-}
-.detail-apartment-wrap .room .roomzone-wrap{
-    border-style: solid;
-    border-width: 1px;
-    border-color: gainsboro;
-    border-radius: 10px;
+.detail-apartment-wrap .roomzone-wrap{
     margin-top: 20px;
     margin-bottom: 20px;
-    margin-left: 20px;
-    margin-right: 20px;
+    margin-left: 100px;
+    margin-right: 100px;
 }
-.detail-apartment-wrap .room .roomzone-wrap table{
+.detail-apartment-wrap .roomzone-wrap table{
     width: 100%;
     text-align: start;
     margin: 10px 10px 10px 10px;
 }
-.detail-apartment-wrap .room .roomzone-wrap .contain{
+.detail-apartment-wrap .roomzone-wrap .contain{
     width: 70%;
 }
-.detail-apartment-wrap .room .roomzone-wrap img{
+.detail-apartment-wrap .roomzone-wrap img{
     width: 100%;
     border-radius: 10px;
     margin-left: -5px;
     margin-top: 10px;
+}
+.else-wrap{
+    background-color: white;
+    padding-left: 20%;
+    padding-right: 20%;
+    padding-top: 20px;
+    padding-bottom: 10px;
+}
+.else-wrap .title{
+    vertical-align: top;
+    font-size: xx-large;
+    color: grey;
+}
+.else-wrap ul li{
+    list-style: none;
+    text-align: left;
 }
