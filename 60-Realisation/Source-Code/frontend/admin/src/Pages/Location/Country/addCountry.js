@@ -8,8 +8,7 @@ export default function AddCountry() {
     const onChangeCountry = (e) => {
         setCountry({...country,[e.target.name]: e.target.value})
     }
-
-
+    
     const [show, setShow] = useState(false);
   
     const handleClose = () => setShow(false);
@@ -28,16 +27,16 @@ export default function AddCountry() {
     }
     return (
       <>
-        <Button variant="primary" onClick={handleShow}>Add</Button>
+        <Button variant="primary" onClick={handleShow}>Thêm</Button>
   
         <Modal show={show} onHide={handleClose} centered>
           <Modal.Header>
-            <Modal.Title>Add Country</Modal.Title>
+            <Modal.Title>Thêm Quốc gia</Modal.Title>
           </Modal.Header>
           <Modal.Body>
                     <form>
                         <div className="form-group">
-                            <label>Country's Name</label>
+                            <label>Tên Quốc gia</label>
                             <input type="text" className="form-control form-control-lg" name="countryName" onChange={onChangeCountry}/>
                         </div>                      
                     </form>

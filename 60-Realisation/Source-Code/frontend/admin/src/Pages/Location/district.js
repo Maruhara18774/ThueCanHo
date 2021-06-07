@@ -17,6 +17,7 @@ export default class District extends Component {
     getDistrictList = (() => {
         Axios.get('http://localhost:33456/api/admin/getListDistrict').then(
             (res) => {
+                console.log(res.data)
                 this.state.myDistrictList = res.data;
                 this.setState(this);
             }
@@ -28,11 +29,11 @@ export default class District extends Component {
                 <div className="py-4">
                     <div className="row">
                     <div className="col">
-                            <Link className="btn btn-primary mr-2" to={`location/district/add`}>Add</Link>
+                            <Link className="btn btn-primary mr-2" to={`location/district/add`}>Thêm</Link>
                         </div>
                         <div className="col">
                             <div className="input-group mb-3">
-                                <input type="text" className="form-control" placeholder="Search"/>
+                                <input type="text" className="form-control" placeholder="Tìm kiếm"/>
                                 <div className="input-group-append">
                                     <button className="btn btn-primary" type="button"><FaIcon.FaSearch/></button>
                                 </div>
@@ -43,9 +44,9 @@ export default class District extends Component {
                         <thead className="thead-dark">
                             <tr>
                                 <th scope="col">#</th>
-                                <th scope="col">District's Name</th>
-                                <th scope="col">City's ID</th>
-                                <th>Action</th>
+                                <th scope="col">Tên Quận</th>
+                                <th scope="col">Mã Thành phố</th>
+                                <th className="border-secondary bg-secondary">Chức năng</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -55,7 +56,7 @@ export default class District extends Component {
                                     <td>{val.TEN_QUAN}</td>
                                     <td>{val.ID_THANHPHO}</td>
                                     <td>
-                                        <Link className="btn btn-outline-primary mx-1" to={`/district/edit/${val.ID_QUAN}`}>Edit</Link>
+                                        <Link className="btn btn-outline-primary mx-1" to={`location/district/edit/${val.ID_QUAN}`}><FaIcon.FaEdit title="Cập nhật"/></Link>
                                     </td>
                                 </tr>
                             ))}

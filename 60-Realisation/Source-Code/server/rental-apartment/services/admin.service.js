@@ -156,11 +156,15 @@ module.exports = {
 				role: {type:"string"}
             },
 			async handler({action,params,meta, ... ctx}) {
-				const {username, password, role} = params;				 	
-                const updateAccount = await dbContext.TAIKHOAN.findOne({where: {TEN_TAIKHOAN: username}}).update({TEN_TAIKHOAN: username, MATKHAU: password, ROLE_TAIKHOAN: role});
-				if (updateAccount == null){
-					 return "Không có Tài khoản này";
-				}
+				const {id, username, password, role} = params;				 	
+                const updateAccount = await dbContext.TAIKHOAN.update(
+					{
+						TEN_TAIKHOAN: username, MATKHAU: password, ROLE_TAIKHOAN: role					
+					},
+					{
+						where: {ID_TAIKHOAN: id}
+					}													
+				);
 				return updateAccount;						
 			}
 		},
@@ -188,7 +192,7 @@ module.exports = {
 				path: "/getListDistrict"
 			},
 			async handler({action,params,meta, ... ctx}) {
-                const lstQuan = await dbContext.QUAN.findAll()
+                const lstQuan = await dbContext.QUAN.findAll({})
 				return lstQuan
 			}
 		},
@@ -256,6 +260,47 @@ module.exports = {
 				return createCountry;
 			}
 		},
+		/*-------------------------------[Get] CountryById ------------------------------*/
+		getIdCountry: {
+			rest: {
+				method: "GET",
+				path: "/getIdCountry/"
+			},
+			async handler({action,params,meta, ... ctx}) {
+				const {id} = params;
+                const checkList = await dbContext.QUOCGIA.findOne({
+					where: {
+						ID_QUOCGIA: id
+					}
+				});
+                if (checkList == null){
+                    return "Không có Tài khoản này";
+                } 
+				return checkList;
+			}
+		},
+		/*-------------------------------[Post] UpdateCountry------------------------------*/
+		updateCountry: {
+			rest: {
+				method: "POST",
+				path: "/updateCountry/"
+			},
+			params: {
+                countryName: {type:"string"},
+            },
+			async handler({action,params,meta, ... ctx}) {
+				const {id, countryName} = params;				 	
+                const updateCountry = await dbContext.QUOCGIA.update(
+					{
+						TEN_QUOCGIA: countryName				
+					},
+					{
+						where: {ID_QUOCGIA: id}
+					}													
+				);
+				return updateCountry;						
+			}
+		},
 		/*-------------------------------[Post] Add City ------------------------------*/
 		addCity: {
 			rest: {
@@ -278,6 +323,104 @@ module.exports = {
 				return createCity;
 			}
 		},
+		/*-------------------------------[Get] CityById ------------------------------*/
+		getIdCity: {
+			rest: {
+				method: "GET",
+				path: "/getIdCity/"
+			},
+			async handler({action,params,meta, ... ctx}) {
+				const {id} = params;
+                const checkList = await dbContext.THANHPHO.findOne({
+					where: {
+						ID_THANHPHO: id
+					}
+				});
+                if (checkList == null){
+                    return "Không có Tài khoản này";
+                } 
+				return checkList;
+			}
+		},
+		/*-------------------------------[Post] UpdateCity------------------------------*/
+		updateCity: {
+			rest: {
+				method: "POST",
+				path: "/updateCity/"
+			},
+			params: {
+                cityName: {type: "string"},
+				idCountry: {type:"string"}
+            },
+			async handler({action,params,meta, ... ctx}) {
+				const {id, cityName, idCountry} = params;				 	
+                const updateCity = await dbContext.THANHPHO.update(
+					{
+						TEN_THANHPHO: cityName,
+						ID_QUOCGIA: idCountry				
+					},
+					{
+						where: {ID_THANHPHO: id}
+					}													
+				);
+				return updateCity;						
+			}
+		},
+		/*-------------------------------[Get] DistrictById ------------------------------*/
+		getIdDistrict: {
+			rest: {
+				method: "GET",
+				path: "/getIdDistrict/"
+			},
+			async handler({action,params,meta, ... ctx}) {
+				const {id} = params;
+                const checkList = await dbContext.QUAN.findOne({
+					where: {
+						ID_QUAN: id
+					}
+				});
+                if (checkList == null){
+                    return "Không có Tài khoản này";
+                } 
+				return checkList;
+			}
+		},
+		/*-------------------------------[Post] UpdateDistrict------------------------------*/
+		updateDistrict: {
+			rest: {
+				method: "POST",
+				path: "/updateDistrict/"
+			},
+			params: {
+                districtName: {type: "string"},
+				idCity: {type:"string"}
+            },
+			async handler({action,params,meta, ... ctx}) {
+				const {id, districtName, idCity} = params;				 	
+                const updateDistrict = await dbContext.QUAN.update(
+					{
+						TEN_QUAN: districtName,
+						ID_THANHPHO: idCity			
+					},
+					{
+						where: {ID_QUAN: id}
+					}													
+				);
+				return updateDistrict;						
+			}
+		},
+		/*-------------------------------[Get] List of Order ------------------------------*/
+		getListOrder: {
+			rest: {
+				method: "GET",
+				path: "/getListOrder"
+			},		
+			async handler({action,params,meta, ... ctx}) {
+                const lstOrder = await dbContext.DATCANHO.findAll()
+				return lstOrder
+			}
+		},
+		
 		/**
 		 * Welcome, a username
 		 *

@@ -2,20 +2,22 @@ import React, { Component } from "react"
 //import "./App.css";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom"
 
-import Navbar from "./Components/navbar" 
 import Login from "./Components/login"
 
 import Home from "./Pages/Main/home"
 import Account from "./Pages/Main/account"
 import Trending from "./Pages/Main/trending"
-import Report from "./Pages/Main/report"
+import Report from "./Pages/Main/reports"
 import NotFound from "./Pages/Main/notFound"
 import Location from "./Pages/Main/location"
 
-import AddCity from "./Pages/Location/addCity"
+import AddCity from "./Pages/Location/City/addCity"
+import EditCity from "./Pages/Location/City/editCity"
 
+import AddDistrict from "./Pages/Location/District/addDistrict"
+import EditDistrict from "./Pages/Location/District/editDistrict"
 
-import AddDistrict from "./Pages/Location/addDistrict"
+import EditCountry from './Pages/Location/Country/editCountry'
 
 
 import AddReport from "./Pages/Report/addReport"
@@ -39,10 +41,13 @@ class App extends Component {
             <Route exact path="/report" component={Report} />
             <Route exact path="/location" component={Location} />
 
+            <Route exact path="/location/country/edit/:id" component={EditCountry} /> 
+
             <Route exact path="/location/city/add" component={AddCity} />
-            {/* <Route exact path="/location/city/edit/:id" component={} /> */}
+            <Route exact path="/location/city/edit/:id" component={EditCity} />
 
             <Route exact path="/location/district/add" component={AddDistrict} />
+             <Route exact path="/location/district/edit/:id" component={EditDistrict} />
 
             <Route exact path="/report/add" component={AddReport} />
             <Route exact path="/report/edit/:id" component={EditReport}/>

@@ -3,7 +3,7 @@ import Axios from "axios";
 import { Link } from "react-router-dom";
 import * as FaIcon from 'react-icons/fa'
 
-import AddCity from '../Location/addCity'
+import AddCity from './City/addCity'
 export default class City extends Component {
     constructor(props) {
         super(props);
@@ -29,12 +29,12 @@ export default class City extends Component {
                 <div className="py-4">
                     <div className="row">
                     <div className="col">
-                        <Link className="btn btn-primary mr-2" to={`/location/city/add`}>Add</Link>
+                        <Link className="btn btn-primary mr-2" to={`/location/city/add`}>Thêm</Link>
                         {/* <AddCity/> */}
                         </div>
                         <div className="col">
                             <div className="input-group mb-3">
-                                <input type="text" className="form-control" placeholder="Search"/>
+                                <input type="text" className="form-control" placeholder="Tìm kiếm"/>
                                 <div className="input-group-append">
                                     <button className="btn btn-primary" type="button"><FaIcon.FaSearch/></button>
                                 </div>
@@ -45,9 +45,9 @@ export default class City extends Component {
                         <thead className="thead-dark">
                             <tr>
                                 <th scope="col">#</th>
-                                <th scope="col">City's Name</th>
-                                <th scope="col">Country's ID</th>
-                                <th>Action</th>
+                                <th scope="col">Tên Thành phố</th>
+                                <th scope="col">Mã Quốc gia</th>
+                                <th className="border-secondary bg-secondary">Chức năng</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -57,7 +57,7 @@ export default class City extends Component {
                                     <td>{val.TEN_THANHPHO}</td>
                                     <td>{val.ID_QUOCGIA}</td>
                                     <td>
-                                        <Link className="btn btn-outline-primary mx-1" to={`/city/edit/${val.ID_THANHPHO}`}>Edit</Link>
+                                        <Link className="btn btn-outline-primary mx-1" to={`/location/city/edit/${val.ID_THANHPHO}`}><FaIcon.FaEdit title="Cập nhật"/></Link>
                                     </td>
                                 </tr>
                             ))}

@@ -5,6 +5,7 @@ import Tabs from 'react-bootstrap/Tabs'
 import Tab from 'react-bootstrap/Tab'
 
 import Navbar from '../../Components/navbar'
+import TitlePages from '../../Components/titlePages'
 
 import District from '../Location/district.js'
 import Country from '../Location/country.js'
@@ -17,18 +18,20 @@ class Location extends Component {
     render() {
         return (
             <div>
-                <Navbar/>
+               <div className="sticky-top">               
+                    <Navbar />
+                </div>
                 <div className="container">
                     <div className="py-4">
-                        <h1>Location Management</h1>
-                        <Tabs defaultActiveKey="district" variant="tabs" unmountOnExit>
-                            <Tab eventKey="district" title="District" >
+                    <TitlePages title="QUẢN LÝ VỊ TRÍ"/>
+                        <Tabs defaultActiveKey="district" variant="tabs">
+                            <Tab eventKey="district" title="Quận" >
                                 <District/>
                             </Tab>
-                            <Tab eventKey="nation" title="Nation">
+                            <Tab eventKey="country" title="Quốc gia">
                                 <Country/>
                             </Tab>
-                            <Tab eventKey="city" title="City">
+                            <Tab eventKey="city" title="Thành phố">
                                 <City/>
                             </Tab>
                         </Tabs>

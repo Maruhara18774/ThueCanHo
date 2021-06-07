@@ -45,15 +45,15 @@ export default class AddCity extends Component {
       <div>
         <div className="container">
           <div className="w-75 mx-auto shadow p-5">
-            <h2 className="text-center mb-4">Add City</h2>
+            <h2 className="text-center mb-4">Thêm Thành phố</h2>
             <form onSubmit={this.onSubmit}>
               <div className="form-group">
-                <label>City's Name</label>
+                <label>Tên Thành phố</label>
                 <input type="text" className="form-control form-control-lg" name="cityName" onChange={this.changeCity} />
               </div>
 
               <div className="form-group">
-                <label>Country</label>
+                <label>Quốc gia</label>
                 <select className="form-control form-control-lg" value={this.state.idCountry} onChange={this.changeCountry}>
                   {this.state.lstCountry.map((val, index) =>
                     <option key={val.ID_QUOCGIA} value={val.ID_QUOCGIA}>{val.TEN_QUOCGIA}</option>
@@ -61,7 +61,7 @@ export default class AddCity extends Component {
                 </select>
               </div>
 
-              <button className="btn btn-warning btn-block text-white">Add City</button>
+              <button className="btn btn-warning btn-block text-white">Thêm</button>
             </form>
           </div>
         </div>

@@ -40,20 +40,20 @@ class AddAccount extends Component {
         return (       
             <div className="container">
                 <div className="w-75 mx-auto shadow p-5">
-                    <h2 className="text-center mb-4">Add Account</h2>
+                    <h2 className="text-center mb-4">Thêm Tài khoản</h2>
                     <form onSubmit={this.onSubmit}>
                         <div className="form-group">
-                            <label>Username</label>
+                            <label>Tên đăng nhập</label>
                             <input type="text" className="form-control form-control-lg" name="username" onChange={this.handleChange} />
                         </div>
 
                         <div className="form-group">
-                            <label>Password</label>
+                            <label>Mật khẩu</label>
                             <input type="text" className="form-control form-control-lg" name="password" onChange={this.handleChange} />
                         </div>
 
                         <div className="form-group">
-                            <label>Role</label>
+                            <label>Loại Tài khoản</label>
                             <select className="form-control form-control-lg" value ={this.state.role.title} onChange={this.changeRole}>
                                 {this.state.role.map((val, index) => 
                                     <option key={val.id} value={val.title}>{val.title}</option>
@@ -61,7 +61,7 @@ class AddAccount extends Component {
                             </select>
                         </div>
 
-                        <button className="btn btn-warning btn-block text-white">Add Account</button>
+                        <button className="btn btn-warning btn-block text-white">Thêm</button>
                     </form>
                 </div>
             </div>

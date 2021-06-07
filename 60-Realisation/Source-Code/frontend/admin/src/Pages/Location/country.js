@@ -3,7 +3,8 @@ import Axios from "axios";
 import { Link } from "react-router-dom";
 import * as FaIcon from 'react-icons/fa'
 
-import AddCountry from './addCountry'
+import AddCountry from './Country/addCountry'
+
 export default class Country extends Component {
     constructor(props) {
         super(props);
@@ -33,7 +34,7 @@ export default class Country extends Component {
                         </div>
                         <div className="col">
                             <div className="input-group mb-3">
-                                <input type="text" className="form-control" placeholder="Search"/>
+                                <input type="text" className="form-control" placeholder="Tìm kiếm"/>
                                 <div className="input-group-append">
                                     <button className="btn btn-primary" type="button"><FaIcon.FaSearch/></button>
                                 </div>
@@ -44,8 +45,8 @@ export default class Country extends Component {
                         <thead className="thead-dark">
                             <tr>
                                 <th scope="col">#</th>
-                                <th scope="col">Country's Name</th>
-                                <th>Action</th>
+                                <th scope="col">Tên Quốc gia</th>
+                                <th className="border-secondary bg-secondary">Chức năng</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -54,7 +55,7 @@ export default class Country extends Component {
                                     <th scope="row">{val.ID_QUOCGIA}</th>
                                     <td>{val.TEN_QUOCGIA}</td>
                                     <td>
-                                        <Link className="btn btn-outline-primary mx-1" to={`/country/edit/${val.ID_QUOCGIA}`}>Edit</Link>
+                                        <Link className="btn btn-outline-primary mx-1" to={`/location/country/edit/${val.ID_QUOCGIA}`}><FaIcon.FaEdit title="Cập nhật"/></Link>
                                     </td>
                                 </tr>
                             ))}
