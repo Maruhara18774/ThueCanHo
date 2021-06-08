@@ -1,11 +1,16 @@
 /* eslint-disable no-unused-vars */
 "use strict";
+//npm install --save sequelize
+//npm install -g mssql
+//npm install -g tedious sequelize-auto || npm install --save sequelize-auto || npm install sequelize tedious
+//npx sequelize-auto -h localhost -d RENTALAPARTMENT -u sa -x 12345@abc -p 1400  --dialect mssql -o './src/models'
+//
+const { MoleculerError } = require("moleculer").Errors;
+const dbContext = require("../src/DBContext")();
 
 /**
  * @typedef {import('moleculer').Context} Context Moleculer's Context
  */
-const { MoleculerError } = require("moleculer").Errors;
-const dbContext = require("../src/DBContext")();
 
 module.exports = {
 	name: "partner",
@@ -13,7 +18,35 @@ module.exports = {
 	/**
 	 * Settings
 	 */
-	settings: {},
+	settings: {
+		// Global CORS settings for all routes
+		cors: {
+			// Configures the Access-Control-Allow-Origin CORS header.
+			origin: "*",
+			// Configures the Access-Control-Allow-Methods CORS header.
+			methods: ["GET", "OPTIONS", "POST", "PUT", "DELETE"],
+			// Configures the Access-Control-Allow-Headers CORS header.
+			allowedHeaders: [],
+			// Configures the Access-Control-Expose-Headers CORS header.
+			exposedHeaders: [],
+			// Configures the Access-Control-Allow-Credentials CORS header.
+			credentials: false,
+			// Configures the Access-Control-Max-Age CORS header.
+			maxAge: 3600,
+		},
+		routes: [
+			{
+				path: "/api",
+
+				// Route CORS settings (overwrite global settings)
+				cors: {
+					origin: ["http://localhost:3000", "https://localhost:5000"],
+					methods: ["GET", "OPTIONS", "POST"],
+					credentials: true,
+				},
+			},
+		],
+	},
 
 	/**
 	 * Dependencies
@@ -43,7 +76,7 @@ module.exports = {
 				if (!username && !password) {
 					throw new MoleculerError("Không có người dùng này");
 				}
-				// Test 1: http://localhost:3000/api/partner/signin?username=demo1&password=abc123
+				// Test 1: http://localhost:3000/api/partner/signin?username=a@gmail.com&password=123456
 				const checkUser = await dbContext.TAIKHOAN.findOne({
 					where: {
 						TEN_TAIKHOAN: username,
@@ -63,6 +96,7 @@ module.exports = {
 				path: "/registrationDetail/contactRegistration",
 			},
 			params: {
+				idTK: { type: "string" },
 				fullName: { type: "string" },
 				email: { type: "string" },
 				phoneNumber: { type: "string" },
@@ -75,6 +109,7 @@ module.exports = {
 			},
 			async handler({ action, params, meta, ...ctx }) {
 				const {
+					idTK,
 					fullName,
 					email,
 					phoneNumber,
@@ -85,7 +120,7 @@ module.exports = {
 					address,
 					taxCode,
 				} = params;
-
+				//const idtk = parseInt(idTK);
 				const createUser = await dbContext.THONGTINCHUHO.create({
 					TEN_CHUHO: fullName,
 					EMAIL: email,
@@ -96,8 +131,58 @@ module.exports = {
 					GIOITINH: gender,
 					DIACHI: address,
 					MASO_THUE: taxCode,
+					ID_TAIKHOAN: idTK,
 				});
 				return createUser;
+			},
+		},
+		showApartment: {
+			rest: {
+				method: "POST",
+				path: "/showApartment",
+			},
+			params: {
+				idChuHo: { type: "string" },
+			},
+			async handler({ action, params, meta, ...ctx }) {
+				const { idChuHo } = params;
+				const show = await dbContext.THONGTINCHUHO.findAll({
+					attributes: ["TEN_CHUHO"],
+					where: {
+						ID_TT_CHUHO: idChuHo,
+					},
+					include: ["NHAs"],
+				});
+				return show;
+			},
+		},
+		showMainContact: {
+			rest: {
+				method: "POST",
+				path: "/showMainContact",
+			},
+			params: {
+				idTk: { type: "string" },
+			},
+			async handler({ action, params, meta, ...ctx }) {
+				const { idTk } = params;
+				const intId = parseInt(idTk);
+
+				const showTK = await dbContext.TAIKHOAN.findAll({
+					attributes: ["ID_TAIKHOAN"],
+					where: {
+						ID_TAIKHOAN: intId,
+					},
+					include: [
+						{
+							model: dbContext.THONGTINCHUHO,
+							as: "THONGTINCHUHOs",
+							attributes: ["TEN_CHUHO"],
+							include: ["NHAs"],
+						},
+					],
+				});
+				return showTK;
 			},
 		},
 		register: {
@@ -116,7 +201,7 @@ module.exports = {
 						"Username and Password is incorrect"
 					);
 				}
-				//http://localhost:3000/api/user/sigin/signin?username=b@gmail.com&password=1111111
+				//http://localhost:3000/api/partner/sigin/signin?username=b@gmail.com&password=1111111
 				const createUser = await dbContext.TAIKHOAN.create({
 					TEN_TAIKHOAN: username,
 					MATKHAU: password,
@@ -132,6 +217,28 @@ module.exports = {
 			async handler() {
 				const getList = await dbContext.STYLE.findAll();
 				return getList;
+			},
+		},
+		getApartmentPrice: {
+			rest: {
+				method: "POST",
+				path: "/getApartmentPrice",
+			},
+			params: {
+				idPrice: { type: "string" },
+			},
+			async handler({ action, params, meta, ...ctx }) {
+				let { idPrice } = params;
+				const lsPrice = await dbContext.BANGGIA.findAll();
+				let output = 0;
+				for (let i = 0; i < lsPrice.length; i++) {
+					let element = lsPrice[i];
+					if (element.ID_BANGGIA == idPrice) {
+						output = element;
+						break;
+					}
+				}
+				return output;
 			},
 		},
 		getDetailApartment: {
@@ -186,24 +293,52 @@ module.exports = {
 				return getList;
 			},
 		},
-		getRoomType: {
+		getListRoomType: {
 			rest: {
 				method: "POST",
-				path: "/registrationDetail/getRoomType",
+				path: "/registrationDetail/getListRoomType",
 			},
 			async handler({ action, params, meta, ...ctx }) {
 				const getType = await dbContext.LOAIPHONG.findAll();
 				return getType;
 			},
 		},
-		getBedType: {
+		getListBedType: {
 			rest: {
 				method: "POST",
-				path: "/registrationDetail/getBedType",
+				path: "/registrationDetail/getListBedType",
 			},
 			async handler({ action, params, meta, ...ctx }) {
 				const getType = await dbContext.LOAIGIUONG.findAll();
 				return getType;
+			},
+		},
+		getListApartType: {
+			rest: {
+				method: "POST",
+				path: "/registrationDetail/getListApartType",
+			},
+			async handler(ctx) {
+				const listType = dbContext.LOAINHA.findAll();
+				return listType;
+			},
+		},
+		getTypeApart: {
+			rest: {
+				method: "POST",
+				path: "/getTypeApart",
+			},
+			params: {
+				id: {type: "string"}
+			},
+			async handler(params, ...ctx) {
+				const {id} = params;
+				const type = dbContext.LOAINHA.findOne({
+					where:{
+						ID_LOAINHA: id
+					}
+				});
+				return type.TEN_LOAINHA;
 			},
 		},
 		getListCountry: {
@@ -212,7 +347,7 @@ module.exports = {
 				path: "/registrationDetail/getListCountry",
 			},
 			async handler(ctx) {
-				const listCountry = dbContext.THANHPHO.findAll();
+				const listCountry = dbContext.QUOCGIA.findAll();
 				return listCountry;
 			},
 		},
@@ -274,13 +409,14 @@ module.exports = {
 				idQuan: { type: "string" },
 				soNguoi: { type: "string" },
 				soGiuongPhu: { type: "string" },
-				idGia: { type: "string" },
+				gia: {type: "string"},
+				khuyenMai: {type: "string"},
 				trangThai: { type: "string" },
 			},
 			async handler({ action, params, meta, ...ctx }) {
 				const {
 					idNha,
-					//idChuHo,
+					idChuHo,
 					idLoaiNha,
 					tenNha,
 					huyPhong,
@@ -295,12 +431,13 @@ module.exports = {
 					idQuan,
 					soNguoi,
 					soGiuongPhu,
-					// idGia,
-					// trangThai,
+					gia,
+					khuyenMai,
+					trangThai,
 				} = params;
 				const createApartment = await dbContext.NHA.create({
 					ID_NHA: idNha,
-					//ID_TT_CHUHO: idChuHo,
+					ID_TT_CHUHO: idChuHo,
 					ID_LOAINHA: idLoaiNha,
 					TEN_NHA: tenNha,
 					FREE_CANCEL: huyPhong,
@@ -315,30 +452,106 @@ module.exports = {
 					ID_QUAN: idQuan,
 					SO_NGUOI: soNguoi,
 					SO_GIUONGPHU: soGiuongPhu,
-					// ID_BANGGIA: idGia,
-					// ID_TRANGTHAI_NHA: trangThai
+					GIA: gia,
+					KHUYENMAI: khuyenMai,
+					ID_TRANGTHAI_NHA: trangThai
 				});
 				return createApartment;
 			},
 		},
-		createPrice: {
+		createRoom: {
 			rest: {
 				method: "POST",
-				path: "/registrationDetail/createPrice",
+				path: "/registrationDetail/createRoom",
 			},
 			params: {
-				firstPrice: {type: "number"},
-				secondPrice: {type: "number"},
-				thirdPrice: {type: "number"}
+				idApart: { type: "string" },
+				roomName: { type: "string" },
+				idStyleRoom: { type: "string" },
+				idStyleBed: { type: "string" },
+				numberBed: { type: "string" },
+				maxPer: { type: "string" },
+				maxExtraBed: { type: "string" },
+				priceExtra: { type: "string" },
+				width: { type: "string" },
+				height: { type: "string" },
+				numberRooms: { type: "string" },
+				descript: {type: "string"}
 			},
 			async handler({ action, params, meta, ...ctx }) {
-				const { firstPrice, secondPrice, thirdPrice } = params;
-				const create = await dbContext.BANGGIA.create({
-					MUCGIA_MOT: firstPrice,
-					MUCGIA_HAI: secondPrice,
-					MUCGIA_BA: thirdPrice,
+				const {
+					idApart,
+					roomName,
+					idStyleRoom,
+					idStyleBed,
+					numberBed,
+					maxPer,
+					maxExtraBed,
+					priceExtra,
+					width,
+					height,
+					numberRooms,
+					descript
+				} = params;
+
+				const create = await dbContext.PHONG.create({
+					ID_NHA: idApart,
+					TEN_PHONG: roomName,
+					ID_LOAIPHONG: idStyleRoom,
+					ID_LOAIGIUONG: idStyleBed,
+					SOGIUONG: numberBed,
+					SONGUOITOIDA: maxPer,
+					SOGIUONG_PHU: maxExtraBed,
+					GIAGIUONG_PHU: priceExtra,
+					CHIEUDAI_PHONG: width,
+					CHIEURONG_PHONG: height,
+					SOLUONG: numberRooms,
+					MOTA: descript,
 				});
 				return create;
+			},
+		},
+		getAddressApartment: {
+			rest: {
+				method: "POST",
+				path: "/getAddressApartment",
+			},
+			params: {
+				id: { type: "string" },
+			},
+			async handler({ action, params, meta, ...ctx }) {
+				const { id } = params;
+				const myApart = await dbContext.NHA.findOne({
+					where: {
+						ID_NHA: id,
+					},
+				});
+				const myDistrict = await dbContext.QUAN.findOne({
+					where: {
+						ID_QUAN: myApart.ID_QUAN,
+					},
+				});
+				const myCity = await dbContext.THANHPHO.findOne({
+					where: {
+						ID_THANHPHO: myDistrict.ID_THANHPHO,
+					},
+				});
+				const myCountry = await dbContext.QUOCGIA.findOne({
+					where: {
+						ID_QUOCGIA: myCity.ID_QUOCGIA,
+					},
+				});
+				const output =
+					myApart.SONHA +
+					" " +
+					myApart.TEN_DUONG +
+					" " +
+					myDistrict.TEN_QUAN +
+					" " +
+					myCity.TEN_THANHPHO +
+					" " +
+					myCountry.TEN_QUOCGIA;
+				return output;
 			},
 		},
 		/**
