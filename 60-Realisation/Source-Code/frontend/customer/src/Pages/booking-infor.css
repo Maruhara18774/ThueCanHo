@@ -53,3 +53,16 @@
 .booking-wrap .inputZone .check{
     text-align: left;
 }
+.booking-wrap .inputZone .check-input{
+    margin-left: 20%;
+}
+.booking-wrap .inputZone .check-input td{
+    text-align: right;
+}
+.booking-wrap .inputZone .check-input th{
+    text-align: left;
+}
+.booking-wrap .paypal{
+    width: fit-content();
+    margin-left: 40%;
+}

@@ -1,4 +1,4 @@
-import React, { Component} from 'react';
+import React, { Component } from 'react';
 import imageDefault from '../Images/as.jpg';
 import image1 from '../Images/house1.jpg';
 import image2 from '../Images/house2.jpg';
@@ -11,82 +11,71 @@ import image8 from '../Images/yard1.jpg';
 import Axios from 'axios';
 import './detail-apartment.css';
 import { Link } from 'react-router-dom';
-
+import FooterCustom from '../Components/footer';
 
 export default class DetailApartment extends Component {
-    constructor(props){
-        super(props); 
-        this.state ={
+    constructor(props) {
+        super(props);
+        this.state = {
             idApartment: document.location.pathname.substring(16),
             apartmentInfo: {},
-            lsImage: [imageDefault,image1,image2,image3,image4,image5,image6,image7,image8],
+            lsImage: [imageDefault, image1, image2, image3, image4, image5, image6, image7, image8],
             imgActive: 0,
-            typeApartment: "",
             address: "",
             numStar: 5,
-            price: 0,
+            lsRoom: []
         }
         this.getApartmentInfo();
     }
-    getApartmentInfo = ()=>{
-        Axios.post('http://localhost:33456/api/customer/getDetailApartment',{id: this.state.idApartment}).then(
+    getApartmentInfo = () => {
+        Axios.post('http://localhost:33456/api/customer/getDetailApartment', { id: this.state.idApartment }).then(
             (response) => {
                 this.state.apartmentInfo = response.data[0];
-                console.log(response.data);
-                this.setState(this,()=>{
-                    this.getType(this.state.apartmentInfo.ID_LOAINHA.toString());
+                this.setState(this, () => {
                     this.getAddress(this.state.apartmentInfo.ID_NHA.toString());
-                    this.getPrice(this.state.apartmentInfo.ID_BANGGIA.toString());
+                    this.getListRoom(this.state.apartmentInfo.ID_NHA.toString());
                 });
             });
     }
-    getType = (idLoaiNha) =>{
-        console.log(this.state.apartmentInfo.ID_LOAINHA);
-        Axios.post('http://localhost:33456/api/customer/getTypeApartment',{idType: idLoaiNha}).then(
-            (response) => {
-                this.state.typeApartment = response.data;
-                this.setState(this);
-            });
-    }
-    getAddress = (idNha) =>{
-        Axios.post('http://localhost:33456/api/customer/getAddressApartment',{id: idNha}).then(
+    getAddress = (idNha) => {
+        Axios.post('http://localhost:33456/api/customer/getAddressApartment', { id: idNha }).then(
             (response) => {
                 this.state.address = response.data;
                 this.setState(this);
             });
     }
-    getPrice = (idPrice) => {
-        Axios.post('http://localhost:33456/api/customer/getApartmentPrice',{idPrice: idPrice}).then(
+    getListRoom = (idNha) => {
+        Axios.post('http://localhost:33456/api/customer/getListRoom', { idApartment: idNha }).then(
             (response) => {
-                this.state.price = response.data;
+                this.state.lsRoom = response.data;
+                console.log(response.data)
                 this.setState(this);
             });
-            
     }
-    componentDidMount(){
-        window.scrollTo(0,0);
+    componentDidMount() {
+        window.scrollTo(0, 0);
     }
     componentDidUpdate() {
-        setTimeout(()=>this.changeImgActive(this.state.imgActive),6000);
+        setTimeout(() => this.changeImgActive(this.state.imgActive), 6000);
     }
-    changeImgActive = (current)=>{
-        if(current + 1 == this.state.lsImage.length){
+    changeImgActive = (current) => {
+        if (current + 1 == this.state.lsImage.length) {
             this.state.imgActive = 0;
             this.setState(this);
         }
-        else{
-            this.state.imgActive = current +1;
+        else {
+            this.state.imgActive = current + 1;
             this.setState(this);
         }
     }
-    getImageNum = (number) =>{
+    getImageNum = (number) => {
         const numNow = number % this.state.lsImage.length;
-        if(numNow +1 >= this.state.lsImage.length){
+        if (numNow + 1 >= this.state.lsImage.length) {
             return 0;
         }
-        return numNow +1;
+        return numNow + 1;
     }
-    renderRateStar = ()=>{
+    renderRateStar = () => {
         switch (this.state.numStar) {
             case 5:
                 return (
@@ -629,7 +618,6 @@ export default class DetailApartment extends Component {
     }
 
     render() {
-        this.getType();
         return (
             <div className="detail-apartment-position">
                 <div className="detail-apartment-wrap">
@@ -638,38 +626,38 @@ export default class DetailApartment extends Component {
                             <tr>
                                 <td className="header-left">
                                     <p className="nameApartment">{this.state.apartmentInfo.TEN_NHA}</p>
-                                    <p className = "sticker">{this.state.typeApartment}</p>
+                                    <p className="sticker">Biệt thự</p>
                                     <p className="location">
                                         <span><i class="fas fa-map-marker-alt mrg5"></i></span>
                                         {this.state.address}
                                     </p>
                                 </td>
-                                <td  className="header-right">
+                                <td className="header-right">
                                     <i class="far fa-bookmark saveApartment"></i>
                                 </td>
                             </tr>
                         </table>
                     </div>
-                    <hr/>
+                    <hr />
                     <div className="images">
                         <table>
                             <tr>
                                 <td className="header-left" rowSpan="4">
-                                    <img src={this.state.lsImage[this.state.imgActive]} width="750px" height="500px"className="imageWrapMain"/>
-                                    
+                                    <img src={this.state.lsImage[this.state.imgActive]} width="750px" height="500px" className="imageWrapMain" />
+
                                 </td>
-                                <td  className="header-right">
-                                    <img src={this.state.lsImage[this.getImageNum(this.state.imgActive+1)]} width="200px" height="120px"
-                                    className="imageWrapChild"/>
-                                    
-                                    <img src={this.state.lsImage[this.getImageNum(this.state.imgActive+2)]} width="200px" height="120px"
-                                    className="imageWrapChild"/>
+                                <td className="header-right">
+                                    <img src={this.state.lsImage[this.getImageNum(this.state.imgActive + 1)]} width="200px" height="120px"
+                                        className="imageWrapChild" />
 
-                                    <img src={this.state.lsImage[this.getImageNum(this.state.imgActive+3)]} width="200px" height="120px"
-                                    className="imageWrapChild"/>
+                                    <img src={this.state.lsImage[this.getImageNum(this.state.imgActive + 2)]} width="200px" height="120px"
+                                        className="imageWrapChild" />
 
-                                    <img src={this.state.lsImage[this.getImageNum(this.state.imgActive+4)]} width="200px" height="120px"
-                                    className="imageWrapChild"/>
+                                    <img src={this.state.lsImage[this.getImageNum(this.state.imgActive + 3)]} width="200px" height="120px"
+                                        className="imageWrapChild" />
+
+                                    <img src={this.state.lsImage[this.getImageNum(this.state.imgActive + 4)]} width="200px" height="120px"
+                                        className="imageWrapChild" />
                                 </td>
                             </tr>
                         </table>
@@ -678,19 +666,70 @@ export default class DetailApartment extends Component {
                         <table>
                             <tr>
                                 <td className="header-left">
-                                    <p>Traveloka</p>
+                                    <p>Đánh giá</p>
                                     <p> {this.renderRateStar()}
                                     </p>
                                 </td>
-                                <td  className="header-right">
+                                <td className="header-right">
                                     <p>Giá mỗi đêm từ</p>
-                                    <p className="priceRental">{this.state.price.MUCGIA_MOT - this.state.price.KHUYENMAI} VND</p>
+                                    <p className="priceRental">{this.state.apartmentInfo.GIA - this.state.apartmentInfo.KHUYENMAI} VND</p>
                                     <Link to={"/booking/" + this.state.idApartment} className="bookNowBtn">Đặt ngay</Link>
                                 </td>
                             </tr>
                         </table>
                     </div>
                 </div>
+                {this.state.lsRoom.map((val, key) => {
+                    return (
+                        <div className="detail-apartment-wrap">
+                            <div className="roomzone-wrap">
+                                <table>
+                                    <tr>
+                                        <th colSpan="2"><h3>{val.TEN_PHONG}</h3></th>
+                                    </tr>
+                                    <tr>
+                                        <td>{val.MOTA}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <img src={this.state.lsImage[0]} height="150px" />
+                                        </td>
+                                        <td className="contain">
+                                            <ul>
+                                                <li>Diện tích: <span><i class="fas fa-ruler-combined"></i></span> {val.CHIEUDAI_PHONG*val.CHIEURONG_PHONG} m2 ({val.CHIEUDAI_PHONG} x {val.CHIEURONG_PHONG})</li>
+                                                <li>Loại phòng: {val.ID_LOAIPHONG_LOAIPHONG.TEN_LOAIPHONG} ({val.SONGUOITOIDA} người)</li>
+                                                <li>Loại giường: {val.ID_LOAIGIUONG_LOAIGIUONG.TEN_LOAIGIUONG}</li>
+                                                <li>Số giường phụ: {val.SOGIUONG_PHU}</li>
+                                            </ul>
+                                        </td>
+                                    </tr>
+                                </table>
+
+                            </div>
+                        </div>
+                    )
+                })}
+                <div className="else-wrap">
+                    <table>
+                        <tr>
+                           <th className="title">Mô tả chung</th>
+                           <td>
+                                <ul>
+                                    <li><b>Vị trí</b></li>
+                                    <li>Địa chỉ: {this.state.address}</li>
+                                    <li>Diện tích: {this.state.apartmentInfo.DIENTICH} m2</li>
+                                    <li>Khoảng cách đến trung tâm thành phố: {this.state.apartmentInfo.KHOANGCACH_TRUNGTAMTP}</li>
+                                </ul>   
+                                <ul>
+                                    <li><b>Giờ nhận phòng và trả phòng</b></li>
+                                    <li>Giờ nhận phòng: {this.state.apartmentInfo.CHECKIN}</li>
+                                    <li>Giờ trả phòng: {this.state.apartmentInfo.CHECKOUT}</li>
+                                </ul>  
+                            </td> 
+                        </tr>
+                    </table>
+                </div>
+                <FooterCustom/>
             </div>
         )
     }

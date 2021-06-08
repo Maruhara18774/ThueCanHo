@@ -1,0 +1,21 @@
+.rental-guide-wrap{
+    padding-top: 50px;
+    padding-bottom: 50px;
+    background-color: #245d9e;
+}
+.rental-guide-wrap .title{
+    color: white;
+    font-size: x-large;
+    font-weight: bold;
+}
+.rental-guide-wrap .card{
+    background-color: white;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    margin-left: 20px;
+    margin-right: 20px;
+
+}
+.rental-guide-wrap .card .illustration{
+    vertical-align: bottom;
+}

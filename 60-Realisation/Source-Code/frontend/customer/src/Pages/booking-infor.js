@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './booking-infor.css';
 import { Link } from 'react-router-dom';
 import Axios from 'axios';
+import Paypal from '../Components/paypal';
 
 export default class BookingForm extends Component {
     constructor(props) {
@@ -16,6 +17,7 @@ export default class BookingForm extends Component {
             username: "",
             password: "",
             // THONGTINKHACHHANG
+            idTTKH: 0,
             tenKH: "",
             email: "",
             phone: "",
@@ -37,7 +39,9 @@ export default class BookingForm extends Component {
             totalBuaSang: 0,
             totalGiuongPhu: 0,
             phiGTGT: 0,
-            total: 0
+            total: 0,
+            // Paypal
+            totalInUSD:0,
         }
         this.getApartmentInfo();
     }
@@ -47,53 +51,6 @@ export default class BookingForm extends Component {
         this.setState(this);
         if (this.state.currentStep == 4) {
             this.calcAll();
-        }
-        if (this.state.currentStep == 6) {
-            var idTTKH = 0;
-            Axios.post('http://localhost:33456/api/customer/searchPaymentInfo', {
-                maGiayTo: this.state.giaytotuythanID,
-                loaiGiayTo: this.state.giaytotuythanType,
-            }).then((response) => {
-                idTTKH = response.data;
-                if (idTTKH == 0) {
-                    Axios.post('http://localhost:33456/api/customer/savePaymentInfo', {
-                        tenKH: this.state.tenKH,
-                        email: this.state.email,
-                        phoneNumber: this.state.phone,
-                        maGiayTo: this.state.giaytotuythanID,
-                        loaiGiayTo: this.state.giaytotuythanType,
-                        quocTich: this.state.quocTich,
-                        gioiTinh: this.state.gioiTinh,
-                        idTK: this.state.idTK,
-                    });
-                    Axios.post('http://localhost:33456/api/customer/searchPaymentInfo', {
-                        maGiayTo: this.state.giaytotuythanID,
-                        loaiGiayTo: this.state.giaytotuythanType,
-                    }).then((response) => {
-                        idTTKH = response.data;
-                    });
-                    
-                }
-                const sendData = {
-                    idNha: this.state.idApartment,
-                    idTTKH: idTTKH.toString(),
-                    ngayDat: this.getDateNow(),
-                    checkIn: this.state.checkIn,
-                    checkOut: this.state.checkOut,
-                    ngayDen: this.state.ngayDen,
-                    ngayDi: this.state.ngayDi,
-                    tongTienPhong: this.state.totalPhong.toString(),
-                    buaSang: this.state.soBuaSang.toString(),
-                    tongTienBuaSang: this.state.totalBuaSang.toString(),
-                    soGiuongPhu: this.state.soGiuongPhu.toString(),
-                    tongTienGiuongPhu: this.state.totalGiuongPhu.toString(),
-                    phiGTGT: this.state.phiGTGT.toString(),
-                    tongTien: this.state.total.toString(),
-                    ghiChu: this.state.ghiChu,
-                }
-                console.log(sendData);
-                Axios.post('http://localhost:33456/api/customer/rentalApartment',sendData)
-            });
         }
         window.scrollTo(0, 0);
     }
@@ -137,7 +94,6 @@ export default class BookingForm extends Component {
             this.state.quocTich == "") {
             return false;
         }
-
         return true;
     }
     checkInput2 = () => {
@@ -176,27 +132,25 @@ export default class BookingForm extends Component {
             });
         }
     }
-    calcAll = () => {
+    calcAll = async () => {
         var day = this.countDate();
-        if (day <= 4) {
-            this.state.totalPhong = (day * this.state.price.MUCGIA_MOT) - this.state.price.KHUYENMAI;
-        }
-        else if (day <= 7) {
-            this.state.totalPhong = (day * this.state.price.MUCGIA_HAI) - this.state.price.KHUYENMAI;
-        }
-        else {
-            this.state.totalPhong = (day * this.state.price.MUCGIA_BA) - this.state.price.KHUYENMAI;
-        }
+        this.state.totalPhong = this.state.apartmentInfo.GIA;
         if (this.state.soBuaSang > 0) {
             this.state.totalBuaSang = this.state.soBuaSang * day * this.state.apartmentInfo.PHUPHI_BUASANG;
         }
         if (this.state.soGiuongPhu > 0) {
-            this.state.totalGiuongPhu = this.state.soGiuongPhu * 200000;
+            this.state.totalGiuongPhu = this.state.soGiuongPhu * this.state.apartmentInfo.PHUPHI_GIUONGPHU;
         }
         var tong = this.state.totalPhong + this.state.totalBuaSang + this.state.totalGiuongPhu;
         this.state.phiGTGT = (tong * 10) / 100;
         this.state.total = tong + this.state.phiGTGT;
-        this.setState(this);
+        await Axios.get('https://free.currconv.com/api/v7/convert?q=VND_USD&compact=ultra&apiKey=755f6cf4214b8669d582').then(
+            (response)=>{
+                this.state.totalInUSD = Math.round(this.state.total*response.data.VND_USD);
+                this.setState(this,()=>{console.log(this.state.totalInUSD)});
+            }
+        )
+        
     }
     // Input state
     setTenKH = (event) => {
@@ -278,7 +232,7 @@ export default class BookingForm extends Component {
                 this.state.apartmentInfo = response.data[0];
                 this.setState(this, () => {
                     this.getAddress(this.state.apartmentInfo.ID_NHA);
-                    this.getApartmentPrice(this.state.apartmentInfo.ID_BANGGIA.toString());
+                    this.state.price= this.state.apartmentInfo.GIA;
                 });
             })
 
@@ -290,12 +244,46 @@ export default class BookingForm extends Component {
                 this.setState(this);
             });
     }
-    getApartmentPrice = (idBangGia) => {
-        Axios.post('http://localhost:33456/api/customer/getApartmentPrice', { idPrice: idBangGia }).then(
-            (response) => {
-                this.state.price = response.data;
-                this.setState(this);
-            });
+    handlePaypalCallback = () =>{
+        const sendKH = {
+            tenKH: this.state.tenKH,
+            email: this.state.email,
+            phoneNumber: this.state.phone,
+            maGiayTo: this.state.giaytotuythanID,
+            loaiGiayTo: this.state.giaytotuythanType,
+            quocTich: this.state.quocTich,
+            gioiTinh: this.state.gioiTinh,
+            idTK: this.state.idTK.toString(),
+        };
+        Axios.post('http://localhost:33456/api/customer/savePaymentInfo', sendKH).then(
+            (response)=>{
+                this.state.idTTKH = parseInt(response.data);
+                this.state.checkOut_Paypal=true;
+                this.setState(this,()=> {console.log(this.state.idTTKH)});
+                const sendData = {
+                    idNha: this.state.idApartment,
+                    //idTTKH: idTTKH.toString(),
+                    idTTKH: this.state.idTTKH.toString(),
+                    ngayDat: this.getDateNow(),
+                    checkIn: this.state.checkIn,
+                    checkOut: this.state.checkOut,
+                    ngayDen: this.state.ngayDen,
+                    ngayDi: this.state.ngayDi,
+                    tongTienPhong: this.state.totalPhong.toString(),
+                    buaSang: this.state.soBuaSang.toString(),
+                    tongTienBuaSang: this.state.totalBuaSang.toString(),
+                    soGiuongPhu: this.state.soGiuongPhu.toString(),
+                    tongTienGiuongPhu: this.state.totalGiuongPhu.toString(),
+                    phiGTGT: this.state.phiGTGT.toString(),
+                    tongTien: this.state.total.toString(),
+                    ghiChu: this.state.ghiChu,
+                }
+                console.log(sendData);
+                Axios.post('http://localhost:33456/api/customer/rentalApartment',sendData);
+            }
+        )
+        this.state.currentStep = 7;
+        this.setState(this);
     }
     render() {
         switch (this.state.currentStep) {
@@ -366,8 +354,8 @@ export default class BookingForm extends Component {
                                     <br />
                                     <div class="form-row">
                                         <label for="FMCustomerHumanType">Loại giấy tờ tùy thân:</label>
-                                        <select value={this.state.giaytotuythanType} onChange={this.setGiaytotuythanType} className="custom-select" id="FMCustomerHumanType">
-                                            <option value="Căng cước công dân" selected>Căn cước công dân</option>
+                                        <select value={this.state.giaytotuythanType} onChange={this.setGiaytotuythanType} className="custom-select" id="FMCustomerHumanType" placeholder="Chọn loại ...">
+                                            <option value="Căng cước công dân">Căn cước công dân</option>
                                             <option value="Chứng minh nhân dân">Chứng minh nhân dân</option>
                                             <option value="Hộ chiếu">Hộ chiếu</option>
                                             <option value="Visa">Visa</option>
@@ -448,7 +436,7 @@ export default class BookingForm extends Component {
                                     <div className="form-row">
                                         <div class="form-group col-md-6">
                                             <label for="FMBookingDayFrom">Ngày đến</label>
-                                            <input type="date" class="form-control is-valid" id="FMBookingDayFrom" min={this.getDateNow()} value={this.getDateNow()} onChange={this.setNgayDen} required />
+                                            <input type="date" class="form-control is-valid" id="FMBookingDayFrom" min={this.getDateNow()} defaultValue={this.getDateNow()} onChange={this.setNgayDen} required />
                                         </div>
                                         {this.state.ngayDi != "" ?
                                             <div class="form-group col-md-6">
@@ -668,7 +656,7 @@ export default class BookingForm extends Component {
                             <hr />
                             <div className="inputZone">
                                 <p className="title">Thông tin khách hàng</p>
-                                <table>
+                                <table className="check-input">
                                     <tr>
                                         <td>Tên khách hàng:</td>
                                         <th>{this.state.tenKH}</th>
@@ -700,9 +688,9 @@ export default class BookingForm extends Component {
                                         </tr> :
                                         <tr> </tr>}
                                 </table>
-
+                                <br/>
                                 <p className="title">Thông tin thuê căn hộ</p>
-                                <table>
+                                <table className="check-input">
                                     <tr>
                                         <td>Tên căn hộ:</td>
                                         <th>{this.state.apartmentInfo.TEN_NHA}</th>
@@ -754,14 +742,10 @@ export default class BookingForm extends Component {
                                 </table>
                                 <form>
                                     <br />
-                                    <div className="form-row">
-                                        <div class="form-group col-md-6">
-                                            <button type="button" class="btn btn-secondary btn-lg" onClick={() => this.prevStep(this.state.currentStep)}>Trở về</button>
-                                        </div>
-                                        <div class="form-group col-md-6">
-                                            <button type="button" class="btn btn-warning btn-lg" onClick={() => this.nextStep(this.state.currentStep)}>Gửi thông tin</button>
-                                        </div>
+                                    <div className="form-row paypal">
+                                        <Paypal val={this.state.totalInUSD} name ={this.state.apartmentInfo.TEN_NHA} callback = {this.handlePaypalCallback}/>
                                     </div>
+                                    
                                 </form>
                             </div>
                         </div>

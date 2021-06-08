@@ -1,0 +1,13 @@
+.why-traveloka-wrap{
+    margin-top: 20px;
+    margin-bottom: 20px;
+    margin-left: 70px;
+}
+.why-traveloka-wrap .card{
+    border: none;
+    width: 250px;
+}
+.why-traveloka-wrap .card img{
+    align-self: center;
+    margin-bottom: 10px;
+}

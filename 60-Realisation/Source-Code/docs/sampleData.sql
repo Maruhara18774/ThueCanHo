@@ -40,6 +40,7 @@ VALUES
 
 INSERT INTO TAIKHOAN(TEN_TAIKHOAN,MATKHAU,ROLE_TAIKHOAN)
 VALUES
+(N'Chung','a@1234','Customer'),
 (N'nhattrung92','abc@1234','Partner'), --1
 (N'nguyenha11','abc@1234','Customer'), --2
 (N'vivanho33','admin','Admin'), --3
@@ -49,8 +50,12 @@ VALUES
 
 INSERT INTO THONGTINCHUHO(TEN_CHUHO,EMAIL,PHONE_NUMBER,MA_GIAYTOTUYTHAN,LOAI_GIAYTOTUYTHAN,QUOCTICH,GIOITINH,DIACHI, MASO_THUE,ID_TAIKHOAN)
 VALUES
-(N'Nguyễn Nhật Trung','nhattrung92@gmail.com','032155422','52323665','CCCD','Vietnam',0,N'99 Nguyễn Văn Cừ, Tân Bình, HCM','23231320032',1), --1
-(N'Lucas de France Dio','lucasdio3201@gmail.com','032155422','52323665','Passport','Vietnam',0,N'99 Wall Street, Washington DC, DC','23231320032',5); --2
+(N'Nguyễn Nhật Trung','nhattrung92@gmail.com','032155422','52323665','CCCD','Vietnam',0,N'99 Nguyễn Văn Cừ, Tân Bình, HCM','23231320032',2), --1
+(N'Lucas de France Dio','lucasdio3201@gmail.com','032155422','52323665','Passport','Vietnam',0,N'99 Wall Street, Washington DC, DC','23231320032',6); --2
+
+INSERT INTO THONGTINKHACHHANG(TEN_KHACHHANG, EMAIL, PHONE_NUMBER, MA_GIAYTOTUYTHAN,LOAI_GIAYTOTUYTHAN,QUOCTICH,GIOITINH,ID_TAIKHOAN)
+VALUES
+(N'Nguyễn Thu Hà', 'nguyenha11@gmail.com', '032326565','032626565',N'Căn cước công dân', N'Việt Nam',1,3);
 
 INSERT INTO LOAINHA(TEN_LOAINHA)
 VALUES
@@ -87,3 +92,4 @@ VALUES
 INSERT INTO TRANGTHAIDATCANHO(TEN_TRANGTHAI)
 VALUES
 (N'Chưa xác nhận')
+

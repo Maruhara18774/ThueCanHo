@@ -43,4 +43,5 @@
 }
 .mainZone .card .button:hover{
     background-color: pink;
+    cursor: pointer;
 }

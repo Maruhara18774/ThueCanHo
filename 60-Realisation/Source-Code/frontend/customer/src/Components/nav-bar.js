@@ -5,6 +5,9 @@ import './nav-bar.css'
 class Navbar extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      logged: false
+    }
   }
   render() {
     return (
@@ -38,16 +41,21 @@ class Navbar extends Component {
               <Link to="/apaLst" className="gray-text mrl20"><span className="sea-text mrl5"><i class="fas fa-home"></i></span>Xem căn hộ</Link>
             </li>
             <li class="nav-item">
-              <Link to="/apaLst" className="gray-text mrl20"><span className="sea-text mrl5"><i class="fas fa-chart-line"></i></span>Trending</Link>
-            </li>
-            <li class="nav-item">
               <Link to="/promotion" className="gray-text mrl20"><span className="fire-text mrl5"><i class="fas fa-gift"></i></span>Khuyến mãi</Link>
             </li>
           </ul>
           <ul class="navbar-nav flex-row ml-md-auto d-none d-md-flex">
+            {!this.state.logged&&this.props.isLogged?
             <li class="nav-item active">
-              <Link to="/login" className="gray-text mrl20" id="loginInfo"><span className="sea-text mrl5"><i class="far fa-user"></i></span>Đăng nhập</Link>
-            </li>
+            <Link to={'/customerInfor/'+this.props.id.toString()} className="gray-text mrl20">Xin chào bạn!</Link>            
+          </li>
+            :
+            <li class="nav-item active ">
+            <Link to="/login" className="gray-text mrl20" ><span className="sea-text mrl5"><i class="far fa-user"></i></span>Đăng nhập</Link>
+            <Link to="/register" className="register-btn">Đăng ký</Link>
+          </li>
+          }
+            
           </ul>
         </div>
       </nav>

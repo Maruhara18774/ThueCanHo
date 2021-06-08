@@ -23,3 +23,25 @@
     text-decoration: none;
     color:#3380E6;
 }
+.register-btn{
+    background-color: #3380E6;
+    color: white;
+    border-radius: 10px;
+    padding:10px 15px 10px 15px;
+}
+.register-btn:hover{
+    background-color: tomato;
+    color: white;
+    text-decoration: none;
+}
+.logout-btn{
+    background-color: transparent;
+    border-style: solid;
+    color: tomato;
+    border-color: tomato;
+    border-radius: 10px;
+}
+.logout-btn:hover{
+    color: #3380E6;
+    border-color: #3380E6;
+}

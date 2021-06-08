@@ -14,10 +14,13 @@ class SelectBar extends Component {
       idDistrict: 0,
       lsStyle:[],
       idStyle: 0,
-      minBudget: 0
+      minBudget: 0,
+      lsShow: [],
+      lsFull: []
     };
     this.getListCountry();
     this.getListStyle();
+    this.sortApartment();
   }
   getListCountry = () =>{
 
@@ -61,24 +64,39 @@ class SelectBar extends Component {
   changeDistrict = (event)=>{
     this.state.idDistrict = event.target.value;
     this.setState(this);
+    this.sortApartment();
   }
   changeStyle = (event)=>{
     this.state.idStyle = event.target.value;
     this.setState(this);
+    this.sortApartment();
   }
   getMinBudget =(event)=>{
     this.state.minBudget = event.target.value;
-    this.setState(this);
+    this.state.lsShow = [];
+    this.state.lsFull.forEach(item=>{
+      this.state.lsShow.push(item);
+    })
+    
+    this.state.lsShow.forEach(item => {
+        if((parseFloat(item.GIA) - parseFloat(item.KHUYENMAI))<parseFloat(this.state.minBudget)){
+          
+          this.state.lsShow.pop(item)
+        }
+      });
+      
+      this.setState(this);
+      this.props.callback(this.state.lsShow);
   }
   sortApartment = () => {
     console.log(this.state.idDistrict + " - " + this.state.idStyle + " - " + this.state.minBudget);
     Axios.post('http://localhost:33456/api/customer/searchApartmentWithDetail', {
       "idDistrict": this.state.idDistrict.toString(),
-      "idStyle": this.state.idStyle.toString(),
-      "minBudget": this.state.minBudget.toString()
+      "idStyle": this.state.idStyle.toString()
     }).then((response) => {
-      console.log(response.data);
-      this.props.callback(response.data);
+      this.state.lsFull = response.data;
+      this.setState(this);
+      this.props.callback(this.state.lsFull);
     });
   }
   render() {
@@ -129,18 +147,11 @@ class SelectBar extends Component {
           <tr>
             <td className="title">Mức giá từ: </td>
             <td className="content">
-              <input type="range" class="form-range" min="0" max="1000000" range="50000" onChange={this.getMinBudget}/>
+              <input type="range" class="form-range" min="0" max="20000000" range="200000" onChange={this.getMinBudget}/>
             </td>
           </tr>
           <tr>
             <td colSpan="2" className="content"><b className="emphasis">{this.state.minBudget} VND</b> trở lên.</td>
-          </tr>
-          <tr className="spacing"/>
-          <tr>
-            <td colSpan="2">
-            <div className="button" onClick={()=>this.sortApartment()}>Lọc kết quả</div>
-            </td>
-            
           </tr>
           <tr className="spacing"/>
         </table>

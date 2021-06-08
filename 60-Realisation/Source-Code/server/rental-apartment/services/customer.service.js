@@ -90,14 +90,16 @@ module.exports = {
 				path: "/getDetailApartment"
 			},
 			params:{
-				id: {type: "string"}
+				id: {type: "string"},
+				
 			},
 			async handler({action,params,meta, ... ctx}) {
                 const {id} = params;
                 const checkDetail = await dbContext.NHA.findAll({
                     where: {
                         ID_NHA: id
-                    }
+                    },
+					include:["ID_LOAINHA_LOAINHA"]
                 });
                 if (checkDetail == null){
                     return "Không có căn hộ này";
@@ -172,28 +174,6 @@ module.exports = {
 				return output;
 			}
 		},
-		getApartmentPrice:{
-			rest: {
-				method: "POST",
-				path: "/getApartmentPrice"
-			},
-			params:{
-				idPrice: {type:"string"}
-			},
-			async handler({action,params,meta, ... ctx}) {
-                var {idPrice} = params;
-				const lsPrice = await dbContext.BANGGIA.findAll();
-				var output= 0;
-				for(var i=0;i<lsPrice.length;i++){
-					var element = lsPrice[i];
-					if(element.ID_BANGGIA== idPrice){
-						output = element;
-						break;
-					}
-				}
-				return output;
-			}
-		},
 		getAddressApartment:{
 			rest: {
 				method: "POST",
@@ -236,47 +216,47 @@ module.exports = {
 			},
 			params:{
 				idDistrict: {type:"string"},
-				idStyle: {type:"string"},
-				minBudget: {type: "string"}
+				idStyle: {type:"string"}
 			},
 			async handler({action,params,meta, ... ctx}) {
-                const {idDistrict, idStyle,minBudget} = params;
+                const {idDistrict, idStyle} = params;
 				var result = [];
-				if(idDistrict == 0&& idStyle == 0 && minBudget==0){
-					result = await dbContext.NHA.findAll();
+				if(idDistrict!= "0"){
+					const lsApart = await dbContext.NHA.findAll({
+						where:{
+							ID_QUAN: idDistrict
+						},
+						include:["ID_QUAN_QUAN","STYLENHAs"]
+					})
+					if(idStyle!="0"){
+						lsApart.forEach(item =>{
+							if(item.STYLENHAs[0].ID_STYLE.toString() == idStyle){
+								result.push(item);
+							}
+						})
+					}
+					else{
+						lsApart.forEach(item =>{
+								result.push(item);
+						})
+					}
 				}
 				else{
-					const lsApartment = await dbContext.NHA.findAll();
-					const lsPrice = await dbContext.BANGGIA.findAll();
-					lsApartment.forEach(element => {
-						for(var i=1;i<lsPrice.length;i++){
-							const element2 = lsPrice[i]; 
-							if((element.ID_BANGGIA == element2.ID_BANGGIA)&&(element2.MUCGIA_MOT>= minBudget)){
-								result.push(element);
-								break;
+					const lsApart = await dbContext.NHA.findAll({
+						include:["ID_QUAN_QUAN","STYLENHAs"]
+					})
+					if(idStyle!="0"){
+						lsApart.forEach(item =>{
+							if(item.STYLENHAs[0].ID_STYLE.toString() == idStyle){
+								result.push(item);
 							}
-						}
-					});
-					if(idDistrict!=0){
-						for(var i=1;i<result.length;i++){
-							var element = result[i];
-							if(element.ID_QUAN != idDistrict){
-								result.pop(element);
-							}
-						}
+						})
 					}
-					if(idStyle != 0){
-						const lsStyle = await dbContext.STYLENHA.findAll();
-						for(var i=1;i<result.length;i++){
-							var element = result[i];
-							console.log(element);
-							for(var i=0;i<lsStyle.length;i++) {
-								const element2 = lsStyle[i];
-								if(element.ID_NHA== element2.ID_NHA && element2.ID_STYLE != idStyle){
-									result.pop(element);
-								}
-							}
-						}
+					else{
+						lsApart.forEach(item =>{
+								result.push(item);
+							
+						})
 					}
 				}
 				
@@ -342,31 +322,6 @@ module.exports = {
 				return checkStyle;
 			},
 		},
-		searchPaymentInfo:{
-			rest:{
-				method: "POST",
-				path: "/searchPaymentInfo"
-			},
-			params:{
-				maGiayTo: {type: "string"},
-				loaiGiayTo: {type: "string"},
-			},
-			async handler({action,params,meta, ... ctx}){
-                var {maGiayTo,loaiGiayTo} = params;
-				var result = 0;
-				const checkInfo = await dbContext.THONGTINKHACHHANG.findOne({
-					where:{
-						MA_GIAYTOTUYTHAN: maGiayTo,
-						LOAI_GIAYTOTUYTHAN: loaiGiayTo,
-					}
-				});
-				if(checkInfo != null){
-					result = checkInfo.ID_TT_KHACHHANG;
-				}
-				return result;
-			},
-		},
-		// Select bar - END
 		savePaymentInfo:{
 			rest:{
 				method: "POST",
@@ -384,20 +339,37 @@ module.exports = {
 			},
 			async handler({action,params,meta, ... ctx}){
                 var {tenKH,email,phoneNumber,maGiayTo,loaiGiayTo,quocTich,gioiTinh,idTK} = params;
-				if(idTK==0){
-					idTK = 1002
+				if(parseInt(idTK)==0){
+					idTK = 1;
 				}
-				const createInfo = await dbContext.THONGTINKHACHHANG.create({
-					TEN_KHACHHANG: tenKH,
-					EMAIL: email,
-					PHONE_NUMBER: phoneNumber,
-					MA_GIAYTOTUYTHAN: maGiayTo,
-					LOAI_GIAYTOTUYTHAN: loaiGiayTo,
-					QUOCTICH: quocTich,
-					GIOITINH: gioiTinh,
-					ID_TAIKHOAN: idTK
-				})
-				return null;
+				const checkInfo = await dbContext.THONGTINKHACHHANG.findOne({
+					where:{
+						MA_GIAYTOTUYTHAN: maGiayTo,
+						LOAI_GIAYTOTUYTHAN: loaiGiayTo,
+					}
+				});
+				if (gioiTinh == "Nam"){
+					gioiTinh = false;
+				}
+				else{
+					gioiTinh = true;
+				}
+				if(checkInfo ==null){
+					const createInfo = await dbContext.THONGTINKHACHHANG.create({
+						TEN_KHACHHANG: tenKH,
+						EMAIL: email,
+						PHONE_NUMBER: phoneNumber,
+						MA_GIAYTOTUYTHAN: maGiayTo,
+						LOAI_GIAYTOTUYTHAN: loaiGiayTo,
+						QUOCTICH: quocTich,
+						GIOITINH: gioiTinh,
+						ID_TAIKHOAN: parseInt(idTK)
+					})
+					return createInfo.ID_TT_KHACHHANG;
+				}
+				else{
+					return checkInfo.ID_TT_KHACHHANG;
+				}
 			},
 		},
 		rentalApartment:{
@@ -463,7 +435,108 @@ module.exports = {
 				return checkType.TEN_LOAINHA;
 			},
 		},
-
+		getListRoom:{
+			rest:{
+				method: "POST",
+				path: "/getListRoom"
+			},
+			params:{
+				idApartment: {type: "string"},
+			},
+			async handler({action,params,meta, ... ctx}){
+                var {idApartment} = params;
+				const lsRoom = await dbContext.PHONG.findAll({
+					where:{
+						ID_NHA: idApartment
+					},
+					include:["ID_LOAIPHONG_LOAIPHONG","ID_LOAIGIUONG_LOAIGIUONG"]
+				})
+				return lsRoom;
+			},
+		},
+		getAccountInfo:{
+			rest:{
+				method: "POST",
+				path: "/getAccountInfo"
+			},
+			params:{
+				id: {type: "string"}
+			},
+			async handler({action,params,meta, ... ctx}){
+                var {id} = params;
+				id = parseInt(id);
+				const acc = dbContext.TAIKHOAN.findOne({
+					where:{
+						ID_TAIKHOAN: id
+					}
+				})
+				return acc;
+			},
+		},
+		updateCustomerInfo4Account:{
+			rest:{
+				method: "POST",
+				path: "/updateCustomerInfo4Account"
+			},
+			params:{
+				idAccount: {type: "string"},
+				idCustomerInfo: {type: "string"},
+			},
+			async handler({action,params,meta, ... ctx}){
+                var {idAccount, idCustomerInfo} = params;
+				idAccount = parseInt(idAccount);
+				idCustomerInfo = parseInt(idCustomerInfo);
+				const acc = dbContext.TAIKHOAN.update({
+					ID_TAIKHOAN: idAccount,
+					where:{
+						ID_TAIKHOAN: idCustomerInfo
+					}
+				})
+				return acc;
+			},
+		},
+		getAllListRental:{
+			rest:{
+				method: "POST",
+				path: "/getAllListRental"
+			},
+			params:{
+				idCustomerInfo: {type: "string"},
+			},
+			async handler({action,params,meta, ... ctx}){
+                var {idCustomerInfo} = params;
+				idCustomerInfo = parseInt(idCustomerInfo);
+				const ls = dbContext.DATCANHO.update({
+					where:{
+						ID_TT_KHACHHANG: idCustomerInfo
+					},
+					include:["ID_TT_DCH_TRANGTHAIDATCANHO"]
+				})
+				return ls;
+			},
+		},
+		updateRentalState:{
+			rest:{
+				method: "POST",
+				path: "/updateCustomerInfo4Account"
+			},
+			params:{
+				idOrder: {type: "string"},
+				idState: {type: "string"}
+			},
+			async handler({action,params,meta, ... ctx}){
+                var {idOrder,idState} = params;
+				idOrder = parseInt(idOrder);
+				idState = parseInt(idState);
+				const stateSet = dbContext.DATCANHO.update({
+					ID_TT_DCH: idState,
+					where:{
+						ID_DATCANHO: idOrder
+					}
+				})
+				return stateSet;
+			},
+		},
 		/**
 		 * Welcome, a username
 		 *
