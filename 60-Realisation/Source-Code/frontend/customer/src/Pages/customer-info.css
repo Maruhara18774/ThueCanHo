@@ -1,0 +1,35 @@
+.customer-info-wrap{
+    margin-left: 20%;
+    margin-right: 20%;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+.position-wrap{
+    width: 100%;
+    margin-top: 100px;
+}
+.position-wrap .menu{
+    width: 200px;
+    list-style: none;
+}
+.position-wrap .menu ul{
+    list-style: none;
+    text-align: left;
+    margin:0;
+    padding: 0;
+}
+.position-wrap .menu ul li{
+    border-style: solid;
+    border-width: 1px;
+    border-color: gainsboro;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 20px;
+}
+.position-wrap .menu ul .active{
+    background-color: #3380E6;
+    color: white;
+}
+.position-wrap .content{
+    background-color: aqua;
+}

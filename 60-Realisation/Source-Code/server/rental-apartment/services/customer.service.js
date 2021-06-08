@@ -340,7 +340,7 @@ module.exports = {
 			async handler({action,params,meta, ... ctx}){
                 var {tenKH,email,phoneNumber,maGiayTo,loaiGiayTo,quocTich,gioiTinh,idTK} = params;
 				if(parseInt(idTK)==0){
-					idTK = 1002;
+					idTK = 1;
 				}
 				const checkInfo = await dbContext.THONGTINKHACHHANG.findOne({
 					where:{
@@ -473,7 +473,70 @@ module.exports = {
 				return acc;
 			},
 		},
-
+		updateCustomerInfo4Account:{
+			rest:{
+				method: "POST",
+				path: "/updateCustomerInfo4Account"
+			},
+			params:{
+				idAccount: {type: "string"},
+				idCustomerInfo: {type: "string"},
+			},
+			async handler({action,params,meta, ... ctx}){
+                var {idAccount, idCustomerInfo} = params;
+				idAccount = parseInt(idAccount);
+				idCustomerInfo = parseInt(idCustomerInfo);
+				const acc = dbContext.TAIKHOAN.update({
+					ID_TAIKHOAN: idAccount,
+					where:{
+						ID_TAIKHOAN: idCustomerInfo
+					}
+				})
+				return acc;
+			},
+		},
+		getAllListRental:{
+			rest:{
+				method: "POST",
+				path: "/getAllListRental"
+			},
+			params:{
+				idCustomerInfo: {type: "string"},
+			},
+			async handler({action,params,meta, ... ctx}){
+                var {idCustomerInfo} = params;
+				idCustomerInfo = parseInt(idCustomerInfo);
+				const ls = dbContext.DATCANHO.update({
+					where:{
+						ID_TT_KHACHHANG: idCustomerInfo
+					},
+					include:["ID_TT_DCH_TRANGTHAIDATCANHO"]
+				})
+				return ls;
+			},
+		},
+		updateRentalState:{
+			rest:{
+				method: "POST",
+				path: "/updateCustomerInfo4Account"
+			},
+			params:{
+				idOrder: {type: "string"},
+				idState: {type: "string"}
+			},
+			async handler({action,params,meta, ... ctx}){
+                var {idOrder,idState} = params;
+				idOrder = parseInt(idOrder);
+				idState = parseInt(idState);
+				const stateSet = dbContext.DATCANHO.update({
+					ID_TT_DCH: idState,
+					where:{
+						ID_DATCANHO: idOrder
+					}
+				})
+				return stateSet;
+			},
+		},
 		/**
 		 * Welcome, a username
 		 *
