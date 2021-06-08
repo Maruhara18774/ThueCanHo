@@ -5,6 +5,9 @@ import './nav-bar.css'
 class Navbar extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      logged: false
+    }
   }
   render() {
     return (
@@ -42,12 +45,17 @@ class Navbar extends Component {
             </li>
           </ul>
           <ul class="navbar-nav flex-row ml-md-auto d-none d-md-flex">
-            <div id="loginInfo">
+            {!this.state.logged&&this.props.isLogged?
+            <li class="nav-item active">
+            <Link to={'/customerInfor/'+this.props.id.toString()} className="gray-text mrl20">Xin chào bạn!</Link>            
+          </li>
+            :
             <li class="nav-item active ">
-              <Link to="/login" className="gray-text mrl20" ><span className="sea-text mrl5"><i class="far fa-user"></i></span>Đăng nhập</Link>
-              <Link to="/register" className="register-btn">Đăng ký</Link>
-            </li>
-            </div>
+            <Link to="/login" className="gray-text mrl20" ><span className="sea-text mrl5"><i class="far fa-user"></i></span>Đăng nhập</Link>
+            <Link to="/register" className="register-btn">Đăng ký</Link>
+          </li>
+          }
+            
           </ul>
         </div>
       </nav>

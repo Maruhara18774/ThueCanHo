@@ -2,8 +2,6 @@ import {Component,createRef} from 'react';
 import ReactDOM from 'react-dom';
 import Axios from 'axios';
 import './login.css'
-import {BrowserRouter as Router,Switch,Route, Link, BrowserRouter} from 'react-router-dom';
-import NavbarLogged from '../Components/nav-bar-logged';
 
 
 class Login extends Component{
@@ -13,7 +11,8 @@ class Login extends Component{
         this.loginPWRef = createRef();
         this.state={
             id: -1,
-            errorName: ""
+            errorName: "",
+            loginSuccess: false
         }
     }
     confirmLogin = () =>{
@@ -30,11 +29,9 @@ class Login extends Component{
                 this.setState(this);
                 if(this.state.id != 0){
                     this.state.errorName="";
+                    this.state.loginSuccess = true;
                     this.setState(this);
-                    ReactDOM.render(
-                        <NavbarLogged id= {this.state.id.toString()} name={this.loginNameRef.current.value}/>
-                        , document.getElementById('loginInfo'));
-                    this.props.history.push('/apaLst');
+                    this.props.callback(response.data)
                 }
                 else{
                     this.state.errorName="Nhập sai tên đăng nhập/ mật khẩu!";
@@ -46,38 +43,50 @@ class Login extends Component{
         
     }
     render(){
-        if(this.state.errorName==""){
+        if(this.state.loginSuccess){
             return (
                 <div className="mainZone">
                     <div className="card">
-                        <label className="titleText">Đăng nhập</label>
-                        <br/>
-                        <input className="inputBox" type = "text" placeholder="Nhập tên đăng nhập ..." ref={this.loginNameRef} ></input>
-                        <br/>
-                        <input className="inputBox" type = "password" placeholder="Nhập mật khẩu..." ref={this.loginPWRef} ></input>
-                        <br/>
-                        <div className="button" onClick={this.confirmLogin}>Đăng nhập</div>
-                    </div>
+                        <label className="titleText">Đăng nhập thành công!</label>
+                        </div>
                 </div>
                 
               );
         }
         else{
-            return (
-                <div className="mainZone">
-                    <div className="card">
-                        <label className="titleText">Đăng nhập</label>
-                        <br/>
-                        <p class="text-danger">{this.state.errorName}</p>
-                        <input className="inputBox" type = "text" placeholder="Nhập tên đăng nhập ..." ref={this.loginNameRef} ></input>
-                        <br/>
-                        <input className="inputBox" type = "password" placeholder="Nhập mật khẩu..." ref={this.loginPWRef} ></input>
-                        <br/>
-                        <div className="button" onClick={this.confirmLogin}>Đăng nhập</div>
+            if(this.state.errorName==""){
+                return (
+                    <div className="mainZone">
+                        <div className="card">
+                            <label className="titleText">Đăng nhập</label>
+                            <br/>
+                            <input className="inputBox" type = "text" placeholder="Nhập tên đăng nhập ..." ref={this.loginNameRef} ></input>
+                            <br/>
+                            <input className="inputBox" type = "password" placeholder="Nhập mật khẩu..." ref={this.loginPWRef} ></input>
+                            <br/>
+                            <div className="button" onClick={this.confirmLogin}>Đăng nhập</div>
+                        </div>
                     </div>
-                </div>
-                
-              );
+                    
+                  );
+            }
+            else{
+                return (
+                    <div className="mainZone">
+                        <div className="card">
+                            <label className="titleText">Đăng nhập</label>
+                            <br/>
+                            <p class="text-danger">{this.state.errorName}</p>
+                            <input className="inputBox" type = "text" placeholder="Nhập tên đăng nhập ..." ref={this.loginNameRef} ></input>
+                            <br/>
+                            <input className="inputBox" type = "password" placeholder="Nhập mật khẩu..." ref={this.loginPWRef} ></input>
+                            <br/>
+                            <div className="button" onClick={this.confirmLogin}>Đăng nhập</div>
+                        </div>
+                    </div>
+                    
+                  );
+            }
         }
     }
 

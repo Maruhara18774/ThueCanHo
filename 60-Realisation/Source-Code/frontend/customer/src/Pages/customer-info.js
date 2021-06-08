@@ -1,10 +1,18 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
+import {BrowserRouter as Router,Switch,Route, Link, BrowserRouter} from 'react-router-dom';
 
 export class CustomerInfoPage extends Component {
     render() {
         return (
             <div>
-                Hi, customer info page in here.
+                <ul>
+                    <li>Lịch thuê căn hộ</li>
+                    <li>Điểm thưởng</li>
+                    <li>Voucher của bạn</li>
+                    <li>Lịch sử thuê căn hộ</li>
+                    <li>Đổi mật khẩu
+                    </li>
+                </ul>
             </div>
         )
     }

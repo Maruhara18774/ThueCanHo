@@ -454,6 +454,25 @@ module.exports = {
 				return lsRoom;
 			},
 		},
+		getAccountInfo:{
+			rest:{
+				method: "POST",
+				path: "/getAccountInfo"
+			},
+			params:{
+				id: {type: "string"}
+			},
+			async handler({action,params,meta, ... ctx}){
+                var {id} = params;
+				id = parseInt(id);
+				const acc = dbContext.TAIKHOAN.findOne({
+					where:{
+						ID_TAIKHOAN: id
+					}
+				})
+				return acc;
+			},
+		},
 
 		/**
 		 * Welcome, a username
