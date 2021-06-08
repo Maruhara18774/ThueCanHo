@@ -3,11 +3,11 @@ const {Sequelize} = require('sequelize');
 
 const userDBOptions = {
     dialect: 'mssql',
-    host: 'SQL5091.site4now.net',
-    port: '1433',
-    database: 'db_a752df_rentalapartment',
-    username: 'db_a752df_rentalapartment_admin',
-    password: 'thu3c@nh0'
+    host: 'localhost',
+    port: '1400',
+    database: 'RENTALAPARTMENT',
+    username: 'sa',
+    password: '!Passw0rd'
 }
 /*
 class DatabaseContext{
