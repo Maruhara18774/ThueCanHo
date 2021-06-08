@@ -16,7 +16,7 @@ const SidebarData = [
     exact: true
   },
   {
-    key: 1,
+    key: 2,
     cFlexbox: 'flexbox-sidebar css-nb',
     cText: 'text css-nb-text',
     cNumber: 'bagde__number bagde__color bagde__pill css-bagde',
@@ -24,7 +24,6 @@ const SidebarData = [
     number: 1,
     path: "/registrationDetail/generationInformation",
     main: () => <GenerationInformation/>,
-    exact: true
   },
   {
     key: 3,

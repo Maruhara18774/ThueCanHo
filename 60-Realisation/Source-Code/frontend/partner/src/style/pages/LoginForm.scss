@@ -47,7 +47,7 @@ $font-app: Roboto, Arial, sans-serif;
             -webkit-font-smoothing: antialiased;
             color: #4c5052;
             cursor: default;
-            font-weight: 1000;
+            font-weight: 600;
           }
           input {
             background-color: rgb(236, 248, 255);
@@ -73,6 +73,8 @@ $font-app: Roboto, Arial, sans-serif;
             width: 100%;
             display: block;
             margin-bottom: 16px;
+            color: #5899d6;
+            font-weight: 600;
           }
           #btn-login {
             width: 100%;

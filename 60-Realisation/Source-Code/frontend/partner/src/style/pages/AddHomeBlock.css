@@ -1,0 +1,119 @@
+.css-3ryw7p .responsiveContainer {
+    width: 90%;
+    padding-top:30px;
+    margin: 0 auto;
+}
+body{
+    background-color: #f2f4f7;
+}
+
+.responsiveContainer{
+    width: 1000px;
+    padding-left: 26px;
+}
+
+.css-19psm70 {
+    -webkit-flex-direction: row;
+    -ms-flex-direction: row;
+    flex-direction: row;
+}
+
+.css-19psm70 {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    padding-top: 20px;
+    -webkit-flex-direction: row;
+    -ms-flex-direction: row;
+    flex-direction: row;}
+
+.css-19psm70 .card {
+    margin-right: 24px;
+}   
+
+.css-19psm70 .card {
+    padding: 16px;
+    margin-bottom: 24px;
+    background: #FFFFFF;
+    border-radius: 6px;
+    border: 2px solid #FFFFFF;
+    -webkit-flex: 1;
+    -ms-flex: 1;
+    flex: 1;
+}
+
+.css-n0mx2z {
+    font-family: Roboto,'Helvetica Neue',Arial,sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    font-size: 16px;
+    margin-right: 8px;
+}
+
+p {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.css-1d279ga {
+    font-family: Roboto,'Helvetica Neue',Arial,sans-serif;
+    font-size: 14px;
+}
+.css-1bvc4cc {
+    display: flex;
+    -webkit-box-pack: end;
+    -webkit-justify-content: flex-end;
+    -ms-flex-pack: end;
+    justify-content: flex-end;
+    margin-top: 15px;
+}
+
+.css-7mp1uz.c-btn--size-sm:not(.c-btn--no-children) {
+    min-width: 92px;}
+
+.css-19psm70 .btn--small {
+    font-size: 14px;
+    line-height: 20px;
+}
+
+.css-19psm70 .btn--primary {
+    background-color: #0194f3;
+    color: #FFFFFF;
+}
+
+.css-19psm70 .btn {
+    padding: 8px 12px;
+    font-size: 16px;
+    line-height: 24px;
+    border-radius: 6px;
+    font-weight: 700;
+    border-width: 0;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-align-items: center;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    text-align: center;
+    min-width: auto;
+}
+
+.css-7mp1uz.c-btn--size-sm .c-icon {
+    height: 14px;
+    width: 14px;
+    vertical-align: -20%;
+}
+
+.c-icon{
+    color:#FFFFFF;
+}
+
+.css-end{
+    flex: 1;
+}
+.css-btn-edit{
+    padding-top: 26px;
+}
