@@ -54,3 +54,74 @@ h2{
 .box input[type='submit']:hover{
     background: #ba7a1a;
 }
+
+
+
+.bg-login{
+    background-color: #abe9cd;
+    background-image: linear-gradient(315deg, #abe9cd 0%, #3eadcf 74%);
+    height: 100vh;
+    min-height: 100vh;
+}
+.form-login{
+    width: 250px;
+    padding: 10px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    text-align: center;
+    border-radius: 12px;
+}
+.title{
+    font-size: 24px;
+    font-weight: 700;
+    color: #40aecf;
+    border-bottom: solid #ff9823; 
+}
+.form-inner {
+    padding: 0 2px;
+}
+.form-content{
+    margin: 8px 0;
+}
+.form-label{
+    display: block;
+    font-size: 16px;
+    font-weight: 700;
+    color: #40aecf;
+    text-align: left;
+    margin-bottom: 2px;
+}
+.form-input{
+    width: 100%;
+    border: solid 2px #94daef;
+    outline: none;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: 500;
+    text-align: center;
+    padding: 1px;
+    transition: 0.5s;
+    color: #155466;
+}
+.form-input:focus{
+    box-shadow: 4px 4px #bee8f6;
+}
+.form-button{
+    width: 100%;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    text-align: center;
+    padding: 6px 0px;
+    background: #ff9823;
+    color: white;
+    transition: 0.5s;
+}
+.form-button:hover{
+    cursor: pointer;
+    background: #f08b19;
+}
