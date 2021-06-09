@@ -506,7 +506,7 @@ module.exports = {
 			async handler({action,params,meta, ... ctx}){
                 var {idCustomerInfo} = params;
 				idCustomerInfo = parseInt(idCustomerInfo);
-				const ls = dbContext.DATCANHO.update({
+				const ls = dbContext.DATCANHO.findAll({
 					where:{
 						ID_TT_KHACHHANG: idCustomerInfo
 					},
