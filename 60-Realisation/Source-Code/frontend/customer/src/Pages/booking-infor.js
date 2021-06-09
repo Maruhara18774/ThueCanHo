@@ -22,7 +22,7 @@ export default class BookingForm extends Component {
             email: "",
             phone: "",
             giaytotuythanID: "",
-            giaytotuythanType: "giấy tờ tùy thân",
+            giaytotuythanType: "Căn cước công dân",
             quocTich: "",
             gioiTinh: "Nam",
             idTK: 0,
