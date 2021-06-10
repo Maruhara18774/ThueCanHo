@@ -8,7 +8,7 @@ export class CustomerInfoPage extends Component {
         super(props);
         this.state = {
             idAccount: document.location.pathname.substring(15),
-            chooseNum: 0,
+            chooseNum: 1,
             lsRental_Past: [],
             lsRental_Future: [],
             username: "",
@@ -137,7 +137,7 @@ export class CustomerInfoPage extends Component {
                     this.getCustomerInfo();
                 })
         }
-
+        alert("Cập nhật thông tin thành công");
 
     }
     render() {

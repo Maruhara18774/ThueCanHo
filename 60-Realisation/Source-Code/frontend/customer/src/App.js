@@ -46,7 +46,7 @@ class App extends Component {
           <Route path="/promotion" component={PromotionPage}></Route>
           <Route path="/" exact component={HomePage}></Route>
           <Route path="/listApartments/:apartmentId" exact component={DetailApartment}></Route>
-          <Route path="/booking/:apartmentId" exact component={BookingForm}></Route>
+          <Route path="/booking/:apartmentId" exact render={() => <BookingForm id ={this.state.accountID}/>}></Route>
           <Route path="/changePassword/:id" exact component={ChangePasswordPage}></Route>
           <Route path="/customerInfor/:id" exact component={CustomerInfoPage}></Route>
         </Switch>
