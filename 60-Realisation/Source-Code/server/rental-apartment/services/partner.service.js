@@ -554,6 +554,37 @@ module.exports = {
 				return output;
 			},
 		},
+		getListOrder: {
+			rest:{
+				method: "POST",
+				path: "/getListOrder"
+			},
+			async handler({action, params, meta, ...ctx}){
+				const getListOrder = await dbContext.DATCANHO.findAll();
+				return getListOrder;
+			}
+		},
+		changeStatus:{
+			rest:{
+				method: "POST",
+				path: "/changeStatus"
+			},
+			params: {
+				idNha: {type: "string"}
+			},
+			async handler({action, params, meta, ...ctx}){
+				const {idNha } = params;
+				const getApat = await dbContext.NHA.findOne({
+					where: {
+						ID_NHA: idNha,
+					}
+				});
+				getApat.ID_TRANGTHAI_NHA = "3";
+				const change = await getApat.save({fields: ["ID_TRANGTHAI_NHA"]});
+
+				return change;
+			}
+		},
 		/**
 		 * Welcome, a username
 		 *
