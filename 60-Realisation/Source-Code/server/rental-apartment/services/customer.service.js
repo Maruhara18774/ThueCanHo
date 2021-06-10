@@ -574,6 +574,35 @@ module.exports = {
 				return stateSet;
 			},
 		},
+		register:{
+			rest:{
+				method: "POST",
+				path: "/register"
+			},
+			params:{
+				username: {type:"string", min:3},
+                password: {type:"string"}
+			},
+			async handler({action,params,meta, ... ctx}){
+                var {username,password} = params;
+				const check = dbContext.TAIKHOAN.findOne({
+					where:{
+						TEN_TAIKHOAN: username
+					}
+				})
+				if(check!= null){
+					return "Trùng tên tài khoản";
+				}
+				const createAccount = dbContext.TAIKHOAN.create({
+					where:{
+						TEN_TAIKHOAN: username,
+						MATKHAU: password,
+						ROLE_TAIKHOAN: Customer
+					}
+				})
+				return createAccount.ID_TAIKHOAN;
+			},
+		},
 		/**
 		 * Welcome, a username
 		 *

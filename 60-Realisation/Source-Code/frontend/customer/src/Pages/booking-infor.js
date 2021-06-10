@@ -43,6 +43,11 @@ export default class BookingForm extends Component {
             total: 0,
             // Paypal
             totalInUSD: 0,
+            // Voucher
+            voucherValid: true,
+            invalidReason: "",
+            voucherCode: "",
+            voucher: {}
         }
         this.getApartmentInfo();
         this.getCustomerInfo(this.props.id);
@@ -185,6 +190,24 @@ export default class BookingForm extends Component {
         )
 
     }
+    checkVoucher=()=>{
+        this.calcAll();
+        Axios.post("https://oka2-hv.herokuapp.com/api/list_kh", { ma: this.state.idTTKH.toString(), diachi: this.state.apartmentInfo.ID_NHA })
+        .then(response =>{
+            response.forEach(element => {
+                if(element.MaVoucher == this.state.voucherCode){
+                    this.state.voucherValid = true;
+                    this.state.voucher = element;
+                    alert("Cập nhật voucher thành công!");
+                }
+            });
+            if(this.state.voucher=={}){
+                this.state.voucherValid = false;
+                this.state.invalidReason = "Không có voucher này trong hệ thống."
+                this.setState(this);
+            }
+        })
+    }
     // Input state
     setTenKH = (event) => {
         this.state.tenKH = event.target.value;
@@ -251,6 +274,10 @@ export default class BookingForm extends Component {
         this.state.ghiChu = event.target.value;
         this.setState(this);
     }
+    setVoucherCode = (event) => {
+        this.state.voucherCode = event.target.value;
+        this.setState(this);
+    }
     getDateNow = () => {
         var today = new Date();
         var dd = String(today.getDate()).padStart(2, '0');
@@ -312,7 +339,18 @@ export default class BookingForm extends Component {
                         tongTien: this.state.total.toString(),
                         ghiChu: this.state.ghiChu,
                     }
-                    Axios.post('http://localhost:33456/api/customer/rentalApartment', sendData);
+                    if(this.state.voucher!={}){
+                        const tienGiam = Math.round((parseFloat(sendData.tongTien)*this.state.voucher.GiaTriSuDung)/100);
+                        sendData.tongTien = (parseFloat(sendData.tongTien) - tienGiam).toString();
+                        Axios.post('http://localhost:33456/api/customer/rentalApartment', sendData)
+                .then(response=>{
+                    Axios.post('https://oka2-hv.herokuapp.com/api/payment', {ma: response.data})
+                })
+                    }
+                    else{
+                        Axios.post('http://localhost:33456/api/customer/rentalApartment', sendData);
+                    }
+                    
                 }
             )
         }
@@ -337,7 +375,18 @@ export default class BookingForm extends Component {
                 tongTien: this.state.total.toString(),
                 ghiChu: this.state.ghiChu,
             }
-            Axios.post('http://localhost:33456/api/customer/rentalApartment', sendData);
+            if(this.state.voucher!={}){
+                const tienGiam = Math.round((parseFloat(sendData.tongTien)*this.state.voucher.GiaTriSuDung)/100);
+                sendData.tongTien = (parseFloat(sendData.tongTien) - tienGiam).toString();
+                Axios.post('http://localhost:33456/api/customer/rentalApartment', sendData)
+                .then(response=>{
+                    Axios.post('https://oka2-hv.herokuapp.com/api/payment', {ma: response.data})
+                })
+            }
+            else{
+                Axios.post('http://localhost:33456/api/customer/rentalApartment', sendData);
+            }
+            
         }
         this.state.currentStep = 7;
         this.setState(this);
@@ -683,18 +732,38 @@ export default class BookingForm extends Component {
                             </div>
                             <hr />
                             <div className="inputZone">
-                                <p className="title">Chọn quà tặng</p>
-                                <form>
-                                    <br />
-                                    <div className="form-row">
-                                        <div class="form-group col-md-6">
-                                            <button type="button" class="btn btn-secondary btn-lg" onClick={() => this.prevStep(this.state.currentStep)}>Trở về</button>
+                            {this.state.idTK != 0?
+                                    <div>
+                                        <p className="title">Nhập mã voucher</p>
+                                        <div className="form-row">
+                                            <div class="form-group check col-md-12 ">
+                                                    <input type="text" class="form-control" placeholder="Nhập mã voucher ..." onChange={this.setVoucherCode} required />
+                                                    {!this.state.voucherValid?<p style={{color:'red'}}>{this.state.invalidReason}</p>:<p></p>}
+                                                </div>
+                                            <div class="form-group col-md-4">
+                                                <button type="button" class="btn btn-secondary btn-lg" onClick={() => this.prevStep(this.state.currentStep)}>Trở về</button>
+                                            </div>
+                                                <div class="form-group col-md-4">
+                                                    <button type="button" class="btn btn-primary btn-lg" onClick={() => this.checkVoucher()}>Xác nhận</button>
+                                                </div>
+
+                                            <div class="form-group col-md-4">
+                                                <button type="button" class="btn btn-warning btn-lg" onClick={() => this.nextStep(this.state.currentStep)}>Bước tiếp theo</button>
+                                            </div>
                                         </div>
-                                        <div class="form-group col-md-6">
-                                            <button type="button" class="btn btn-warning btn-lg" onClick={() => this.nextStep(this.state.currentStep)}>Bước tiếp theo</button>
-                                        </div>
-                                    </div>
-                                </form>
+                                    </div>:
+                                    <div>
+                                        <p className="title">Đăng nhập và điền thông tin để sử dụng tính năng ...</p>
+                                        <form>
+                                        <div class="form-group col">
+                                                <button type="button" class="btn btn-secondary btn-lg" onClick={() => this.prevStep(this.state.currentStep)}>Trở về</button>
+                                            </div>
+
+                                            <div class="form-group col">
+                                                <button type="button" class="btn btn-warning btn-lg" onClick={() => this.nextStep(this.state.currentStep)}>Bước tiếp theo</button>
+                                            </div>
+                                        </form>
+                                    </div>}
                             </div>
                         </div>
                     </div>
@@ -811,6 +880,14 @@ export default class BookingForm extends Component {
                                         <td>Phí GTGT:</td>
                                         <th>{this.state.phiGTGT}</th>
                                     </tr>
+                                    {this.state.voucher!={}?
+                                    <tr>
+                                        <td>Voucher:</td>
+                                        <th>{this.state.voucher.MaVoucher} - {this.state.voucher.TenVoucher}</th>
+                                    </tr>:
+                                    <tr>
+                                        
+                                    </tr>}
                                     <tr>
                                         <td>Tổng cộng:</td>
                                         <th>{this.state.total}</th>
