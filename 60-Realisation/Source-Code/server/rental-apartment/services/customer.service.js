@@ -479,19 +479,35 @@ module.exports = {
 				path: "/updateCustomerInfo4Account"
 			},
 			params:{
-				idAccount: {type: "string"},
 				idCustomerInfo: {type: "string"},
+				tenKH: {type: "string"},
+				email: {type: "string"},
+				phone: {type: "string"},
+				gtttID: {type: "string"},
+				gtttType: {type: "string"},
+				quocTich: {type: "string"},
+				gioiTinh: {type: "string"},
+				idAccount: {type: "string"},
 			},
 			async handler({action,params,meta, ... ctx}){
-                var {idAccount, idCustomerInfo} = params;
-				idAccount = parseInt(idAccount);
-				idCustomerInfo = parseInt(idCustomerInfo);
-				const acc = dbContext.TAIKHOAN.update({
-					ID_TAIKHOAN: idAccount,
-					where:{
-						ID_TAIKHOAN: idCustomerInfo
+                var {idCustomerInfo, tenKH,email,phone,gtttID,gtttType,quocTich,gioiTinh,idAccount} = params;
+				const acc = dbContext.THONGTINKHACHHANG.update(
+					{
+						TEN_KHACHHANG:tenKH,
+						EMAIL: email,
+						PHONE_NUMBER:phone,
+						MA_GIAYTOTUYTHAN:gtttID,
+						LOAI_GIAYTOTUYTHAN:gtttType,
+						QUOCTICH:quocTich,
+						GIOITINH:(gioiTinh=="Nam"?false:true),
+						ID_TAIKHOAN: idAccount
+					},
+					{
+						where:{
+							ID_TT_KHACHHANG: idCustomerInfo
+						}
 					}
-				})
+				)
 				return acc;
 			},
 		},
@@ -506,7 +522,7 @@ module.exports = {
 			async handler({action,params,meta, ... ctx}){
                 var {idCustomerInfo} = params;
 				idCustomerInfo = parseInt(idCustomerInfo);
-				const ls = dbContext.DATCANHO.update({
+				const ls = dbContext.DATCANHO.findAll({
 					where:{
 						ID_TT_KHACHHANG: idCustomerInfo
 					},
@@ -534,6 +550,27 @@ module.exports = {
 						ID_DATCANHO: idOrder
 					}
 				})
+				return stateSet;
+			},
+		},
+		getCustomerInfo:{
+			rest:{
+				method: "POST",
+				path: "/getCustomerInfo"
+			},
+			params:{
+				idAccount: {type: "string"},
+			},
+			async handler({action,params,meta, ... ctx}){
+                var {idAccount} = params;
+				const stateSet = dbContext.THONGTINKHACHHANG.findOne({
+					where:{
+						ID_TAIKHOAN: idAccount
+					}
+				})
+				if(stateSet == null){
+					return 0;
+				}
 				return stateSet;
 			},
 		},

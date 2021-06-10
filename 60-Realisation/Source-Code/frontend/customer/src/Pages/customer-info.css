@@ -8,6 +8,9 @@
     width: 100%;
     margin-top: 100px;
 }
+.position-wrap tr td{
+    vertical-align: top;
+}
 .position-wrap .menu{
     width: 200px;
     list-style: none;
@@ -25,11 +28,19 @@
     padding-top: 10px;
     padding-bottom: 10px;
     padding-left: 20px;
+    cursor: pointer;
+}
+.position-wrap .menu ul li:hover{
+    background-color: gainsboro;
 }
 .position-wrap .menu ul .active{
     background-color: #3380E6;
     color: white;
 }
-.position-wrap .content{
-    background-color: aqua;
+.position-wrap .menu ul .active:hover{
+    background-color: #2a6bc0;
 }
+.position-wrap .content{
+    padding: 20px 50px 20px 50px;
+}
+
