@@ -585,22 +585,20 @@ module.exports = {
 			},
 			async handler({action,params,meta, ... ctx}){
                 var {username,password} = params;
-				const check = dbContext.TAIKHOAN.findOne({
-					where:{
-						TEN_TAIKHOAN: username
+				const check = await dbContext.TAIKHOAN.findAll();
+				check.forEach(element=>{
+					if(element.TEN_TAIKHOAN == username){
+						return "Trùng tên tài khoản";
 					}
 				})
-				if(check!= null){
-					return "Trùng tên tài khoản";
-				}
-				const createAccount = dbContext.TAIKHOAN.create({
-					where:{
-						TEN_TAIKHOAN: username,
-						MATKHAU: password,
-						ROLE_TAIKHOAN: Customer
-					}
-				})
-				return createAccount.ID_TAIKHOAN;
+					const createAccount = await dbContext.TAIKHOAN.create({
+						where:{
+							TEN_TAIKHOAN: username,
+							MATKHAU: password,
+							ROLE_TAIKHOAN: "Customer"
+						}
+					})
+					return createAccount.ID_TAIKHOAN;
 			},
 		},
 		/**

@@ -50,8 +50,10 @@ export default class BookingForm extends Component {
             voucher: {}
         }
         this.getApartmentInfo();
-        this.getCustomerInfo(this.props.id);
-        this.getAccountInfo(this.props.id);
+        if(this.props.id!= 0){
+            this.getCustomerInfo(this.props.id);
+            this.getAccountInfo(this.props.id);
+        }
     }
     // Action in form
     nextStep = (current) => {
@@ -339,7 +341,7 @@ export default class BookingForm extends Component {
                         tongTien: this.state.total.toString(),
                         ghiChu: this.state.ghiChu,
                     }
-                    if(this.state.voucher!={}){
+                    if(this.state.voucher.GiaTriSuDung != undefined){
                         const tienGiam = Math.round((parseFloat(sendData.tongTien)*this.state.voucher.GiaTriSuDung)/100);
                         sendData.tongTien = (parseFloat(sendData.tongTien) - tienGiam).toString();
                         Axios.post('http://localhost:33456/api/customer/rentalApartment', sendData)
@@ -375,7 +377,7 @@ export default class BookingForm extends Component {
                 tongTien: this.state.total.toString(),
                 ghiChu: this.state.ghiChu,
             }
-            if(this.state.voucher!={}){
+            if(this.state.voucher.GiaTriSuDung != undefined){
                 const tienGiam = Math.round((parseFloat(sendData.tongTien)*this.state.voucher.GiaTriSuDung)/100);
                 sendData.tongTien = (parseFloat(sendData.tongTien) - tienGiam).toString();
                 Axios.post('http://localhost:33456/api/customer/rentalApartment', sendData)
@@ -880,7 +882,7 @@ export default class BookingForm extends Component {
                                         <td>Phí GTGT:</td>
                                         <th>{this.state.phiGTGT}</th>
                                     </tr>
-                                    {this.state.voucher!={}?
+                                    {this.state.voucher.GiaTriSuDung != undefined?
                                     <tr>
                                         <td>Voucher:</td>
                                         <th>{this.state.voucher.MaVoucher} - {this.state.voucher.TenVoucher}</th>
