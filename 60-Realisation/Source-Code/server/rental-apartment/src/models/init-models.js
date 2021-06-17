@@ -13,6 +13,7 @@ var _LOAIPHONG = require("./LOAIPHONG");
 var _NHA = require("./NHA");
 var _NOITHAT = require("./NOITHAT");
 var _NOITHATPHONG = require("./NOITHATPHONG");
+var _PAYPALSAVED = require("./PAYPALSAVED");
 var _PHONG = require("./PHONG");
 var _QUAN = require("./QUAN");
 var _QUOCGIA = require("./QUOCGIA");
@@ -40,6 +41,7 @@ function initModels(sequelize) {
   var NHA = _NHA(sequelize, DataTypes);
   var NOITHAT = _NOITHAT(sequelize, DataTypes);
   var NOITHATPHONG = _NOITHATPHONG(sequelize, DataTypes);
+  var PAYPALSAVED = _PAYPALSAVED(sequelize, DataTypes);
   var PHONG = _PHONG(sequelize, DataTypes);
   var QUAN = _QUAN(sequelize, DataTypes);
   var QUOCGIA = _QUOCGIA(sequelize, DataTypes);
@@ -58,6 +60,8 @@ function initModels(sequelize) {
   CHITIETNOITHAT.hasMany(NOITHATPHONG, { as: "NOITHATPHONGs", foreignKey: "ID_CT_NOITHAT"});
   CHITIETCSVC.belongsTo(CSVC, { as: "ID_CSVC_CSVC", foreignKey: "ID_CSVC"});
   CSVC.hasMany(CHITIETCSVC, { as: "CHITIETCSVCs", foreignKey: "ID_CSVC"});
+  PAYPALSAVED.belongsTo(DATCANHO, { as: "ID_PAYMENT_DATCANHO", foreignKey: "ID_PAYMENT"});
+  DATCANHO.hasMany(PAYPALSAVED, { as: "PAYPALSAVEDs", foreignKey: "ID_PAYMENT"});
   PHONG.belongsTo(LOAIGIUONG, { as: "ID_LOAIGIUONG_LOAIGIUONG", foreignKey: "ID_LOAIGIUONG"});
   LOAIGIUONG.hasMany(PHONG, { as: "PHONGs", foreignKey: "ID_LOAIGIUONG"});
   NHA.belongsTo(LOAINHA, { as: "ID_LOAINHA_LOAINHA", foreignKey: "ID_LOAINHA"});
@@ -120,6 +124,7 @@ function initModels(sequelize) {
     NHA,
     NOITHAT,
     NOITHATPHONG,
+    PAYPALSAVED,
     PHONG,
     QUAN,
     QUOCGIA,

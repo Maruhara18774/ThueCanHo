@@ -306,7 +306,7 @@ export default class BookingForm extends Component {
                 this.setState(this);
             });
     }
-    handlePaypalCallback = () => {
+    handlePaypalCallback = (order) => {
         if (this.state.idTTKH == 0) {
             const sendKH = {
                 tenKH: this.state.tenKH,
@@ -346,11 +346,21 @@ export default class BookingForm extends Component {
                         sendData.tongTien = (parseFloat(sendData.tongTien) - tienGiam).toString();
                         Axios.post('http://localhost:33456/api/customer/rentalApartment', sendData)
                 .then(response=>{
-                    Axios.post('https://oka2-hv.herokuapp.com/api/payment', {ma: response.data})
+                    Axios.post('https://oka2-hv.herokuapp.com/api/payment', {ma: response.data});
+                    Axios.post('http://localhost:33456/api/customer/savedPaypalCheckout',{
+                        idPayment: response.data.toString(),
+                        code: order.id
+                    });
                 })
                     }
                     else{
-                        Axios.post('http://localhost:33456/api/customer/rentalApartment', sendData);
+                        Axios.post('http://localhost:33456/api/customer/rentalApartment', sendData)
+                        .then(response =>{
+                            Axios.post('http://localhost:33456/api/customer/savedPaypalCheckout',{
+                        idPayment: response.data.toString(),
+                        code: order.id
+                    });
+                        });
                     }
                     
                 }
@@ -383,10 +393,20 @@ export default class BookingForm extends Component {
                 Axios.post('http://localhost:33456/api/customer/rentalApartment', sendData)
                 .then(response=>{
                     Axios.post('https://oka2-hv.herokuapp.com/api/payment', {ma: response.data})
+                    Axios.post('http://localhost:33456/api/customer/savedPaypalCheckout',{
+                        idPayment: response.data.toString(),
+                        code: order.id
+                    });
                 })
             }
             else{
-                Axios.post('http://localhost:33456/api/customer/rentalApartment', sendData);
+                Axios.post('http://localhost:33456/api/customer/rentalApartment', sendData)
+                .then(response =>{
+                    Axios.post('http://localhost:33456/api/customer/savedPaypalCheckout',{
+                        idPayment: response.data.toString(),
+                        code: order.id
+                    });
+                });
             }
             
         }

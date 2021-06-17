@@ -33,11 +33,55 @@ export class CustomerInfoPage extends Component {
         Axios.post('http://localhost:33456/api/customer/getCustomerInfo', { idAccount: this.state.idAccount })
             .then(response => {
                 if (response.data != 0) {
+                    var lsFuture = [];
+                    var lsPast = [];
+                    Axios.post('http://localhost:33456/api/customer/getAllListRental',{idCustomerInfo: response.data.ID_TT_KHACHHANG.toString()})
+                    .then(response2=>{
+                        var exist = false;
+                        response2.data.forEach(item =>{
+                            /*
+                            const year = item.NGAY_DEN.substring(0,4);
+                            const month = item.NGAY_DEN.substring(5,7);
+                            const day = item.NGAY_DEN.substring(8);
+                            */
+                            const now = this.getDateNow();
+                            if(parseInt(item.NGAY_DEN.substring(0,4)<parseInt(now.substring(0,4)))){
+                                lsPast.push(item);
+                                exist = true;
+                            }
+                            else if(parseInt(item.NGAY_DEN.substring(0,4)==parseInt(now.substring(0,4)))){
+                                if(parseInt(item.NGAY_DEN.substring(5,7)<parseInt(now.substring(5,7)))){
+                                    lsPast.push(item);
+                                    exist = true;
+                                }
+                                else if(parseInt(item.NGAY_DEN.substring(5,7)==parseInt(now.substring(5,7)))){
+                                    if(parseInt(item.NGAY_DEN.substring(8)<parseInt(now.substring(8)))){
+                                        lsPast.push(item);
+                                        exist = true;
+                                    }
+                                }
+                            }
+                            if(!exist){
+                                lsFuture.push(item);
+                            }
+
+                        })
+                        
+                    })
                     this.state.customerInfo = response.data;
+                    this.state.lsRental_Future = lsFuture;
+                    this.state.lsRental_Past = lsPast;
                     this.setState(this);
-                    console.log(this.state.customerInfo)
+                    
                 }
             })
+    }
+    getDateNow = () => {
+        var today = new Date();
+        var dd = String(today.getDate()).padStart(2, '0');
+        var mm = String(today.getMonth() + 1).padStart(2, '0');
+        var yyyy = today.getFullYear();
+        return yyyy + "-" + mm + "-" + dd;
     }
     setCustomerInfoState = () => {
         this.state.idTT = this.state.customerInfo.ID_TT_KHACHHANG;

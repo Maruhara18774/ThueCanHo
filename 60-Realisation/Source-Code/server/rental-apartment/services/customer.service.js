@@ -601,6 +601,24 @@ module.exports = {
 					return createAccount.ID_TAIKHOAN;
 			},
 		},
+		savedPaypalCheckout:{
+			rest:{
+				method: "POST",
+				path: "/savedPaypalCheckout"
+			},
+			params:{
+				idPayment: {type:"string"},
+                code: {type:"string"}
+			},
+			async handler({action,params,meta, ... ctx}){
+                var {idPayment, code} = params;
+				const createPS = await dbContext.PAYPALSAVED.create({
+					ID_PAYMENT: parseInt(idPayment),
+					ID_TRANSACTION: code
+				});
+				return createPS.ID_SAVED;
+			},
+		},
 		/**
 		 * Welcome, a username
 		 *

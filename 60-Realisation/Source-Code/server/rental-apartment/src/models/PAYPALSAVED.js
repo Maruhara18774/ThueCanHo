@@ -1,35 +1,35 @@
 const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('QUAN', {
-    ID_QUAN: {
+  return sequelize.define('PAYPALSAVED', {
+    ID_SAVED: {
       autoIncrement: true,
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true
     },
-    ID_THANHPHO: {
+    ID_PAYMENT: {
       type: DataTypes.INTEGER,
       allowNull: true,
       references: {
-        model: 'THANHPHO',
-        key: 'ID_THANHPHO'
+        model: 'DATCANHO',
+        key: 'ID_DATCANHO'
       }
     },
-    TEN_QUAN: {
-      type: DataTypes.STRING(100),
+    ID_TRANSACTION: {
+      type: DataTypes.TEXT,
       allowNull: true
     }
   }, {
     sequelize,
-    tableName: 'QUAN',
+    tableName: 'PAYPALSAVED',
     schema: 'dbo',
     timestamps: false,
     indexes: [
       {
-        name: "PK__QUAN__E0775F03D24076CA",
+        name: "PK__PAYPALSA__E6FD57B35F617E0F",
         unique: true,
         fields: [
-          { name: "ID_QUAN" },
+          { name: "ID_SAVED" },
         ]
       },
     ]
