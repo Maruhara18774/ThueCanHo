@@ -88,6 +88,8 @@ function initModels(sequelize) {
   PHONG.hasMany(NOITHATPHONG, { as: "NOITHATPHONGs", foreignKey: "ID_PHONG"});
   NHA.belongsTo(QUAN, { as: "ID_QUAN_QUAN", foreignKey: "ID_QUAN"});
   QUAN.hasMany(NHA, { as: "NHAs", foreignKey: "ID_QUAN"});
+  THANHPHO.belongsTo(QUOCGIA, { as: "ID_QUOCGIA_QUOCGIum", foreignKey: "ID_QUOCGIA"});
+  QUOCGIA.hasMany(THANHPHO, { as: "THANHPHOs", foreignKey: "ID_QUOCGIA"});
   STYLENHA.belongsTo(STYLE, { as: "ID_STYLE_STYLE", foreignKey: "ID_STYLE"});
   STYLE.hasMany(STYLENHA, { as: "STYLENHAs", foreignKey: "ID_STYLE"});
   QUAN.belongsTo(THANHPHO, { as: "ID_THANHPHO_THANHPHO", foreignKey: "ID_THANHPHO"});

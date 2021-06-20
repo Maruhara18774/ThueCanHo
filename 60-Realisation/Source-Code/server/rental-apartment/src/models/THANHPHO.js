@@ -2,14 +2,18 @@ const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
   return sequelize.define('THANHPHO', {
     ID_THANHPHO: {
+      autoIncrement: true,
       type: DataTypes.INTEGER,
       allowNull: false,
-      primaryKey: true,
-      autoIncrement: true
+      primaryKey: true
     },
     ID_QUOCGIA: {
       type: DataTypes.INTEGER,
-      allowNull: true
+      allowNull: true,
+      references: {
+        model: 'QUOCGIA',
+        key: 'ID_QUOCGIA'
+      }
     },
     TEN_THANHPHO: {
       type: DataTypes.STRING(100),

@@ -7,7 +7,8 @@ module.exports = function(sequelize, DataTypes) {
     },
     TEN_TAIKHOAN: {
       type: DataTypes.STRING(100),
-      allowNull: true
+      allowNull: true,
+      unique: "UQ__TAIKHOAN__6B714C8EE9DB15DD"
     },
     MATKHAU: {
       type: DataTypes.STRING(100),
