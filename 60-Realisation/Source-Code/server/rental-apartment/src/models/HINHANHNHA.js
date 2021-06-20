@@ -2,14 +2,18 @@ const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
   return sequelize.define('HINHANHNHA', {
     ID_HINHANHNHA: {
+      autoIncrement: true,
       type: DataTypes.INTEGER,
       allowNull: false,
-      primaryKey: true,
-      autoIncrement: true
+      primaryKey: true
     },
     ID_NHA: {
       type: DataTypes.STRING(50),
-      allowNull: true
+      allowNull: true,
+      references: {
+        model: 'NHA',
+        key: 'ID_NHA'
+      }
     },
     HINHANH: {
       type: DataTypes.TEXT,
@@ -22,7 +26,7 @@ module.exports = function(sequelize, DataTypes) {
     timestamps: false,
     indexes: [
       {
-        name: "PK__HINHANHN__B4B8C4961ABF8307",
+        name: "PK__HINHANHN__B4B8C4968012F9FA",
         unique: true,
         fields: [
           { name: "ID_HINHANHNHA" },

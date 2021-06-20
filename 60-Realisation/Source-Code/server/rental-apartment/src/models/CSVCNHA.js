@@ -2,18 +2,26 @@ const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
   return sequelize.define('CSVCNHA', {
     ID_CSVC_NHA: {
+      autoIncrement: true,
       type: DataTypes.INTEGER,
       allowNull: false,
-      primaryKey: true,
-      autoIncrement: true
+      primaryKey: true
     },
     ID_CT_CSVC: {
       type: DataTypes.INTEGER,
-      allowNull: true
+      allowNull: true,
+      references: {
+        model: 'CHITIETCSVC',
+        key: 'ID_CT_CSVC'
+      }
     },
     ID_NHA: {
       type: DataTypes.STRING(50),
-      allowNull: true
+      allowNull: true,
+      references: {
+        model: 'NHA',
+        key: 'ID_NHA'
+      }
     },
     SOLUONG: {
       type: DataTypes.INTEGER,
@@ -26,7 +34,7 @@ module.exports = function(sequelize, DataTypes) {
     timestamps: false,
     indexes: [
       {
-        name: "PK__CSVCNHA__4BFFADB954505622",
+        name: "PK__CSVCNHA__4BFFADB94AA0866F",
         unique: true,
         fields: [
           { name: "ID_CSVC_NHA" },

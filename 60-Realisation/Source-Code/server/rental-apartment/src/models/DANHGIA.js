@@ -2,18 +2,26 @@ const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
   return sequelize.define('DANHGIA', {
     ID_DANHGIA: {
+      autoIncrement: true,
       type: DataTypes.INTEGER,
       allowNull: false,
-      primaryKey: true,
-      autoIncrement: true
+      primaryKey: true
     },
     ID_TT_KHACHHANG: {
       type: DataTypes.INTEGER,
-      allowNull: true
+      allowNull: true,
+      references: {
+        model: 'THONGTINKHACHHANG',
+        key: 'ID_TT_KHACHHANG'
+      }
     },
     ID_NHA: {
       type: DataTypes.STRING(50),
-      allowNull: true
+      allowNull: true,
+      references: {
+        model: 'NHA',
+        key: 'ID_NHA'
+      }
     },
     SOSAO: {
       type: DataTypes.SMALLINT,
@@ -30,7 +38,7 @@ module.exports = function(sequelize, DataTypes) {
     timestamps: false,
     indexes: [
       {
-        name: "PK__DANHGIA__D7D8AB788079CAFC",
+        name: "PK__DANHGIA__D7D8AB780F0070A9",
         unique: true,
         fields: [
           { name: "ID_DANHGIA" },

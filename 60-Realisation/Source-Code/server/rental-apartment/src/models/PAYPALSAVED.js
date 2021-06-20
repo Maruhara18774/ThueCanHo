@@ -2,14 +2,18 @@ const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
   return sequelize.define('PAYPALSAVED', {
     ID_SAVED: {
+      autoIncrement: true,
       type: DataTypes.INTEGER,
       allowNull: false,
-      primaryKey: true,
-      autoIncrement: true
+      primaryKey: true
     },
     ID_PAYMENT: {
       type: DataTypes.INTEGER,
-      allowNull: true
+      allowNull: true,
+      references: {
+        model: 'DATCANHO',
+        key: 'ID_DATCANHO'
+      }
     },
     ID_TRANSACTION: {
       type: DataTypes.TEXT,
@@ -22,7 +26,7 @@ module.exports = function(sequelize, DataTypes) {
     timestamps: false,
     indexes: [
       {
-        name: "PK__PAYPALSA__E6FD57B3133C23B3",
+        name: "PK__PAYPALSA__E6FD57B3576BA1B1",
         unique: true,
         fields: [
           { name: "ID_SAVED" },

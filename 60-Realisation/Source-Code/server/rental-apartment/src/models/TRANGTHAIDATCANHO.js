@@ -2,10 +2,10 @@ const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
   return sequelize.define('TRANGTHAIDATCANHO', {
     ID_TT_DCH: {
+      autoIncrement: true,
       type: DataTypes.INTEGER,
       allowNull: false,
-      primaryKey: true,
-      autoIncrement: true
+      primaryKey: true
     },
     TEN_TRANGTHAI: {
       type: DataTypes.STRING(100),
@@ -18,7 +18,7 @@ module.exports = function(sequelize, DataTypes) {
     timestamps: false,
     indexes: [
       {
-        name: "PK__TRANGTHA__28801B35E8BAEE92",
+        name: "PK__TRANGTHA__28801B352C253FE0",
         unique: true,
         fields: [
           { name: "ID_TT_DCH" },

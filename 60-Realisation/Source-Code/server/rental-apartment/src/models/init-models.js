@@ -54,16 +54,54 @@ function initModels(sequelize) {
   var TRANGTHAIDATCANHO = _TRANGTHAIDATCANHO(sequelize, DataTypes);
   var TRANGTHAINHA = _TRANGTHAINHA(sequelize, DataTypes);
 
+  CSVCNHA.belongsTo(CHITIETCSVC, { as: "ID_CT_CSVC_CHITIETCSVC", foreignKey: "ID_CT_CSVC"});
+  CHITIETCSVC.hasMany(CSVCNHA, { as: "CSVCNHAs", foreignKey: "ID_CT_CSVC"});
+  NOITHATPHONG.belongsTo(CHITIETNOITHAT, { as: "ID_CT_NOITHAT_CHITIETNOITHAT", foreignKey: "ID_CT_NOITHAT"});
+  CHITIETNOITHAT.hasMany(NOITHATPHONG, { as: "NOITHATPHONGs", foreignKey: "ID_CT_NOITHAT"});
+  CHITIETCSVC.belongsTo(CSVC, { as: "ID_CSVC_CSVC", foreignKey: "ID_CSVC"});
+  CSVC.hasMany(CHITIETCSVC, { as: "CHITIETCSVCs", foreignKey: "ID_CSVC"});
+  PAYPALSAVED.belongsTo(DATCANHO, { as: "ID_PAYMENT_DATCANHO", foreignKey: "ID_PAYMENT"});
+  DATCANHO.hasMany(PAYPALSAVED, { as: "PAYPALSAVEDs", foreignKey: "ID_PAYMENT"});
   PHONG.belongsTo(LOAIGIUONG, { as: "ID_LOAIGIUONG_LOAIGIUONG", foreignKey: "ID_LOAIGIUONG"});
   LOAIGIUONG.hasMany(PHONG, { as: "PHONGs", foreignKey: "ID_LOAIGIUONG"});
+  NHA.belongsTo(LOAINHA, { as: "ID_LOAINHA_LOAINHA", foreignKey: "ID_LOAINHA"});
+  LOAINHA.hasMany(NHA, { as: "NHAs", foreignKey: "ID_LOAINHA"});
   PHONG.belongsTo(LOAIPHONG, { as: "ID_LOAIPHONG_LOAIPHONG", foreignKey: "ID_LOAIPHONG"});
   LOAIPHONG.hasMany(PHONG, { as: "PHONGs", foreignKey: "ID_LOAIPHONG"});
+  CSVCNHA.belongsTo(NHA, { as: "ID_NHA_NHA", foreignKey: "ID_NHA"});
+  NHA.hasMany(CSVCNHA, { as: "CSVCNHAs", foreignKey: "ID_NHA"});
+  DANHGIA.belongsTo(NHA, { as: "ID_NHA_NHA", foreignKey: "ID_NHA"});
+  NHA.hasMany(DANHGIA, { as: "DANHGIa", foreignKey: "ID_NHA"});
+  DATCANHO.belongsTo(NHA, { as: "ID_NHA_NHA", foreignKey: "ID_NHA"});
+  NHA.hasMany(DATCANHO, { as: "DATCANHOs", foreignKey: "ID_NHA"});
+  HINHANHNHA.belongsTo(NHA, { as: "ID_NHA_NHA", foreignKey: "ID_NHA"});
+  NHA.hasMany(HINHANHNHA, { as: "HINHANHNHAs", foreignKey: "ID_NHA"});
   PHONG.belongsTo(NHA, { as: "ID_NHA_NHA", foreignKey: "ID_NHA"});
   NHA.hasMany(PHONG, { as: "PHONGs", foreignKey: "ID_NHA"});
+  STYLENHA.belongsTo(NHA, { as: "ID_NHA_NHA", foreignKey: "ID_NHA"});
+  NHA.hasMany(STYLENHA, { as: "STYLENHAs", foreignKey: "ID_NHA"});
   CHITIETNOITHAT.belongsTo(NOITHAT, { as: "ID_NOITHAT_NOITHAT", foreignKey: "ID_NOITHAT"});
   NOITHAT.hasMany(CHITIETNOITHAT, { as: "CHITIETNOITHATs", foreignKey: "ID_NOITHAT"});
   HINHANH.belongsTo(PHONG, { as: "ID_PHONG_PHONG", foreignKey: "ID_PHONG"});
   PHONG.hasMany(HINHANH, { as: "HINHANHs", foreignKey: "ID_PHONG"});
+  NOITHATPHONG.belongsTo(PHONG, { as: "ID_PHONG_PHONG", foreignKey: "ID_PHONG"});
+  PHONG.hasMany(NOITHATPHONG, { as: "NOITHATPHONGs", foreignKey: "ID_PHONG"});
+  NHA.belongsTo(QUAN, { as: "ID_QUAN_QUAN", foreignKey: "ID_QUAN"});
+  QUAN.hasMany(NHA, { as: "NHAs", foreignKey: "ID_QUAN"});
+  STYLENHA.belongsTo(STYLE, { as: "ID_STYLE_STYLE", foreignKey: "ID_STYLE"});
+  STYLE.hasMany(STYLENHA, { as: "STYLENHAs", foreignKey: "ID_STYLE"});
+  QUAN.belongsTo(THANHPHO, { as: "ID_THANHPHO_THANHPHO", foreignKey: "ID_THANHPHO"});
+  THANHPHO.hasMany(QUAN, { as: "QUANs", foreignKey: "ID_THANHPHO"});
+  NHA.belongsTo(THONGTINCHUHO, { as: "ID_TT_CHUHO_THONGTINCHUHO", foreignKey: "ID_TT_CHUHO"});
+  THONGTINCHUHO.hasMany(NHA, { as: "NHAs", foreignKey: "ID_TT_CHUHO"});
+  DANHGIA.belongsTo(THONGTINKHACHHANG, { as: "ID_TT_KHACHHANG_THONGTINKHACHHANG", foreignKey: "ID_TT_KHACHHANG"});
+  THONGTINKHACHHANG.hasMany(DANHGIA, { as: "DANHGIa", foreignKey: "ID_TT_KHACHHANG"});
+  DATCANHO.belongsTo(THONGTINKHACHHANG, { as: "ID_TT_KHACHHANG_THONGTINKHACHHANG", foreignKey: "ID_TT_KHACHHANG"});
+  THONGTINKHACHHANG.hasMany(DATCANHO, { as: "DATCANHOs", foreignKey: "ID_TT_KHACHHANG"});
+  DATCANHO.belongsTo(TRANGTHAIDATCANHO, { as: "ID_TT_DCH_TRANGTHAIDATCANHO", foreignKey: "ID_TT_DCH"});
+  TRANGTHAIDATCANHO.hasMany(DATCANHO, { as: "DATCANHOs", foreignKey: "ID_TT_DCH"});
+  NHA.belongsTo(TRANGTHAINHA, { as: "ID_TRANGTHAI_NHA_TRANGTHAINHA", foreignKey: "ID_TRANGTHAI_NHA"});
+  TRANGTHAINHA.hasMany(NHA, { as: "NHAs", foreignKey: "ID_TRANGTHAI_NHA"});
 
   return {
     CHITIETCSVC,

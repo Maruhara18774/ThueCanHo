@@ -2,14 +2,18 @@ const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
   return sequelize.define('QUAN', {
     ID_QUAN: {
+      autoIncrement: true,
       type: DataTypes.INTEGER,
       allowNull: false,
-      primaryKey: true,
-      autoIncrement: true
+      primaryKey: true
     },
     ID_THANHPHO: {
       type: DataTypes.INTEGER,
-      allowNull: true
+      allowNull: true,
+      references: {
+        model: 'THANHPHO',
+        key: 'ID_THANHPHO'
+      }
     },
     TEN_QUAN: {
       type: DataTypes.STRING(100),
@@ -22,7 +26,7 @@ module.exports = function(sequelize, DataTypes) {
     timestamps: false,
     indexes: [
       {
-        name: "PK__QUAN__E0775F03264823A8",
+        name: "PK__QUAN__E0775F03DB2F869C",
         unique: true,
         fields: [
           { name: "ID_QUAN" },
