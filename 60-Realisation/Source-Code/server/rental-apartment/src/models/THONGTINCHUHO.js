@@ -45,11 +45,7 @@ module.exports = function(sequelize, DataTypes) {
     },
     ID_TAIKHOAN: {
       type: DataTypes.INTEGER,
-      allowNull: true,
-      references: {
-        model: 'TAIKHOAN',
-        key: 'ID_TAIKHOAN'
-      }
+      allowNull: true
     }
   }, {
     sequelize,
@@ -58,7 +54,7 @@ module.exports = function(sequelize, DataTypes) {
     timestamps: false,
     indexes: [
       {
-        name: "PK__THONGTIN__1B5192F2B3CB1B83",
+        name: "PK__THONGTIN__1B5192F2507E24E5",
         unique: true,
         fields: [
           { name: "ID_TT_CHUHO" },
