@@ -13,6 +13,7 @@ var _LOAIPHONG = require("./LOAIPHONG");
 var _NHA = require("./NHA");
 var _NOITHAT = require("./NOITHAT");
 var _NOITHATPHONG = require("./NOITHATPHONG");
+var _PAYPALSAVED = require("./PAYPALSAVED");
 var _PHONG = require("./PHONG");
 var _QUAN = require("./QUAN");
 var _QUOCGIA = require("./QUOCGIA");
@@ -40,6 +41,7 @@ function initModels(sequelize) {
   var NHA = _NHA(sequelize, DataTypes);
   var NOITHAT = _NOITHAT(sequelize, DataTypes);
   var NOITHATPHONG = _NOITHATPHONG(sequelize, DataTypes);
+  var PAYPALSAVED = _PAYPALSAVED(sequelize, DataTypes);
   var PHONG = _PHONG(sequelize, DataTypes);
   var QUAN = _QUAN(sequelize, DataTypes);
   var QUOCGIA = _QUOCGIA(sequelize, DataTypes);
@@ -52,58 +54,16 @@ function initModels(sequelize) {
   var TRANGTHAIDATCANHO = _TRANGTHAIDATCANHO(sequelize, DataTypes);
   var TRANGTHAINHA = _TRANGTHAINHA(sequelize, DataTypes);
 
-  CSVCNHA.belongsTo(CHITIETCSVC, { as: "ID_CT_CSVC_CHITIETCSVC", foreignKey: "ID_CT_CSVC"});
-  CHITIETCSVC.hasMany(CSVCNHA, { as: "CSVCNHAs", foreignKey: "ID_CT_CSVC"});
-  NOITHATPHONG.belongsTo(CHITIETNOITHAT, { as: "ID_CT_NOITHAT_CHITIETNOITHAT", foreignKey: "ID_CT_NOITHAT"});
-  CHITIETNOITHAT.hasMany(NOITHATPHONG, { as: "NOITHATPHONGs", foreignKey: "ID_CT_NOITHAT"});
-  CHITIETCSVC.belongsTo(CSVC, { as: "ID_CSVC_CSVC", foreignKey: "ID_CSVC"});
-  CSVC.hasMany(CHITIETCSVC, { as: "CHITIETCSVCs", foreignKey: "ID_CSVC"});
   PHONG.belongsTo(LOAIGIUONG, { as: "ID_LOAIGIUONG_LOAIGIUONG", foreignKey: "ID_LOAIGIUONG"});
   LOAIGIUONG.hasMany(PHONG, { as: "PHONGs", foreignKey: "ID_LOAIGIUONG"});
-  NHA.belongsTo(LOAINHA, { as: "ID_LOAINHA_LOAINHA", foreignKey: "ID_LOAINHA"});
-  LOAINHA.hasMany(NHA, { as: "NHAs", foreignKey: "ID_LOAINHA"});
   PHONG.belongsTo(LOAIPHONG, { as: "ID_LOAIPHONG_LOAIPHONG", foreignKey: "ID_LOAIPHONG"});
   LOAIPHONG.hasMany(PHONG, { as: "PHONGs", foreignKey: "ID_LOAIPHONG"});
-  CSVCNHA.belongsTo(NHA, { as: "ID_NHA_NHA", foreignKey: "ID_NHA"});
-  NHA.hasMany(CSVCNHA, { as: "CSVCNHAs", foreignKey: "ID_NHA"});
-  DANHGIA.belongsTo(NHA, { as: "ID_NHA_NHA", foreignKey: "ID_NHA"});
-  NHA.hasMany(DANHGIA, { as: "DANHGIa", foreignKey: "ID_NHA"});
-  DATCANHO.belongsTo(NHA, { as: "ID_NHA_NHA", foreignKey: "ID_NHA"});
-  NHA.hasMany(DATCANHO, { as: "DATCANHOs", foreignKey: "ID_NHA"});
-  HINHANHNHA.belongsTo(NHA, { as: "ID_NHA_NHA", foreignKey: "ID_NHA"});
-  NHA.hasMany(HINHANHNHA, { as: "HINHANHNHAs", foreignKey: "ID_NHA"});
   PHONG.belongsTo(NHA, { as: "ID_NHA_NHA", foreignKey: "ID_NHA"});
   NHA.hasMany(PHONG, { as: "PHONGs", foreignKey: "ID_NHA"});
-  STYLENHA.belongsTo(NHA, { as: "ID_NHA_NHA", foreignKey: "ID_NHA"});
-  NHA.hasMany(STYLENHA, { as: "STYLENHAs", foreignKey: "ID_NHA"});
   CHITIETNOITHAT.belongsTo(NOITHAT, { as: "ID_NOITHAT_NOITHAT", foreignKey: "ID_NOITHAT"});
   NOITHAT.hasMany(CHITIETNOITHAT, { as: "CHITIETNOITHATs", foreignKey: "ID_NOITHAT"});
   HINHANH.belongsTo(PHONG, { as: "ID_PHONG_PHONG", foreignKey: "ID_PHONG"});
   PHONG.hasMany(HINHANH, { as: "HINHANHs", foreignKey: "ID_PHONG"});
-  NOITHATPHONG.belongsTo(PHONG, { as: "ID_PHONG_PHONG", foreignKey: "ID_PHONG"});
-  PHONG.hasMany(NOITHATPHONG, { as: "NOITHATPHONGs", foreignKey: "ID_PHONG"});
-  NHA.belongsTo(QUAN, { as: "ID_QUAN_QUAN", foreignKey: "ID_QUAN"});
-  QUAN.hasMany(NHA, { as: "NHAs", foreignKey: "ID_QUAN"});
-  THANHPHO.belongsTo(QUOCGIA, { as: "ID_QUOCGIA_QUOCGIum", foreignKey: "ID_QUOCGIA"});
-  QUOCGIA.hasMany(THANHPHO, { as: "THANHPHOs", foreignKey: "ID_QUOCGIA"});
-  STYLENHA.belongsTo(STYLE, { as: "ID_STYLE_STYLE", foreignKey: "ID_STYLE"});
-  STYLE.hasMany(STYLENHA, { as: "STYLENHAs", foreignKey: "ID_STYLE"});
-  DANHGIA.belongsTo(TAIKHOAN, { as: "ID_TAIKHOAN_TAIKHOAN", foreignKey: "ID_TAIKHOAN"});
-  TAIKHOAN.hasMany(DANHGIA, { as: "DANHGIa", foreignKey: "ID_TAIKHOAN"});
-  THONGTINCHUHO.belongsTo(TAIKHOAN, { as: "ID_TAIKHOAN_TAIKHOAN", foreignKey: "ID_TAIKHOAN"});
-  TAIKHOAN.hasMany(THONGTINCHUHO, { as: "THONGTINCHUHOs", foreignKey: "ID_TAIKHOAN"});
-  THONGTINKHACHHANG.belongsTo(TAIKHOAN, { as: "ID_TAIKHOAN_TAIKHOAN", foreignKey: "ID_TAIKHOAN"});
-  TAIKHOAN.hasMany(THONGTINKHACHHANG, { as: "THONGTINKHACHHANGs", foreignKey: "ID_TAIKHOAN"});
-  QUAN.belongsTo(THANHPHO, { as: "ID_THANHPHO_THANHPHO", foreignKey: "ID_THANHPHO"});
-  THANHPHO.hasMany(QUAN, { as: "QUANs", foreignKey: "ID_THANHPHO"});
-  NHA.belongsTo(THONGTINCHUHO, { as: "ID_TT_CHUHO_THONGTINCHUHO", foreignKey: "ID_TT_CHUHO"});
-  THONGTINCHUHO.hasMany(NHA, { as: "NHAs", foreignKey: "ID_TT_CHUHO"});
-  DATCANHO.belongsTo(THONGTINKHACHHANG, { as: "ID_TT_KHACHHANG_THONGTINKHACHHANG", foreignKey: "ID_TT_KHACHHANG"});
-  THONGTINKHACHHANG.hasMany(DATCANHO, { as: "DATCANHOs", foreignKey: "ID_TT_KHACHHANG"});
-  DATCANHO.belongsTo(TRANGTHAIDATCANHO, { as: "ID_TT_DCH_TRANGTHAIDATCANHO", foreignKey: "ID_TT_DCH"});
-  TRANGTHAIDATCANHO.hasMany(DATCANHO, { as: "DATCANHOs", foreignKey: "ID_TT_DCH"});
-  NHA.belongsTo(TRANGTHAINHA, { as: "ID_TRANGTHAI_NHA_TRANGTHAINHA", foreignKey: "ID_TRANGTHAI_NHA"});
-  TRANGTHAINHA.hasMany(NHA, { as: "NHAs", foreignKey: "ID_TRANGTHAI_NHA"});
 
   return {
     CHITIETCSVC,
@@ -120,6 +80,7 @@ function initModels(sequelize) {
     NHA,
     NOITHAT,
     NOITHATPHONG,
+    PAYPALSAVED,
     PHONG,
     QUAN,
     QUOCGIA,

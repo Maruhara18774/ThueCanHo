@@ -2,18 +2,14 @@ const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
   return sequelize.define('CHITIETCSVC', {
     ID_CT_CSVC: {
-      autoIncrement: true,
       type: DataTypes.INTEGER,
       allowNull: false,
-      primaryKey: true
+      primaryKey: true,
+      autoIncrement: true
     },
     ID_CSVC: {
       type: DataTypes.INTEGER,
-      allowNull: true,
-      references: {
-        model: 'CSVC',
-        key: 'ID_CSVC'
-      }
+      allowNull: true
     },
     TEN_CSVC: {
       type: DataTypes.TEXT,
@@ -26,7 +22,7 @@ module.exports = function(sequelize, DataTypes) {
     timestamps: false,
     indexes: [
       {
-        name: "PK__CHITIETC__5133F49836CCD488",
+        name: "PK__CHITIETC__5133F498D2110EBC",
         unique: true,
         fields: [
           { name: "ID_CT_CSVC" },

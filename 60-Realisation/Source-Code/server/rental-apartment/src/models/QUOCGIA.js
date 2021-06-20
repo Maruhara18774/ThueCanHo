@@ -2,10 +2,10 @@ const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
   return sequelize.define('QUOCGIA', {
     ID_QUOCGIA: {
-      autoIncrement: true,
       type: DataTypes.INTEGER,
       allowNull: false,
-      primaryKey: true
+      primaryKey: true,
+      autoIncrement: true
     },
     TEN_QUOCGIA: {
       type: DataTypes.STRING(100),
@@ -18,7 +18,7 @@ module.exports = function(sequelize, DataTypes) {
     timestamps: false,
     indexes: [
       {
-        name: "PK__QUOCGIA__F62EAC4D1E0ED1D5",
+        name: "PK__QUOCGIA__F62EAC4D628E4CC2",
         unique: true,
         fields: [
           { name: "ID_QUOCGIA" },
