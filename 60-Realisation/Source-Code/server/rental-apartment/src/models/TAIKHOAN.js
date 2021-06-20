@@ -2,15 +2,13 @@ const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
   return sequelize.define('TAIKHOAN', {
     ID_TAIKHOAN: {
-      autoIncrement: true,
       type: DataTypes.INTEGER,
-      allowNull: false,
-      primaryKey: true
+      allowNull: true
     },
     TEN_TAIKHOAN: {
       type: DataTypes.STRING(100),
       allowNull: true,
-      unique: "UQ__TAIKHOAN__6B714C8EFB6AFC73"
+      unique: "UQ__TAIKHOAN__6B714C8EE9DB15DD"
     },
     MATKHAU: {
       type: DataTypes.STRING(100),
@@ -27,14 +25,7 @@ module.exports = function(sequelize, DataTypes) {
     timestamps: false,
     indexes: [
       {
-        name: "PK__TAIKHOAN__EB942D7FE92F35AF",
-        unique: true,
-        fields: [
-          { name: "ID_TAIKHOAN" },
-        ]
-      },
-      {
-        name: "UQ__TAIKHOAN__6B714C8EFB6AFC73",
+        name: "UQ__TAIKHOAN__6B714C8EE9DB15DD",
         unique: true,
         fields: [
           { name: "TEN_TAIKHOAN" },
