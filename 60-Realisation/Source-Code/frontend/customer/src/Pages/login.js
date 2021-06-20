@@ -21,17 +21,17 @@ class Login extends Component{
             this.setState(this);
         }
         else{
-            Axios.post('http://localhost:33456/api/customer/signin',{
-                "username": this.loginNameRef.current.value,
-                "password": this.loginPWRef.current.value
+            Axios.post('https://oka1kh.azurewebsites.net/api/user/login',{
+                "email": this.loginNameRef.current.value,
+                "pass": this.loginPWRef.current.value
             }).then((response)=>{
-                this.state.id = parseInt(response.data);
+                this.state.id = parseInt(response.data.data.userId);
                 this.setState(this);
                 if(this.state.id != 0){
                     this.state.errorName="";
                     this.state.loginSuccess = true;
                     this.setState(this);
-                    this.props.callback(response.data)
+                    this.props.callback(this.state.id)
                 }
                 else{
                     this.state.errorName="Nhập sai tên đăng nhập/ mật khẩu!";
