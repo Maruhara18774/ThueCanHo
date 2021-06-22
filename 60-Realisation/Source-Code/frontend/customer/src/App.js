@@ -41,7 +41,7 @@ class App extends Component {
         </div>
         <Switch>
           <Route path="/login" render={() => <Login callback={this.SetLogged}/>}></Route>
-          <Route path="/register" component={RegisterForm}></Route>
+          <Route path="/register" render={() => <RegisterForm callback={this.SetLogged}/>}></Route>
           <Route path="/apaLst" component={ListApartment}></Route>
           <Route path="/promotion" component={PromotionPage}></Route>
           <Route path="/" exact component={HomePage}></Route>

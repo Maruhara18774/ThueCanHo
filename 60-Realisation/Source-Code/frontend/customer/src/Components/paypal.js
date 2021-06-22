@@ -22,7 +22,7 @@ export default function Paypal(props) {
         onApprove: async (data, actions) => {
           const order = await actions.order.capture();
           console.log(order);
-          props.callback();
+          props.callback(order);
         },
         onError: (err) => {
           console.log(err);
