@@ -19,7 +19,7 @@ var _QUAN = require("./QUAN");
 var _QUOCGIA = require("./QUOCGIA");
 var _STYLE = require("./STYLE");
 var _STYLENHA = require("./STYLENHA");
-var _TAIKHOAN = require("./TAIKHOAN");
+var _TAIKHOANHETHONG = require("./TAIKHOANHETHONG");
 var _THANHPHO = require("./THANHPHO");
 var _THONGTINCHUHO = require("./THONGTINCHUHO");
 var _THONGTINKHACHHANG = require("./THONGTINKHACHHANG");
@@ -47,7 +47,7 @@ function initModels(sequelize) {
   var QUOCGIA = _QUOCGIA(sequelize, DataTypes);
   var STYLE = _STYLE(sequelize, DataTypes);
   var STYLENHA = _STYLENHA(sequelize, DataTypes);
-  var TAIKHOAN = _TAIKHOAN(sequelize, DataTypes);
+  var TAIKHOANHETHONG = _TAIKHOANHETHONG(sequelize, DataTypes);
   var THANHPHO = _THANHPHO(sequelize, DataTypes);
   var THONGTINCHUHO = _THONGTINCHUHO(sequelize, DataTypes);
   var THONGTINKHACHHANG = _THONGTINKHACHHANG(sequelize, DataTypes);
@@ -126,7 +126,7 @@ function initModels(sequelize) {
     QUOCGIA,
     STYLE,
     STYLENHA,
-    TAIKHOAN,
+    TAIKHOANHETHONG,
     THANHPHO,
     THONGTINCHUHO,
     THONGTINKHACHHANG,

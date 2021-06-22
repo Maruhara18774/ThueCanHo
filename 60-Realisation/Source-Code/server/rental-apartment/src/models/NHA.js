@@ -5,7 +5,7 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.INTEGER,
       allowNull: false,
       autoIncrement: true,
-      unique: "UQ__NHA__A9654DEAA569BC40"
+      unique: "UQ__NHA__A9654DEA30AB23AF"
     },
     ID_NHA: {
       type: DataTypes.STRING(50),
@@ -111,14 +111,14 @@ module.exports = function(sequelize, DataTypes) {
     timestamps: false,
     indexes: [
       {
-        name: "PK__NHA__253B662C4DB44469",
+        name: "PK__NHA__253B662C8604DE3E",
         unique: true,
         fields: [
           { name: "ID_NHA" },
         ]
       },
       {
-        name: "UQ__NHA__A9654DEAA569BC40",
+        name: "UQ__NHA__A9654DEA30AB23AF",
         unique: true,
         fields: [
           { name: "THUTU_NHA" },
