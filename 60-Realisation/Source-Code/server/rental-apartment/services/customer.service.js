@@ -46,11 +46,11 @@ module.exports = {
 			async handler({action,params,meta, ... ctx}) {
 				const {username, password} = params;
 				// Test 1: http://localhost:3000/api/user/signin?username=demo1&password=abc123
-                const checkUser = await dbContext.TAIKHOAN.findOne({
+                const checkUser = await dbContext.TAIKHOANHETHONG.findOne({
                     where: {
-                        TEN_TAIKHOAN: username,
+                        TEN_TAIKHOAN_HT: username,
                         MATKHAU: password,
-						ROLE_TAIKHOAN: 'Customer'
+						ROLE_TAIKHOAN_HT: 'Customer'
                       }
                 });
 
@@ -62,7 +62,7 @@ module.exports = {
 					return 0;
 				}
 				else{
-					return checkUser.ID_TAIKHOAN;
+					return checkUser.ID_TAIKHOAN_HT;
 				}
 
 			}
@@ -466,9 +466,9 @@ module.exports = {
 			async handler({action,params,meta, ... ctx}){
                 var {id} = params;
 				id = parseInt(id);
-				const acc = dbContext.TAIKHOAN.findOne({
+				const acc = dbContext.TAIKHOANHETHONG.findOne({
 					where:{
-						ID_TAIKHOAN: id
+						ID_TAIKHOAN_HT: id
 					}
 				})
 				return acc;
@@ -586,20 +586,20 @@ module.exports = {
 			},
 			async handler({action,params,meta, ... ctx}){
                 var {username,password} = params;
-				const check = await dbContext.TAIKHOAN.findAll();
+				const check = await dbContext.TAIKHOANHETHONG.findAll();
 				check.forEach(element=>{
-					if(element.TEN_TAIKHOAN == username){
+					if(element.TEN_TAIKHOAN_HT == username){
 						return "Trùng tên tài khoản";
 					}
 				})
-					const createAccount = await dbContext.TAIKHOAN.create({
+					const createAccount = await dbContext.TAIKHOANHETHONG.create({
 						where:{
-							TEN_TAIKHOAN: username,
+							TEN_TAIKHOAN_HT: username,
 							MATKHAU: password,
-							ROLE_TAIKHOAN: "Customer"
+							ROLE_TAIKHOAN_HT: "Customer"
 						}
 					})
-					return createAccount.ID_TAIKHOAN;
+					return createAccount.ID_TAIKHOAN_HT;
 			},
 		},
 		savedPaypalCheckout:{

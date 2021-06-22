@@ -2,8 +2,9 @@ const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
   return sequelize.define('TAIKHOANHETHONG', {
     ID_TAIKHOAN_HT: {
-      type: DataTypes.INTEGER,
-      allowNull: true
+      type: DataTypes.STRING(50),
+      allowNull: true,
+	  primaryKey: true
     },
     TEN_TAIKHOAN_HT: {
       type: DataTypes.STRING(100),

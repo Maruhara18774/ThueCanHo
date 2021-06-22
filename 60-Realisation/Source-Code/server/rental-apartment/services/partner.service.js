@@ -77,17 +77,17 @@ module.exports = {
 				if (!username && !password) {
 					throw new MoleculerError("Không có người dùng này");
 				}
-				const checkUser = await dbContext.TAIKHOAN.findOne({
+				const checkUser = await dbContext.TAIKHOANHETHONG.findOne({
 					where: {
-						TEN_TAIKHOAN: username,
+						TEN_TAIKHOAN_HT: username,
 						MATKHAU: password,
-						ROLE_TAIKHOAN: "Partner",
+						ROLE_TAIKHOAN_HT: "Partner",
 					},
 				});
 				if (checkUser == null) {
 					return "Username or Password not correct";
 				} else {
-					return checkUser.ID_TAIKHOAN;
+					return checkUser.ID_TAIKHOAN_HT;
 				}
 			},
 		},
@@ -491,7 +491,7 @@ module.exports = {
 						"ID_LOAIGIUONG_LOAIGIUONG",
 					],
 				});
-				
+
 				return lsRoom;
 			},
 		},
