@@ -73,7 +73,7 @@ export class CustomerInfoPage extends Component {
                     this.state.customerInfo = response.data;
                     this.state.lsRental_Future = lsFuture;
                     this.state.lsRental_Past = lsPast;
-                    this.setState(this);
+                    this.setState(this,()=>{console.log(this.state.customerInfo)});
                 }
             })
     }

@@ -77,7 +77,7 @@ export default class BookingForm extends Component {
         Axios.post('http://localhost:33456/api/customer/getCustomerInfo', {
             idAccount: id.toString()
         }).then(response => {
-            if (response.data != null || response.data != "") {
+            if (response.data.ID_TT_KHACHHANG != undefined) {
                 this.state.idTTKH = response.data.ID_TT_KHACHHANG;
                 this.state.tenKH = response.data.TEN_KHACHHANG;
                 this.state.email = response.data.EMAIL;
@@ -535,7 +535,7 @@ export default class BookingForm extends Component {
                             <hr />
                             <div className="inputZone">
                                 <p className="title">Thông tin khách hàng</p>
-                                {this.props.id == 0 ?
+                                {this.state.idTTKH == 0 ?
                                     <form>
                                         {this.state.tenKH != "" ?
                                             <div class="form-row">

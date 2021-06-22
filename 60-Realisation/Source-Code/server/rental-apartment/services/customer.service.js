@@ -560,7 +560,7 @@ module.exports = {
 				path: "/getCustomerInfo"
 			},
 			params:{
-				idAccount: {type: "string"},
+				idAccount : {type: "string"}
 			},
 			async handler({action,params,meta, ... ctx}){
                 var {idAccount} = params;
@@ -618,6 +618,24 @@ module.exports = {
 					ID_TRANSACTION: code
 				});
 				return createPS.ID_SAVED;
+			},
+		},
+		getPaypalTransactionID: {
+			rest:{
+				method: "POST",
+				path: "/getPaypalTransactionID"
+			},
+			params:{
+				idOrder: {type:"string"}
+			},
+			async handler({action,params,meta, ... ctx}){
+                var {idOrder} = params;
+				const check = db.PAYPALSAVED.findOne({
+					where:{
+						ID_PAYMENT: idOrder
+					}
+				})
+				return check;
 			},
 		},
 		/**
