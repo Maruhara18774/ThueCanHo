@@ -656,6 +656,7 @@ module.exports = {
 				dienTich: { type: "string" },
 				idQuan: { type: "string" },
 				soNguoi: { type: "string" },
+				giaGiuong: {type: "string"},
 				soGiuongPhu: { type: "string" },
 				gia: { type: "string" },
 				khuyenMai: { type: "string" },
@@ -678,11 +679,16 @@ module.exports = {
 					dienTich,
 					idQuan,
 					soNguoi,
+					giaGiuong,
 					soGiuongPhu,
 					gia,
 					khuyenMai,
 					trangThai,
 				} = params;
+				const buasang = parseFloat(buaSang);
+				const khuyenmai = parseFloat(khuyenMai);
+				const giaPhong = parseFloat(gia);
+				const giagiuong =parseFloat(giaGiuong);
 				const createApartment = await dbContext.NHA.create({
 					ID_NHA: idNha,
 					ID_TT_CHUHO: idChuHo,
@@ -693,15 +699,16 @@ module.exports = {
 					CHECKOUT: checkOut,
 					KHOANGCACH_TRUNGTAMTP: khoangCachTT,
 					SOTANG: soTang,
-					PHUPHI_BUASANG: buaSang,
+					PHUPHI_BUASANG: buasang,
+					PHUPHI_GIUONGPHU: giagiuong,
 					SONHA: soNha,
 					TEN_DUONG: tenDuong,
 					DIENTICH: dienTich,
 					ID_QUAN: idQuan,
 					SO_NGUOI: soNguoi,
 					SO_GIUONGPHU: soGiuongPhu,
-					GIA: gia,
-					KHUYENMAI: khuyenMai,
+					GIA: giaPhong,
+					KHUYENMAI: khuyenmai,
 					ID_TRANGTHAI_NHA: trangThai,
 				});
 				return createApartment;
@@ -721,7 +728,6 @@ module.exports = {
 				numberBed: { type: "string" },
 				maxPer: { type: "string" },
 				maxExtraBed: { type: "string" },
-				priceExtra: { type: "string" },
 				width: { type: "string" },
 				height: { type: "string" },
 				numberRooms: { type: "string" },
@@ -736,13 +742,12 @@ module.exports = {
 					numberBed,
 					maxPer,
 					maxExtraBed,
-					priceExtra,
 					width,
 					height,
 					numberRooms,
 					descript,
 				} = params;
-
+				//const price = parseFloat(priceExtra);
 				const create = await dbContext.PHONG.create({
 					ID_NHA: idApart,
 					TEN_PHONG: roomName,
@@ -751,7 +756,6 @@ module.exports = {
 					SOGIUONG: numberBed,
 					SONGUOITOIDA: maxPer,
 					SOGIUONG_PHU: maxExtraBed,
-					GIAGIUONG_PHU: priceExtra,
 					CHIEUDAI_PHONG: width,
 					CHIEURONG_PHONG: height,
 					SOLUONG: numberRooms,
