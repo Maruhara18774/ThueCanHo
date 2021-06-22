@@ -7,7 +7,7 @@
 //
 const { MoleculerError } = require("moleculer").Errors;
 const dbContext = require("../src/DBContext")();
-
+const { Op } = require("sequelize");
 /**
  * @typedef {import('moleculer').Context} Context Moleculer's Context
  */
@@ -62,6 +62,7 @@ module.exports = {
 		 *
 		 * @returns
 		 */
+		//1
 		signin: {
 			rest: {
 				method: "POST",
@@ -76,20 +77,21 @@ module.exports = {
 				if (!username && !password) {
 					throw new MoleculerError("Không có người dùng này");
 				}
-				// Test 1: http://localhost:3000/api/partner/signin?username=a@gmail.com&password=123456
 				const checkUser = await dbContext.TAIKHOAN.findOne({
 					where: {
 						TEN_TAIKHOAN: username,
 						MATKHAU: password,
+						ROLE_TAIKHOAN: "Partner",
 					},
 				});
 				if (checkUser == null) {
-					return "Không có người dùng này";
+					return "Username or Password not correct";
 				} else {
 					return checkUser.ID_TAIKHOAN;
 				}
 			},
 		},
+		//2
 		contactRegistration: {
 			rest: {
 				method: "POST",
@@ -133,33 +135,150 @@ module.exports = {
 					MASO_THUE: taxCode,
 					ID_TAIKHOAN: idTK,
 				});
-				return createUser;
+				return createUser.ID_TT_CHUHO;
 			},
 		},
-		showApartment: {
+		//3
+		checkContactExist: {
 			rest: {
 				method: "POST",
-				path: "/showApartment",
+				path: "/checkContactExist",
 			},
 			params: {
-				idChuHo: { type: "string" },
+				idTk: { type: "string" },
 			},
 			async handler({ action, params, meta, ...ctx }) {
-				const { idChuHo } = params;
-				const show = await dbContext.THONGTINCHUHO.findAll({
-					attributes: ["TEN_CHUHO"],
+				const { idTk } = params;
+				const intId = idTk;
+				const checkID = await dbContext.THONGTINCHUHO.findOne({
 					where: {
-						ID_TT_CHUHO: idChuHo,
+						ID_TAIKHOAN: intId,
 					},
-					include: ["NHAs"],
+				});
+				return checkID.ID_TT_CHUHO;
+			},
+		},
+		//4
+		showContact: {
+			rest: {
+				method: "POST",
+				path: "/showContact",
+			},
+			params: {
+				idTk: { type: "string" },
+			},
+			async handler({ action, params, meta, ...ctx }) {
+				const { idTk } = params;
+				const intId = parseInt(idTk);
+				const show = await dbContext.THONGTINCHUHO.findOne({
+					where: {
+						ID_TAIKHOAN: intId,
+					},
 				});
 				return show;
 			},
 		},
-		showMainContact: {
+		//5
+		updateContact: {
 			rest: {
 				method: "POST",
-				path: "/showMainContact",
+				path: "/updateContact",
+			},
+			params: {
+				idTT: { type: "string" },
+				fullName: { type: "string" },
+				email: { type: "string" },
+				phoneNumber: { type: "string" },
+				idenCode: { type: "string" },
+				idenType: { type: "string" },
+				country: { type: "string" },
+				gender: { type: "string" },
+				address: { type: "string" },
+				taxCode: { type: "string" },
+			},
+			async handler({ action, params, meta, ...ctx }) {
+				const {
+					idTT,
+					fullName,
+					email,
+					phoneNumber,
+					idenCode,
+					idenType,
+					country,
+					gender,
+					address,
+					taxCode,
+				} = params;
+				const intId = parseInt(idTT);
+				const update = await dbContext.THONGTINCHUHO.update(
+					{
+						TEN_CHUHO: fullName,
+						EMAIL: email,
+						PHONE_NUMBER: phoneNumber,
+						MA_GIAYTOTUYTHAN: idenCode,
+						LOAI_GIAYTOTUYTHAN: idenType,
+						QUOCTICH: country,
+						GIOITINH: gender,
+						DIACHI: address,
+						MASO_THUE: taxCode,
+					},
+					{
+						where: {
+							ID_TT_CHUHO: intId,
+						},
+					}
+				);
+				return update;
+			},
+		},
+		//6
+		showListApartmentStatus1: {
+			rest: {
+				method: "POST",
+				path: "/showListApartmentStatus1",
+			},
+			params: {
+				idTk: { type: "string" },
+			},
+			async handler({ action, params, meta, ...ctx }) {
+				const { idTk } = params;
+				const intId = parseInt(idTk);
+				const status1 = await dbContext.THONGTINCHUHO.findAll({
+					required: false,
+					attributes: ["TEN_CHUHO"],
+					where: {
+						ID_TAIKHOAN: intId,
+					},
+					include: [
+						{
+							model: dbContext.NHA,
+							required: false,
+							as: "NHAs",
+							where: {
+								ID_TRANGTHAI_NHA: "1",
+							},
+							include: ["ID_LOAINHA_LOAINHA"],
+						},
+					],
+				});
+				const r = status1.reduce((prev, curr) => {
+					const mapped = curr.NHAs.map((p, x) => ({
+						...x,
+						ID_NHA: p.ID_NHA,
+						TEN_NHA: p.TEN_NHA,
+						TEN_LOAINHA: p.ID_LOAINHA_LOAINHA.TEN_LOAINHA,
+					}));
+					prev = prev.concat(mapped);
+					return prev;
+				}, []);
+				return r;
+			},
+		},
+		//7
+		showListApartmentStatus2: {
+			rest: {
+				method: "POST",
+				path: "/showListApartmentStatus2",
 			},
 			params: {
 				idTk: { type: "string" },
@@ -168,47 +287,161 @@ module.exports = {
 				const { idTk } = params;
 				const intId = parseInt(idTk);
 
-				const showTK = await dbContext.TAIKHOAN.findAll({
-					attributes: ["ID_TAIKHOAN"],
+				const showTK = await dbContext.THONGTINCHUHO.findAll({
+					required: false,
+					attributes: ["TEN_CHUHO"],
 					where: {
 						ID_TAIKHOAN: intId,
 					},
 					include: [
 						{
-							model: dbContext.THONGTINCHUHO,
-							as: "THONGTINCHUHOs",
-							attributes: ["TEN_CHUHO"],
-							include: ["NHAs"],
+							model: dbContext.NHA,
+							required: false,
+							as: "NHAs",
+							where: {
+								ID_TRANGTHAI_NHA: "2",
+							},
+							include: ["ID_LOAINHA_LOAINHA"],
 						},
 					],
 				});
-				return showTK;
+				const r = showTK.reduce((prev, curr) => {
+					const mapped = curr.NHAs.map((p, x) => ({
+						...x,
+						ID_NHA: p.ID_NHA,
+						TEN_NHA: p.TEN_NHA,
+						TEN_LOAINHA: p.ID_LOAINHA_LOAINHA.TEN_LOAINHA,
+					}));
+					prev = prev.concat(mapped);
+					return prev;
+				}, []);
+				return r;
 			},
 		},
+		//8
+		showListApartmentStatus3: {
+			rest: {
+				method: "POST",
+				path: "/showListApartmentStatus3",
+			},
+			params: {
+				idTk: { type: "string" },
+			},
+			async handler({ action, params, meta, ...ctx }) {
+				const { idTk } = params;
+				const intId = parseInt(idTk);
+
+				const showTK = await dbContext.THONGTINCHUHO.findAll({
+					required: false,
+					attributes: ["TEN_CHUHO"],
+					where: {
+						ID_TAIKHOAN: intId,
+					},
+					include: [
+						{
+							model: dbContext.NHA,
+							required: false,
+							as: "NHAs",
+							where: {
+								ID_TRANGTHAI_NHA: "3",
+							},
+							include: [
+								{
+									model: dbContext.LOAINHA,
+									required: false,
+									as: "ID_LOAINHA_LOAINHA",
+								},
+							],
+						},
+					],
+				});
+				//return showTK;
+				const r = showTK.reduce((prev, curr) => {
+					const mapped = curr.NHAs.map((p, x) => ({
+						...x,
+						ID_NHA: p.ID_NHA,
+						TEN_NHA: p.TEN_NHA,
+						TEN_LOAINHA: p.ID_LOAINHA_LOAINHA.TEN_LOAINHA,
+					}));
+					prev = prev.concat(mapped);
+					return prev;
+				}, []);
+				return r;
+			},
+		},
+		//9
+		deleteApartment: {
+			rest: {
+				method: "POST",
+				path: "/deleteApartment",
+			},
+			params: {
+				idNha: { type: "string" },
+			},
+			async handler({ action, params, meta, ...ctx }) {
+				const { idNha } = params;
+				const deleteApart = await dbContext.NHA.destroy({
+					where: {
+						ID_NHA: idNha,
+					},
+					force: true,
+				});
+				return deleteApart;
+			},
+		},
+		//10
+		deleteRoom: {
+			rest: {
+				method: "POST",
+				path: "/deleteRoom",
+			},
+			params: {
+				idNha: { type: "string" },
+			},
+			async handler({ action, params, meta, ...ctx }) {
+				const { idNha } = params;
+				const deleteRo = await dbContext.PHONG.destroy({
+					where: {
+						ID_NHA: idNha,
+					},
+					force: true,
+				});
+				return deleteRo;
+			},
+		},
+		//11
 		register: {
 			rest: {
 				method: "POST",
 				path: "/register",
 			},
 			params: {
-				username: { type: "string", min: 3 },
-				password: { type: "string", min: 6 },
+				username: { type: "string" },
+				password: { type: "string" },
 			},
 			async handler({ action, params, meta, ...ctx }) {
 				const { username, password } = params;
-				if (!username && !password) {
-					throw new MoleculerError(
-						"Username and Password is incorrect"
-					);
-				}
-				//http://localhost:3000/api/partner/sigin/signin?username=b@gmail.com&password=1111111
-				const createUser = await dbContext.TAIKHOAN.create({
-					TEN_TAIKHOAN: username,
-					MATKHAU: password,
+				const check = await dbContext.TAIKHOAN.count({
+					where: {
+						TEN_TAIKHOAN: {
+							[Op.like]: username,
+						},
+						MATKHAU: password,
+					},
 				});
-				return createUser;
+				if (check > 0) {
+					return "Username exited";
+				} else {
+					const createAccount = await dbContext.TAIKHOAN.create({
+						TEN_TAIKHOAN: username,
+						MATKHAU: password,
+						ROLE_TAIKHOAN: "Partner",
+					});
+					return createAccount.ID_TAIKHOAN;
+				}
 			},
 		},
+		//12
 		getListStyle: {
 			rest: {
 				method: "POST",
@@ -219,32 +452,11 @@ module.exports = {
 				return getList;
 			},
 		},
-		getApartmentPrice: {
-			rest: {
-				method: "POST",
-				path: "/getApartmentPrice",
-			},
-			params: {
-				idPrice: { type: "string" },
-			},
-			async handler({ action, params, meta, ...ctx }) {
-				let { idPrice } = params;
-				const lsPrice = await dbContext.BANGGIA.findAll();
-				let output = 0;
-				for (let i = 0; i < lsPrice.length; i++) {
-					let element = lsPrice[i];
-					if (element.ID_BANGGIA == idPrice) {
-						output = element;
-						break;
-					}
-				}
-				return output;
-			},
-		},
+		//13
 		getDetailApartment: {
 			rest: {
 				method: "GET",
-				path: "/registrationDetail/getDetailApartment",
+				path: "/getDetailApartment",
 			},
 			async handler({ action, params, meta, ...ctx }) {
 				const { id } = params;
@@ -259,6 +471,31 @@ module.exports = {
 				return checkDetail;
 			},
 		},
+		//14
+		getListRoom: {
+			rest: {
+				method: "POST",
+				path: "/getListRoom",
+			},
+			params: {
+				idApartment: { type: "string" },
+			},
+			async handler({ action, params, meta, ...ctx }) {
+				const { idApartment } = params;
+				const lsRoom = await dbContext.PHONG.findOne({
+					where: {
+						ID_NHA: idApartment,
+					},
+					include: [
+						"ID_LOAIPHONG_LOAIPHONG",
+						"ID_LOAIGIUONG_LOAIGIUONG",
+					],
+				});
+				
+				return lsRoom;
+			},
+		},
+		//15
 		getListPropFaci: {
 			rest: {
 				method: "POST",
@@ -271,6 +508,7 @@ module.exports = {
 				return getList;
 			},
 		},
+		//16
 		getListHouseFaci: {
 			rest: {
 				method: "POST",
@@ -281,6 +519,7 @@ module.exports = {
 				return getList;
 			},
 		},
+		//17
 		getListRoomFacility: {
 			rest: {
 				method: "POST",
@@ -293,6 +532,7 @@ module.exports = {
 				return getList;
 			},
 		},
+		//18
 		getListRoomType: {
 			rest: {
 				method: "POST",
@@ -303,6 +543,7 @@ module.exports = {
 				return getType;
 			},
 		},
+		//19
 		getListBedType: {
 			rest: {
 				method: "POST",
@@ -313,6 +554,7 @@ module.exports = {
 				return getType;
 			},
 		},
+		//20
 		getListApartType: {
 			rest: {
 				method: "POST",
@@ -323,24 +565,27 @@ module.exports = {
 				return listType;
 			},
 		},
+		//21
 		getTypeApart: {
 			rest: {
 				method: "POST",
 				path: "/getTypeApart",
 			},
 			params: {
-				id: {type: "string"}
+				idType: { type: "string" },
 			},
-			async handler(params, ...ctx) {
-				const {id} = params;
-				const type = dbContext.LOAINHA.findOne({
-					where:{
-						ID_LOAINHA: id
-					}
+			async handler({ action, params, meta, ...ctx }) {
+				const { idType } = params;
+				const intId = idType;
+				const type = await dbContext.LOAINHA.findOne({
+					where: {
+						ID_LOAINHA: intId,
+					},
 				});
 				return type.TEN_LOAINHA;
 			},
 		},
+		//22
 		getListCountry: {
 			rest: {
 				method: "POST",
@@ -351,6 +596,7 @@ module.exports = {
 				return listCountry;
 			},
 		},
+		//23
 		getListCity: {
 			rest: {
 				method: "POST",
@@ -369,6 +615,7 @@ module.exports = {
 				return listCity;
 			},
 		},
+		//24
 		getListDistrict: {
 			rest: {
 				method: "POST",
@@ -387,6 +634,7 @@ module.exports = {
 				return checkCity;
 			},
 		},
+		//25
 		createApartment: {
 			rest: {
 				method: "POST",
@@ -409,8 +657,8 @@ module.exports = {
 				idQuan: { type: "string" },
 				soNguoi: { type: "string" },
 				soGiuongPhu: { type: "string" },
-				gia: {type: "string"},
-				khuyenMai: {type: "string"},
+				gia: { type: "string" },
+				khuyenMai: { type: "string" },
 				trangThai: { type: "string" },
 			},
 			async handler({ action, params, meta, ...ctx }) {
@@ -454,11 +702,12 @@ module.exports = {
 					SO_GIUONGPHU: soGiuongPhu,
 					GIA: gia,
 					KHUYENMAI: khuyenMai,
-					ID_TRANGTHAI_NHA: trangThai
+					ID_TRANGTHAI_NHA: trangThai,
 				});
 				return createApartment;
 			},
 		},
+		//26
 		createRoom: {
 			rest: {
 				method: "POST",
@@ -476,7 +725,7 @@ module.exports = {
 				width: { type: "string" },
 				height: { type: "string" },
 				numberRooms: { type: "string" },
-				descript: {type: "string"}
+				descript: { type: "string" },
 			},
 			async handler({ action, params, meta, ...ctx }) {
 				const {
@@ -491,7 +740,7 @@ module.exports = {
 					width,
 					height,
 					numberRooms,
-					descript
+					descript,
 				} = params;
 
 				const create = await dbContext.PHONG.create({
@@ -511,6 +760,7 @@ module.exports = {
 				return create;
 			},
 		},
+		//27
 		getAddressApartment: {
 			rest: {
 				method: "POST",
@@ -554,36 +804,348 @@ module.exports = {
 				return output;
 			},
 		},
-		getListOrder: {
-			rest:{
+		//28
+		getListOrderNew: {
+			rest: {
 				method: "POST",
-				path: "/getListOrder"
-			},
-			async handler({action, params, meta, ...ctx}){
-				const getListOrder = await dbContext.DATCANHO.findAll();
-				return getListOrder;
-			}
-		},
-		changeStatus:{
-			rest:{
-				method: "POST",
-				path: "/changeStatus"
+				path: "/getListOrderNew",
 			},
 			params: {
-				idNha: {type: "string"}
+				idTk: { type: "string" },
 			},
-			async handler({action, params, meta, ...ctx}){
-				const {idNha } = params;
+			async handler({ action, params, meta, ...ctx }) {
+				const { idTk } = params;
+				const intId = parseInt(idTk);
+				const getIDPartner = await dbContext.THONGTINCHUHO.findAll({
+					attributes: ["ID_TT_CHUHO"],
+					where: {
+						ID_TAIKHOAN: intId,
+					},
+					include: [
+						{
+							model: dbContext.NHA,
+							as: "NHAs",
+							attributes: ["THUTU_NHA"],
+							required: false,
+							include: [
+								{
+									model: dbContext.DATCANHO,
+									as: "DATCANHOs",
+									required: false,
+									where: {
+										ID_TT_DCH: "1",
+									},
+								},
+							],
+						},
+					],
+				});
+				return getIDPartner;
+			},
+		},
+		//29
+		getListOrderAction: {
+			rest: {
+				method: "POST",
+				path: "/getListOrderAction",
+			},
+			params: {
+				idTk: { type: "string" },
+			},
+			async handler({ action, params, meta, ...ctx }) {
+				const { idTk } = params;
+				const intId = parseInt(idTk);
+				const getIDPartner = await dbContext.THONGTINCHUHO.findAll({
+					attributes: ["ID_TT_CHUHO"],
+					where: {
+						ID_TAIKHOAN: intId,
+					},
+					include: [
+						{
+							model: dbContext.NHA,
+							as: "NHAs",
+							attributes: ["THUTU_NHA"],
+							required: false,
+							include: [
+								{
+									model: dbContext.DATCANHO,
+									as: "DATCANHOs",
+									required: false,
+									where: {
+										ID_TT_DCH: "2",
+									},
+								},
+							],
+						},
+					],
+				});
+				return getIDPartner;
+			},
+		},
+		//30
+		getListOrderFinished: {
+			rest: {
+				method: "POST",
+				path: "/getListOrderFinished",
+			},
+			params: {
+				idTk: { type: "string" },
+			},
+			async handler({ action, params, meta, ...ctx }) {
+				const { idTk } = params;
+				const intId = parseInt(idTk);
+				const getIDPartner = await dbContext.THONGTINCHUHO.findAll({
+					attributes: ["ID_TT_CHUHO"],
+					where: {
+						ID_TAIKHOAN: intId,
+					},
+					include: [
+						{
+							model: dbContext.NHA,
+							as: "NHAs",
+							attributes: ["THUTU_NHA"],
+							required: false,
+							include: [
+								{
+									model: dbContext.DATCANHO,
+									as: "DATCANHOs",
+									required: false,
+									where: {
+										ID_TT_DCH: "3",
+									},
+								},
+							],
+						},
+					],
+				});
+				return getIDPartner;
+			},
+		},
+		//31
+		getListOrderCancelled: {
+			rest: {
+				method: "POST",
+				path: "/getListOrderFinished",
+			},
+			params: {
+				idTk: { type: "string" },
+			},
+			async handler({ action, params, meta, ...ctx }) {
+				const { idTk } = params;
+				const intId = parseInt(idTk);
+
+				const getIDPartner = await dbContext.THONGTINCHUHO.findAll({
+					attributes: ["ID_TT_CHUHO"],
+					where: {
+						ID_TAIKHOAN: intId,
+					},
+					include: [
+						{
+							model: dbContext.NHA,
+							as: "NHAs",
+							attributes: ["THUTU_NHA"],
+							required: false,
+							include: [
+								{
+									model: dbContext.DATCANHO,
+									as: "DATCANHOs",
+									required: false,
+									where: {
+										ID_TT_DCH: "4",
+									},
+								},
+							],
+						},
+					],
+				});
+				return getIDPartner;
+			},
+		},
+		//32
+		changeActive: {
+			rest: {
+				method: "POST",
+				path: "/changeActive",
+			},
+			params: {
+				idNha: { type: "string" },
+			},
+			async handler({ action, params, meta, ...ctx }) {
+				const { idNha } = params;
 				const getApat = await dbContext.NHA.findOne({
 					where: {
 						ID_NHA: idNha,
-					}
+					},
 				});
-				getApat.ID_TRANGTHAI_NHA = "3";
-				const change = await getApat.save({fields: ["ID_TRANGTHAI_NHA"]});
+				getApat.ID_TRANGTHAI_NHA = "2";
+				const change = await getApat.save({
+					fields: ["ID_TRANGTHAI_NHA"],
+				});
+				return change;
+			},
+		},
+		//33
+		changeStatusAction: {
+			rest: {
+				method: "POST",
+				path: "/changeStatusAction",
+			},
+			params: {
+				idOrder: { type: "string" },
+			},
+			async handler({ action, params, meta, ...ctx }) {
+				const { idOrder } = params;
+				const getStatus = await dbContext.DATCANHO.findOne({
+					where: {
+						ID_DATCANHO: idOrder,
+					},
+				});
+				getStatus.ID_TT_DCH = "2";
+				const change = await getStatus.save({
+					fields: ["ID_TT_DCH"],
+				});
+				return change;
+			},
+		},
+		//34
+		changeStatusFinished: {
+			rest: {
+				method: "POST",
+				path: "/changeStatusFinished",
+			},
+			params: {
+				idOrder: { type: "string" },
+			},
+			async handler({ action, params, meta, ...ctx }) {
+				const { idOrder } = params;
+				const getStatus = await dbContext.DATCANHO.findOne({
+					where: {
+						ID_DATCANHO: idOrder,
+					},
+				});
+				getStatus.ID_TT_DCH = "3";
+				const change = await getStatus.save({
+					fields: ["ID_TT_DCH"],
+				});
+				return change;
+			},
+		},
+		//35
+		changeStatusCancelled: {
+			rest: {
+				method: "POST",
+				path: "/changeStatusCancelled",
+			},
+			params: {
+				idOrder: { type: "string" },
+			},
+			async handler({ action, params, meta, ...ctx }) {
+				const { idOrder } = params;
+				const getStatus = await dbContext.DATCANHO.findOne({
+					where: {
+						ID_DATCANHO: idOrder,
+					},
+				});
+				getStatus.ID_TT_DCH = "4";
+				const change = await getStatus.save({
+					fields: ["ID_TT_DCH"],
+				});
+				return change;
+			},
+		},
+		//36
+		changeUnactive: {
+			rest: {
+				method: "POST",
+				path: "/changeUnactive",
+			},
+			params: {
+				idNha: { type: "string" },
+			},
+			async handler({ action, params, meta, ...ctx }) {
+				const { idNha } = params;
+				const getApat = await dbContext.NHA.findOne({
+					where: {
+						ID_NHA: idNha,
+					},
+				});
+				getApat.ID_TRANGTHAI_NHA = "1";
+				const change = await getApat.save({
+					fields: ["ID_TRANGTHAI_NHA"],
+				});
 
 				return change;
-			}
+			},
+		},
+		//37
+		changeHired: {
+			rest: {
+				method: "POST",
+				path: "/changeHired",
+			},
+			params: {
+				idNha: { type: "string" },
+			},
+			async handler({ action, params, meta, ...ctx }) {
+				const { idNha } = params;
+				const getApat = await dbContext.NHA.findOne({
+					where: {
+						ID_NHA: idNha,
+					},
+				});
+				getApat.ID_TRANGTHAI_NHA = "3";
+				const change = await getApat.save({
+					fields: ["ID_TRANGTHAI_NHA"],
+				});
+
+				return change;
+			},
+		},
+		//38
+		getDetailOrder: {
+			rest: {
+				method: "POST",
+				path: "/getDetailOrder",
+			},
+			params: {
+				idOrder: { type: "string" },
+			},
+			async handler({ action, params, meta, ...ctx }) {
+				const { idOrder } = params;
+				const intId = idOrder;
+
+				const cusinfo = await dbContext.DATCANHO.findOne({
+					where: {
+						ID_DATCANHO: intId,
+					},
+					include: ["ID_TT_KHACHHANG_THONGTINKHACHHANG"],
+				});
+				return cusinfo;
+			},
+		},
+		//39
+		checkOrderCancel: {
+			rest: {
+				method: "POST",
+				path: "/checkOrderCancel",
+			},
+			params: {
+				idOrder: { type: "string" },
+			},
+			async handler({ action, params, meta, ...ctx }) {
+				const { idOrder } = params;
+				const getOrder = await dbContext.DATCANHO.findOne({
+					where: {
+						ID_DATCANHO: idOrder,
+					},
+				});
+				const checkCancel = await dbContext.NHA.findOne({
+					where: {
+						ID_NHA: getOrder.ID_NHA,
+					},
+				});
+				return checkCancel.FREE_CANCEL;
+			},
 		},
 		/**
 		 * Welcome, a username

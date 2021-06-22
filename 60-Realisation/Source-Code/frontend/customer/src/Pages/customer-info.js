@@ -13,10 +13,10 @@ export class CustomerInfoPage extends Component {
             lsRental_Future: [],
             username: "",
             password: "",
-            input_username: "",
             input_password: "",
             input_rePassword: "",
             customerInfo: {},
+            accountInfo:{},
             // THONGTINKH
             idTT: 0,
             tenKH: "",
@@ -28,16 +28,68 @@ export class CustomerInfoPage extends Component {
             gioiTinh: "Nam",
         }
         this.getCustomerInfo();
+        this.getAccountInfo();
+        
     }
     getCustomerInfo = () => {
         Axios.post('http://localhost:33456/api/customer/getCustomerInfo', { idAccount: this.state.idAccount })
             .then(response => {
                 if (response.data != 0) {
+                    var lsFuture = [];
+                    var lsPast = [];
+                    Axios.post('http://localhost:33456/api/customer/getAllListRental',{idCustomerInfo: response.data.ID_TT_KHACHHANG.toString()})
+                    .then(response2=>{
+                        var exist = false;
+                        response2.data.forEach(item =>{
+                            /*
+                            const year = item.NGAY_DEN.substring(0,4);
+                            const month = item.NGAY_DEN.substring(5,7);
+                            const day = item.NGAY_DEN.substring(8);
+                            */
+                            const now = this.getDateNow();
+                            if(parseInt(item.NGAY_DEN.substring(0,4)<parseInt(now.substring(0,4)))){
+                                lsPast.push(item);
+                                exist = true;
+                            }
+                            else if(parseInt(item.NGAY_DEN.substring(0,4)==parseInt(now.substring(0,4)))){
+                                if(parseInt(item.NGAY_DEN.substring(5,7)<parseInt(now.substring(5,7)))){
+                                    lsPast.push(item);
+                                    exist = true;
+                                }
+                                else if(parseInt(item.NGAY_DEN.substring(5,7)==parseInt(now.substring(5,7)))){
+                                    if(parseInt(item.NGAY_DEN.substring(8)<parseInt(now.substring(8)))){
+                                        lsPast.push(item);
+                                        exist = true;
+                                    }
+                                }
+                            }
+                            if(!exist){
+                                lsFuture.push(item);
+                            }
+
+                        })
+                        
+                    })
                     this.state.customerInfo = response.data;
-                    this.setState(this);
-                    console.log(this.state.customerInfo)
+                    this.state.lsRental_Future = lsFuture;
+                    this.state.lsRental_Past = lsPast;
+                    this.setState(this,()=>{console.log(this.state.customerInfo)});
                 }
             })
+    }
+    getAccountInfo = () =>{
+        Axios.get('https://oka1kh.azurewebsites.net/api/user/'+this.state.idAccount)
+        .then(response =>{
+            this.state.accountInfo = response.data[0];
+            this.setState(this);
+        })
+    }
+    getDateNow = () => {
+        var today = new Date();
+        var dd = String(today.getDate()).padStart(2, '0');
+        var mm = String(today.getMonth() + 1).padStart(2, '0');
+        var yyyy = today.getFullYear();
+        return yyyy + "-" + mm + "-" + dd;
     }
     setCustomerInfoState = () => {
         this.state.idTT = this.state.customerInfo.ID_TT_KHACHHANG;
@@ -54,7 +106,10 @@ export class CustomerInfoPage extends Component {
         this.state.chooseNum = num;
         this.setState(this, () => {
             if (num == 0) {
-                this.setCustomerInfoState();
+                if(this.state.customerInfo.ID_TT_KHACHHANG != undefined){
+                    this.setCustomerInfoState();
+                }
+                
             }
         });
     }
@@ -99,9 +154,25 @@ export class CustomerInfoPage extends Component {
         this.state.gioiTinh = event.target.value;
         this.setState(this);
     }
+    setUsername = (event) => {
+        this.state.username = event.target.value;
+        this.setState(this);
+    }
+    setPassword = (event) => {
+        this.state.password = event.target.value;
+        this.setState(this);
+    }
+    setInputPassword = (event) => {
+        this.state.input_password = event.target.value;
+        this.setState(this);
+    }
+    setInputRePassword = (event) => {
+        this.state.input_rePassword = event.target.value;
+        this.setState(this);
+    }
     updateCustomerInfo = () => {
         
-        const sendData = (this.state.customerInfo != 0 ?
+        const sendData = (this.state.customerInfo.ID_TT_KHACHHANG != undefined ?
             {
                 idCustomerInfo: this.state.idTT.toString(),
                 tenKH: this.state.tenKH,
@@ -114,18 +185,17 @@ export class CustomerInfoPage extends Component {
                 idAccount: this.state.idAccount.toString()
             } :
             {
-                idCustomerInfo: "0",
                 tenKH: this.state.tenKH,
                 email: this.state.email,
-                phone: this.state.phone,
-                gtttID: this.state.giaytotuythanID,
-                gtttType: this.state.giaytotuythanType,
+                phoneNumber: this.state.phone,
+                maGiayTo: this.state.giaytotuythanID,
+                loaiGiayTo: this.state.giaytotuythanType,
                 quocTich: this.state.quocTich,
                 gioiTinh: this.state.gioiTinh,
-                idAccount: this.state.idAccount.toString()
+                idTK: this.state.idAccount.toString()
             })
             console.log(sendData)
-        if (this.state.customerInfo != 0) {
+        if (this.state.customerInfo.ID_TT_KHACHHANG != undefined) {
             Axios.post('http://localhost:33456/api/customer/updateCustomerInfo4Account', sendData)
                 .then(response => {
                     this.getCustomerInfo();
@@ -139,6 +209,33 @@ export class CustomerInfoPage extends Component {
         }
         alert("Cập nhật thông tin thành công");
 
+    }
+    changePassword = () =>{
+        if(this.state.username==""||this.state.password==""||this.state.input_password==""||this.state.input_rePassword==""){
+            alert("Hãy nhập đủ thông tin!");
+        }
+        else if(this.state.username != this.state.accountInfo.email||this.state.password!= this.state.accountInfo.pass){
+            alert("Thông tin đăng nhập không khớp!");
+        }
+        else if(this.state.input_password != this.state.input_rePassword){
+            alert("Nhập lại mật khẩu không khớp!");
+        }
+        else{
+            Axios.patch(`https://oka1kh.azurewebsites.net/api/user/change_pass/${this.state.idAccount}`,
+            {
+                pass: this.state.input_password,
+                repass: this.state.input_rePassword
+            })
+            .then(response =>{
+                console.log(response.data)
+                this.state.username = "";
+                this.state.password = "";
+                this.state.input_password = "";
+                this.state.input_rePassword = "";
+                this.setState(this);
+                this.getAccountInfo();
+            })
+        }
     }
     render() {
         switch (this.state.chooseNum) {
@@ -252,7 +349,27 @@ export class CustomerInfoPage extends Component {
                                     </ul>
                                 </td>
                                 <td className="content">
-                                    <p>Content</p>
+                                    <div style={{marginLeft: "25%"}}>
+                                    {this.state.lsRental_Future.length == 0?
+                                    <p>Không có dữ liệu</p> :
+                                    <p></p>   
+                                }
+                                {this.state.lsRental_Future.map((val,key)=>{
+                                    return(<ul className="rental-card">
+                                        <li>Căn hộ/ Biệt thự: <b>{val.ID_NHA}</b></li>
+                                        <li>Ngày đặt: <b>{val.NGAYDAT}</b></li>
+                                        <li>Ngày đến: <b>{val.NGAY_DEN} ({val.CHECKIN})</b></li>
+                                        <li>Ngày đi: <b>{val.NGAY_DI} ({val.CHECKOUT})</b></li>
+                                        <li>Bữa sáng: <b>{val.BUASANG}</b></li>
+                                        <li>Giường phụ: <b>{val.SO_GIUONGPHU}</b></li>
+                                        <li>Ghi chú: <b>{val.GHICHU}</b></li>
+                                        <li>Trạng thái: <b>{val.ID_TT_DCH_TRANGTHAIDATCANHO.TEN_TRANGTHAI}</b></li>
+                                        <li>Thao tác: <p className="rental-card__button">Hủy thuê</p></li>
+                                    </ul>)
+                                    
+                                })}
+                                    </div>
+                                
                                 </td>
                             </tr>
                         </table>
@@ -275,7 +392,7 @@ export class CustomerInfoPage extends Component {
                                     </ul>
                                 </td>
                                 <td className="content">
-                                    <p>Content</p>
+                                    <p>Điểm của bạn: {this.state.accountInfo.value_TotalPoint} điểm</p>
                                 </td>
                             </tr>
                         </table>
@@ -321,7 +438,13 @@ export class CustomerInfoPage extends Component {
                                     </ul>
                                 </td>
                                 <td className="content">
-                                    <p>Content</p>
+                                    {this.state.lsRental_Past.length == 0?
+                                    <p>Không có dữ liệu</p> :
+                                    <p></p>   
+                                }
+                                    {this.state.lsRental_Past.map((val,key)=>{
+
+                                    })}
                                 </td>
                             </tr>
                         </table>
@@ -347,15 +470,19 @@ export class CustomerInfoPage extends Component {
                                     <form>
                                         <div class="form-group">
                                             <label for="username">Tên đăng nhập</label>
-                                            <input type="text" class="form-control" id="username" placeholder="Nhập tên đăng nhập ..." />
+                                            <input type="text" class="form-control" id="username" placeholder="Nhập tên đăng nhập ..." onChange={this.setUsername}/>
                                         </div>
                                         <div class="form-group">
-                                            <label for="password" className="tal-left">Mật khẩu</label>
-                                            <input type="password" class="form-control" id="password" placeholder="Nhập mật khẩu ..." />
+                                            <label for="old">Mật khẩu cũ</label>
+                                            <input type="password" class="form-control" id="old" placeholder="Nhập mật khẩu ..." onChange={this.setPassword}/>
                                         </div>
                                         <div class="form-group">
-                                            <label for="re-password" className="tal-left">Nhập lại mật khẩu</label>
-                                            <input type="password" class="form-control" id="re-password" placeholder="Nhập lại mật khẩu ..." />
+                                            <label for="password" className="tal-left">Mật khẩu mới</label>
+                                            <input type="password" class="form-control" id="password" placeholder="Nhập mật khẩu ..." onChange={this.setInputPassword}/>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="re-password" className="tal-left">Nhập lại mật khẩu mới</label>
+                                            <input type="password" class="form-control" id="re-password" placeholder="Nhập lại mật khẩu ..." onChange={this.setInputRePassword}/>
                                         </div>
                                         <button class="btn btn-primary">Cập nhật</button>
                                     </form>

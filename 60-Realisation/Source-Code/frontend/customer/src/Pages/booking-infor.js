@@ -43,10 +43,17 @@ export default class BookingForm extends Component {
             total: 0,
             // Paypal
             totalInUSD: 0,
+            // Voucher
+            voucherValid: true,
+            invalidReason: "",
+            voucherCode: "",
+            voucher: {}
         }
         this.getApartmentInfo();
-        this.getCustomerInfo(this.props.id);
-        this.getAccountInfo(this.props.id);
+        if(this.props.id!= 0){
+            this.getCustomerInfo(this.props.id);
+            this.getAccountInfo(this.props.id);
+        }
     }
     // Action in form
     nextStep = (current) => {
@@ -70,7 +77,7 @@ export default class BookingForm extends Component {
         Axios.post('http://localhost:33456/api/customer/getCustomerInfo', {
             idAccount: id.toString()
         }).then(response => {
-            if (response.data != null || response.data != "") {
+            if (response.data.ID_TT_KHACHHANG != undefined) {
                 this.state.idTTKH = response.data.ID_TT_KHACHHANG;
                 this.state.tenKH = response.data.TEN_KHACHHANG;
                 this.state.email = response.data.EMAIL;
@@ -84,12 +91,11 @@ export default class BookingForm extends Component {
         })
     }
     getAccountInfo(id) {
-        Axios.post('http://localhost:33456/api/customer/getAccountInfo', {
-            id: id.toString()
-        }).then(response => {
-            if (response.data != null || response.data != "") {
-                this.state.username = response.data.TEN_TAIKHOAN;
-                this.state.password = response.data.MATKHAU;
+        Axios.get('https://oka1kh.azurewebsites.net/api/user/'+id.toString())
+        .then(response => {
+            if (response.data[0] != null || response.data[0] != "") {
+                this.state.username = response.data[0].email;
+                this.state.password = response.data[0].pass;
                 this.setState(this);
             }
         })
@@ -185,6 +191,24 @@ export default class BookingForm extends Component {
         )
 
     }
+    checkVoucher=()=>{
+        this.calcAll();
+        Axios.post("https://oka2-hv.herokuapp.com/api/list_kh", { ma: this.state.idTTKH.toString(), diachi: this.state.apartmentInfo.ID_NHA })
+        .then(response =>{
+            response.forEach(element => {
+                if(element.MaVoucher == this.state.voucherCode){
+                    this.state.voucherValid = true;
+                    this.state.voucher = element;
+                    alert("Cập nhật voucher thành công!");
+                }
+            });
+            if(this.state.voucher=={}){
+                this.state.voucherValid = false;
+                this.state.invalidReason = "Không có voucher này trong hệ thống."
+                this.setState(this);
+            }
+        })
+    }
     // Input state
     setTenKH = (event) => {
         this.state.tenKH = event.target.value;
@@ -251,6 +275,10 @@ export default class BookingForm extends Component {
         this.state.ghiChu = event.target.value;
         this.setState(this);
     }
+    setVoucherCode = (event) => {
+        this.state.voucherCode = event.target.value;
+        this.setState(this);
+    }
     getDateNow = () => {
         var today = new Date();
         var dd = String(today.getDate()).padStart(2, '0');
@@ -277,7 +305,7 @@ export default class BookingForm extends Component {
                 this.setState(this);
             });
     }
-    handlePaypalCallback = () => {
+    handlePaypalCallback = (order) => {
         if (this.state.idTTKH == 0) {
             const sendKH = {
                 tenKH: this.state.tenKH,
@@ -312,7 +340,28 @@ export default class BookingForm extends Component {
                         tongTien: this.state.total.toString(),
                         ghiChu: this.state.ghiChu,
                     }
-                    Axios.post('http://localhost:33456/api/customer/rentalApartment', sendData);
+                    if(this.state.voucher.GiaTriSuDung != undefined){
+                        const tienGiam = Math.round((parseFloat(sendData.tongTien)*this.state.voucher.GiaTriSuDung)/100);
+                        sendData.tongTien = (parseFloat(sendData.tongTien) - tienGiam).toString();
+                        Axios.post('http://localhost:33456/api/customer/rentalApartment', sendData)
+                .then(response=>{
+                    Axios.post('https://oka2-hv.herokuapp.com/api/payment', {ma: response.data});
+                    Axios.post('http://localhost:33456/api/customer/savedPaypalCheckout',{
+                        idPayment: response.data.toString(),
+                        code: order.id
+                    });
+                })
+                    }
+                    else{
+                        Axios.post('http://localhost:33456/api/customer/rentalApartment', sendData)
+                        .then(response =>{
+                            Axios.post('http://localhost:33456/api/customer/savedPaypalCheckout',{
+                        idPayment: response.data.toString(),
+                        code: order.id
+                    });
+                        });
+                    }
+                    
                 }
             )
         }
@@ -337,7 +386,115 @@ export default class BookingForm extends Component {
                 tongTien: this.state.total.toString(),
                 ghiChu: this.state.ghiChu,
             }
-            Axios.post('http://localhost:33456/api/customer/rentalApartment', sendData);
+            if(this.state.voucher.GiaTriSuDung != undefined){
+                const tienGiam = Math.round((parseFloat(sendData.tongTien)*this.state.voucher.GiaTriSuDung)/100);
+                sendData.tongTien = (parseFloat(sendData.tongTien) - tienGiam).toString();
+                Axios.post('http://localhost:33456/api/customer/rentalApartment', sendData)
+                .then(response=>{
+                    Axios.post('https://oka2-hv.herokuapp.com/api/payment', {ma: response.data})
+                    Axios.post('http://localhost:33456/api/customer/savedPaypalCheckout',{
+                        idPayment: response.data.toString(),
+                        code: order.id
+                    });
+                })
+            }
+            else{
+                Axios.post('http://localhost:33456/api/customer/rentalApartment', sendData)
+                .then(response =>{
+                    Axios.post('http://localhost:33456/api/customer/savedPaypalCheckout',{
+                        idPayment: response.data.toString(),
+                        code: order.id
+                    });
+                });
+            }
+            
+        }
+        this.state.currentStep = 7;
+        this.setState(this);
+    }
+    testRental = () =>{
+        if (this.state.idTTKH == 0) {
+            const sendKH = {
+                tenKH: this.state.tenKH,
+                email: this.state.email,
+                phoneNumber: this.state.phone,
+                maGiayTo: this.state.giaytotuythanID,
+                loaiGiayTo: this.state.giaytotuythanType,
+                quocTich: this.state.quocTich,
+                gioiTinh: this.state.gioiTinh,
+                idTK: this.state.idTK.toString(),
+            };
+            Axios.post('http://localhost:33456/api/customer/savePaymentInfo', sendKH).then(
+                (response) => {
+                    this.state.idTTKH = parseInt(response.data);
+                    this.state.checkOut_Paypal = true;
+                    this.setState(this, () => { console.log(this.state.idTTKH) });
+                    const sendData = {
+                        idNha: this.state.idApartment,
+                        //idTTKH: idTTKH.toString(),
+                        idTTKH: this.state.idTTKH.toString(),
+                        ngayDat: this.getDateNow(),
+                        checkIn: this.state.checkIn,
+                        checkOut: this.state.checkOut,
+                        ngayDen: this.state.ngayDen,
+                        ngayDi: this.state.ngayDi,
+                        tongTienPhong: this.state.totalPhong.toString(),
+                        buaSang: this.state.soBuaSang.toString(),
+                        tongTienBuaSang: this.state.totalBuaSang.toString(),
+                        soGiuongPhu: this.state.soGiuongPhu.toString(),
+                        tongTienGiuongPhu: this.state.totalGiuongPhu.toString(),
+                        phiGTGT: this.state.phiGTGT.toString(),
+                        tongTien: this.state.total.toString(),
+                        ghiChu: this.state.ghiChu,
+                    }
+                    if(this.state.voucher.GiaTriSuDung != undefined){
+                        const tienGiam = Math.round((parseFloat(sendData.tongTien)*this.state.voucher.GiaTriSuDung)/100);
+                        sendData.tongTien = (parseFloat(sendData.tongTien) - tienGiam).toString();
+                        Axios.post('http://localhost:33456/api/customer/rentalApartment', sendData)
+                .then(response=>{
+                    Axios.post('https://oka2-hv.herokuapp.com/api/payment', {ma: response.data});
+                })
+                    }
+                    else{
+                        Axios.post('http://localhost:33456/api/customer/rentalApartment', sendData)
+                    }
+                    
+                }
+            )
+        }
+        else {
+            this.state.checkOut_Paypal = true;
+            this.setState(this, () => { console.log(this.state.idTTKH) });
+            const sendData = {
+                idNha: this.state.idApartment,
+                //idTTKH: idTTKH.toString(),
+                idTTKH: this.state.idTTKH.toString(),
+                ngayDat: this.getDateNow(),
+                checkIn: this.state.checkIn,
+                checkOut: this.state.checkOut,
+                ngayDen: this.state.ngayDen,
+                ngayDi: this.state.ngayDi,
+                tongTienPhong: this.state.totalPhong.toString(),
+                buaSang: this.state.soBuaSang.toString(),
+                tongTienBuaSang: this.state.totalBuaSang.toString(),
+                soGiuongPhu: this.state.soGiuongPhu.toString(),
+                tongTienGiuongPhu: this.state.totalGiuongPhu.toString(),
+                phiGTGT: this.state.phiGTGT.toString(),
+                tongTien: this.state.total.toString(),
+                ghiChu: this.state.ghiChu,
+            }
+            if(this.state.voucher.GiaTriSuDung != undefined){
+                const tienGiam = Math.round((parseFloat(sendData.tongTien)*this.state.voucher.GiaTriSuDung)/100);
+                sendData.tongTien = (parseFloat(sendData.tongTien) - tienGiam).toString();
+                Axios.post('http://localhost:33456/api/customer/rentalApartment', sendData)
+                .then(response=>{
+                    Axios.post('https://oka2-hv.herokuapp.com/api/payment', {ma: response.data})
+                })
+            }
+            else{
+                Axios.post('http://localhost:33456/api/customer/rentalApartment', sendData)
+            }
+            
         }
         this.state.currentStep = 7;
         this.setState(this);
@@ -378,7 +535,7 @@ export default class BookingForm extends Component {
                             <hr />
                             <div className="inputZone">
                                 <p className="title">Thông tin khách hàng</p>
-                                {this.props.id == 0 ?
+                                {this.state.idTTKH == 0 ?
                                     <form>
                                         {this.state.tenKH != "" ?
                                             <div class="form-row">
@@ -683,18 +840,38 @@ export default class BookingForm extends Component {
                             </div>
                             <hr />
                             <div className="inputZone">
-                                <p className="title">Chọn quà tặng</p>
-                                <form>
-                                    <br />
-                                    <div className="form-row">
-                                        <div class="form-group col-md-6">
-                                            <button type="button" class="btn btn-secondary btn-lg" onClick={() => this.prevStep(this.state.currentStep)}>Trở về</button>
+                            {this.props.id != 0?
+                                    <div>
+                                        <p className="title">Nhập mã voucher</p>
+                                        <div className="form-row">
+                                            <div class="form-group check col-md-12 ">
+                                                    <input type="text" class="form-control" placeholder="Nhập mã voucher ..." onChange={this.setVoucherCode} required />
+                                                    {!this.state.voucherValid?<p style={{color:'red'}}>{this.state.invalidReason}</p>:<p></p>}
+                                                </div>
+                                            <div class="form-group col-md-4">
+                                                <button type="button" class="btn btn-secondary btn-lg" onClick={() => this.prevStep(this.state.currentStep)}>Trở về</button>
+                                            </div>
+                                                <div class="form-group col-md-4">
+                                                    <button type="button" class="btn btn-primary btn-lg" onClick={() => this.checkVoucher()}>Xác nhận</button>
+                                                </div>
+
+                                            <div class="form-group col-md-4">
+                                                <button type="button" class="btn btn-warning btn-lg" onClick={() => this.nextStep(this.state.currentStep)}>Bước tiếp theo</button>
+                                            </div>
                                         </div>
-                                        <div class="form-group col-md-6">
-                                            <button type="button" class="btn btn-warning btn-lg" onClick={() => this.nextStep(this.state.currentStep)}>Bước tiếp theo</button>
-                                        </div>
-                                    </div>
-                                </form>
+                                    </div>:
+                                    <div>
+                                        <p className="title">Đăng nhập và điền thông tin để sử dụng tính năng ...</p>
+                                        <form>
+                                        <div class="form-group col">
+                                                <button type="button" class="btn btn-secondary btn-lg" onClick={() => this.prevStep(this.state.currentStep)}>Trở về</button>
+                                            </div>
+
+                                            <div class="form-group col">
+                                                <button type="button" class="btn btn-warning btn-lg" onClick={() => this.nextStep(this.state.currentStep)}>Bước tiếp theo</button>
+                                            </div>
+                                        </form>
+                                    </div>}
                             </div>
                         </div>
                     </div>
@@ -811,6 +988,14 @@ export default class BookingForm extends Component {
                                         <td>Phí GTGT:</td>
                                         <th>{this.state.phiGTGT}</th>
                                     </tr>
+                                    {this.state.voucher.GiaTriSuDung != undefined?
+                                    <tr>
+                                        <td>Voucher:</td>
+                                        <th>{this.state.voucher.MaVoucher} - {this.state.voucher.TenVoucher}</th>
+                                    </tr>:
+                                    <tr>
+                                        
+                                    </tr>}
                                     <tr>
                                         <td>Tổng cộng:</td>
                                         <th>{this.state.total}</th>
@@ -818,6 +1003,9 @@ export default class BookingForm extends Component {
                                 </table>
                                 <form>
                                     <br />
+                                    <div>
+                                        <button onClick = {this.testRental}>Fast checkout</button>
+                                    </div>
                                     <div className="form-row paypal">
                                         <Paypal val={this.state.totalInUSD} name={this.state.apartmentInfo.TEN_NHA} callback={this.handlePaypalCallback} />
                                     </div>

@@ -16,7 +16,7 @@ module.exports = {
 	 * Settings
 	 */
 	settings: {
-		
+
 	},
 
 	/**
@@ -53,18 +53,18 @@ module.exports = {
 						ROLE_TAIKHOAN: 'Customer'
                       }
                 });
-				
+
                 // Create account
                 // 1 54 28
-                // localhost - 1400 
-                // npx sequelize-auto -h localhost -d RENTALAPARTMENT -u sa -x !Passw0rd -p 1400 -e mssql -o "./src/models"    
+                // localhost - 1400
+                // npx sequelize-auto -h localhost -d RENTALAPARTMENT -u sa -x !Passw0rd -p 1400 -e mssql -o "./src/models"
 				if (checkUser == null){
 					return 0;
 				}
 				else{
 					return checkUser.ID_TAIKHOAN;
 				}
-				
+
 			}
 		},
         getListApartment: {
@@ -79,8 +79,8 @@ module.exports = {
                 }
                 // Create account
                 // 1 54 28
-                // localhost - 1400 
-                // npx sequelize-auto -h localhost -d RENTALAPARTMENT -u sa -x !Passw0rd -p 1400 -e mssql -o "./src/models"    
+                // localhost - 1400
+                // npx sequelize-auto -h localhost -d RENTALAPARTMENT -u sa -x !Passw0rd -p 1400 -e mssql -o "./src/models"
 				return checkList;
 			}
 		},
@@ -91,7 +91,7 @@ module.exports = {
 			},
 			params:{
 				id: {type: "string"},
-				
+
 			},
 			async handler({action,params,meta, ... ctx}) {
                 const {id} = params;
@@ -106,12 +106,12 @@ module.exports = {
                 }
                 // Create account
                 // 1 54 28
-                // localhost - 1400 
-                // npx sequelize-auto -h localhost -d RENTALAPARTMENT -u sa -x !Passw0rd -p 1400 -e mssql -o "./src/models"    
+                // localhost - 1400
+                // npx sequelize-auto -h localhost -d RENTALAPARTMENT -u sa -x !Passw0rd -p 1400 -e mssql -o "./src/models"
 				return checkDetail;
 			}
 		},
-		
+
         searchApartmentWithText: {
 			rest: {
 				method: "POST",
@@ -160,7 +160,7 @@ module.exports = {
 								check = true;
 								break;
 							}
-							
+
 						}
 						if(check){
 							break;
@@ -170,7 +170,7 @@ module.exports = {
 						output.push(lsApartment[i]);
 					}
 				}
-				
+
 				return output;
 			}
 		},
@@ -208,7 +208,7 @@ module.exports = {
 				return output;
 			}
 		},
-		
+
 		searchApartmentWithDetail: {
 			rest: {
 				method: "POST",
@@ -255,11 +255,11 @@ module.exports = {
 					else{
 						lsApart.forEach(item =>{
 								result.push(item);
-							
+
 						})
 					}
 				}
-				
+
 				return result;
 			}
 		},
@@ -289,9 +289,9 @@ module.exports = {
 						ID_QUOCGIA: countryId
 					}
 				});
-				
+
 				return listCity;
-				
+
 			}
 		},
 		getListDistrict:{
@@ -338,6 +338,7 @@ module.exports = {
 				idTK: {type: "string"},
 			},
 			async handler({action,params,meta, ... ctx}){
+				console.log("hello")
                 var {tenKH,email,phoneNumber,maGiayTo,loaiGiayTo,quocTich,gioiTinh,idTK} = params;
 				if(parseInt(idTK)==0){
 					idTK = 1;
@@ -559,7 +560,7 @@ module.exports = {
 				path: "/getCustomerInfo"
 			},
 			params:{
-				idAccount: {type: "string"},
+				idAccount : {type: "string"}
 			},
 			async handler({action,params,meta, ... ctx}){
                 var {idAccount} = params;
@@ -572,6 +573,69 @@ module.exports = {
 					return 0;
 				}
 				return stateSet;
+			},
+		},
+		register:{
+			rest:{
+				method: "POST",
+				path: "/register"
+			},
+			params:{
+				username: {type:"string", min:3},
+                password: {type:"string"}
+			},
+			async handler({action,params,meta, ... ctx}){
+                var {username,password} = params;
+				const check = await dbContext.TAIKHOAN.findAll();
+				check.forEach(element=>{
+					if(element.TEN_TAIKHOAN == username){
+						return "Trùng tên tài khoản";
+					}
+				})
+					const createAccount = await dbContext.TAIKHOAN.create({
+						where:{
+							TEN_TAIKHOAN: username,
+							MATKHAU: password,
+							ROLE_TAIKHOAN: "Customer"
+						}
+					})
+					return createAccount.ID_TAIKHOAN;
+			},
+		},
+		savedPaypalCheckout:{
+			rest:{
+				method: "POST",
+				path: "/savedPaypalCheckout"
+			},
+			params:{
+				idPayment: {type:"string"},
+                code: {type:"string"}
+			},
+			async handler({action,params,meta, ... ctx}){
+                var {idPayment, code} = params;
+				const createPS = await dbContext.PAYPALSAVED.create({
+					ID_PAYMENT: parseInt(idPayment),
+					ID_TRANSACTION: code
+				});
+				return createPS.ID_SAVED;
+			},
+		},
+		getPaypalTransactionID: {
+			rest:{
+				method: "POST",
+				path: "/getPaypalTransactionID"
+			},
+			params:{
+				idOrder: {type:"string"}
+			},
+			async handler({action,params,meta, ... ctx}){
+                var {idOrder} = params;
+				const check = db.PAYPALSAVED.findOne({
+					where:{
+						ID_PAYMENT: idOrder
+					}
+				})
+				return check;
 			},
 		},
 		/**

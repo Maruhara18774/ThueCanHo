@@ -41,6 +41,28 @@
     background-color: #2a6bc0;
 }
 .position-wrap .content{
-    padding: 20px 50px 20px 50px;
+    padding: 20px 50px 20px 70px;
+    text-align: left;
 }
-
+.rental-card{
+    list-style: none;
+    border-style: solid;
+    border-width: 1px;
+    background-color: rgba(214, 214, 214, 0.219);
+    border-radius: 10px;
+    padding-top: 10px;
+    border-color: gainsboro;
+}
+.rental-card__button{
+    border-style: solid;
+    border-width: 1px;
+    background-color: #3380E6;
+    color: white;
+    border-radius: 10px;
+    padding: 5px;
+    width: fit-content;
+}
+.rental-card__button:hover{
+    background-color: orange;
+    cursor: pointer;
+}
