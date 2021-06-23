@@ -66,3 +66,13 @@
     width: fit-content();
     margin-left: 40%;
 }
+.voucher-card{
+    padding: 10px;
+    margin: 10px;;
+    border-radius: 10px;
+    border-style: solid;
+    border-width: 1px;
+    border-color: gainsboro;
+    background-color: #3380E6;
+    color: white;
+}

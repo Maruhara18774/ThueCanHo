@@ -21,11 +21,11 @@ class Login extends Component{
             this.setState(this);
         }
         else{
-            Axios.post('https://oka1kh.azurewebsites.net/api/user/login',{
+            Axios.post('https://gift-api-v1.herokuapp.com/customer/login',{
                 "email": this.loginNameRef.current.value,
-                "pass": this.loginPWRef.current.value
+                "mat_khau": this.loginPWRef.current.value
             }).then((response)=>{
-                this.state.id = parseInt(response.data.data.userId);
+                this.state.id = response.data.id;
                 this.setState(this);
                 if(this.state.id != 0){
                     this.state.errorName="";

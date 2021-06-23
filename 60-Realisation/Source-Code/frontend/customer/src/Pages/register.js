@@ -7,6 +7,7 @@ export class RegisterForm extends Component {
         this.loginNameRef = createRef();
         this.loginPWRef = createRef();
         this.rePasswordRef = createRef();
+        this.phoneRef = createRef();
         this.state = {
             id: -1,
             errorName: "",
@@ -24,9 +25,9 @@ export class RegisterForm extends Component {
         }
         else {
             var confirm = true;
-            Axios.get('https://oka1kh.azurewebsites.net/api/users')
+            Axios.get('https://gift-api-v1.herokuapp.com/customer/list')
                 .then(response => {
-                    response.data.Users.forEach(element => {
+                    response.data.forEach(element => {
                         if (element.email == this.loginNameRef.current.value) {
                             confirm = false;
                             this.state.errorName = "Email đã tồn tại trong hệ thống!";
@@ -35,24 +36,30 @@ export class RegisterForm extends Component {
                     });
                 })
             if (confirm) {
-                Axios.post('https://oka1kh.azurewebsites.net/api/user', {
+                Axios.post('https://gift-api-v1.herokuapp.com/customer/register', {
+                    "ten": "RentalApartment",
+                    "sdt": this.phoneRef.current.value,
                     "email": this.loginNameRef.current.value,
-                    "pass": this.loginPWRef.current.value
-                }).then((response) => {
-                    console.log(response.data);
-                    if (response.data.status == "SUCCES") {
-                        this.state.id = parseInt(response.data.created[0].userId);
-                        this.state.errorName = "";
-                        this.state.loginSuccess = true;
-                        this.setState(this, () => {
-                            this.props.callback(this.state.id);
-                        });
-                    }
-                    else {
-                        this.state.errorName = "Lỗi kết nối ...";
-                        this.setState(this);
-                    }
-                });
+                    "mat_khau": this.loginPWRef.current.value
+                })
+                    .then((response) => {
+                        console.log(response.data);
+                        if (response.data != "Success") {
+                            Axios.post('https://gift-api-v1.herokuapp.com/customer/login', {
+                                "email": this.loginNameRef.current.value,
+                                "mat_khau": this.loginPWRef.current.value
+                            }).then((response) => {
+                                this.state.id = response.data.id;
+                                this.setState(this, () => {
+                                    this.props.callback(this.state.id)
+                                });
+                            })
+                        }
+                        else {
+                            this.state.errorName = "Lỗi kết nối ...";
+                            this.setState(this);
+                        }
+                    });
             }
 
         }
@@ -77,6 +84,8 @@ export class RegisterForm extends Component {
                         <div className="card">
                             <label className="titleText">Đăng ký</label>
                             <br />
+                            <input className="inputBox" type="text" placeholder="Nhập số điện thoại ..." ref={this.phoneRef} ></input>
+                            <br />
                             <input className="inputBox" type="text" placeholder="Nhập tên đăng nhập ..." ref={this.loginNameRef} ></input>
                             <br />
                             <input className="inputBox" type="password" placeholder="Nhập mật khẩu..." ref={this.loginPWRef} ></input>
@@ -96,6 +105,8 @@ export class RegisterForm extends Component {
                             <label className="titleText">Đăng ký</label>
                             <br />
                             <p class="text-danger">{this.state.errorName}</p>
+                            <input className="inputBox" type="text" placeholder="Nhập số điện thoại ..." ref={this.phoneRef} ></input>
+                            <br />
                             <input className="inputBox" type="text" placeholder="Nhập tên đăng nhập ..." ref={this.loginNameRef} ></input>
                             <br />
                             <input className="inputBox" type="password" placeholder="Nhập mật khẩu..." ref={this.loginPWRef} ></input>
