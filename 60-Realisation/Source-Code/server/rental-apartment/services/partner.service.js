@@ -483,7 +483,7 @@ module.exports = {
 						"ID_LOAIGIUONG_LOAIGIUONG",
 					],
 				});
-
+				
 				return lsRoom;
 			},
 		},

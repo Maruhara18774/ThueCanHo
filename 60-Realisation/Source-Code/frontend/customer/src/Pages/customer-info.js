@@ -47,7 +47,7 @@ export class CustomerInfoPage extends Component {
                             const day = item.NGAY_DEN.substring(8);
                             */
                             const now = this.getDateNow();
-                            if(parseInt(item.NGAY_DEN.substring(0,4)<parseInt(now.substring(0,4)))){
+                            if(parseInt(item.NGAY_DEN.substring(0,4)<parseInt(now.substring(0,4)))||item.ID_TT_DCH == 3){
                                 lsPast.push(item);
                                 exist = true;
                             }
@@ -78,10 +78,14 @@ export class CustomerInfoPage extends Component {
             })
     }
     getAccountInfo = () =>{
-        Axios.get('https://oka1kh.azurewebsites.net/api/user/'+this.state.idAccount)
-        .then(response =>{
-            this.state.accountInfo = response.data[0];
-            this.setState(this);
+        Axios.get('https://gift-api-v1.herokuapp.com/customer/list')
+        .then(response => {
+            response.data.forEach(item =>{
+                if(item.id == this.state.idAccount){
+                    this.state.accountInfo = item;
+                    this.setState(this);
+                }
+            })
         })
     }
     getDateNow = () => {
@@ -182,7 +186,7 @@ export class CustomerInfoPage extends Component {
                 gtttType: this.state.giaytotuythanType,
                 quocTich: this.state.quocTich,
                 gioiTinh: this.state.gioiTinh,
-                idAccount: this.state.idAccount.toString()
+                idAccount: this.state.idAccount
             } :
             {
                 tenKH: this.state.tenKH,
@@ -192,7 +196,7 @@ export class CustomerInfoPage extends Component {
                 loaiGiayTo: this.state.giaytotuythanType,
                 quocTich: this.state.quocTich,
                 gioiTinh: this.state.gioiTinh,
-                idTK: this.state.idAccount.toString()
+                idTK: this.state.idAccount
             })
             console.log(sendData)
         if (this.state.customerInfo.ID_TT_KHACHHANG != undefined) {
@@ -236,6 +240,60 @@ export class CustomerInfoPage extends Component {
                 this.getAccountInfo();
             })
         }
+    }
+    refund = (order) =>{
+        Axios.post('http://localhost:33456/api/customer/updateRentalState',{
+                    idOrder: order.ID_DATCANHO.toString(),
+                    idState: "3"
+        }).then(response =>{
+            Axios.put('https://gift-api-v1.herokuapp.com/customer/updatepoint',{
+                                    khach_hang_id: this.state.idAccount,
+                                    diem_tich_luy: -Math.round((order.TONGTIEN*2)/100)
+                                })
+            this.state.lsRental_Future.pop(order);
+            this.state.lsRental_Past.push(order);
+            this.setState(this);
+            alert("Hoàn trả thành công!");
+        })
+    }
+    getDateNow = () => {
+        var today = new Date();
+        var dd = String(today.getDate()).padStart(2, '0');
+        var mm = String(today.getMonth() + 1).padStart(2, '0');
+        var yyyy = today.getFullYear();
+        return yyyy + "-" + mm + "-" + dd;
+    }
+    uncancel= (order) =>{
+        const dateNow = this.getDateNow();
+        if(parseInt(order.NGAY_DEN.substring(0,4)<parseInt(dateNow.substring(0,4)))){
+            alert("Đơn quá hạn, không thể khôi phục.");
+        }
+        else{
+            if(parseInt(order.NGAY_DEN.substring(5,7)<parseInt(dateNow.substring(5,7)))){
+                alert("Đơn quá hạn, không thể khôi phục.");
+            }
+            else{
+                if(parseInt(order.NGAY_DEN.substring(8)<parseInt(dateNow.substring(8)))){
+                    alert("Đơn quá hạn, không thể khôi phục.");
+                }
+                else{
+                    Axios.post('http://localhost:33456/api/customer/updateRentalState',{
+                        idOrder: order.ID_DATCANHO.toString(),
+                        idState: "1"
+            }).then(response =>{
+                Axios.put('https://gift-api-v1.herokuapp.com/customer/updatepoint',{
+                                    khach_hang_id: this.state.idAccount,
+                                    diem_tich_luy: Math.round((order.TONGTIEN*2)/100)
+                                })
+                this.state.lsRental_Past.pop(order);
+                this.state.lsRental_Future.push(order);
+                this.setState(this);
+                alert("Khôi phục thành công!");
+            })
+                }
+            }
+        }
+        
     }
     render() {
         switch (this.state.chooseNum) {
@@ -326,7 +384,7 @@ export class CustomerInfoPage extends Component {
                                         </div>
                                     </form>
                                     <br />
-                                    <button class="btn btn-primary" onClick={()=>this.updateCustomerInfo()}>Cập nhật</button>
+                                    <button class="btn btn-primary profie__button" onClick={()=>this.updateCustomerInfo()}>Cập nhật</button>
                                 </td>
                             </tr>
                         </table>
@@ -358,13 +416,13 @@ export class CustomerInfoPage extends Component {
                                     return(<ul className="rental-card">
                                         <li>Căn hộ/ Biệt thự: <b>{val.ID_NHA}</b></li>
                                         <li>Ngày đặt: <b>{val.NGAYDAT}</b></li>
-                                        <li>Ngày đến: <b>{val.NGAY_DEN} ({val.CHECKIN})</b></li>
-                                        <li>Ngày đi: <b>{val.NGAY_DI} ({val.CHECKOUT})</b></li>
+                                        <li>Ngày đến: <b>{val.NGAY_DEN} ({val.CHECKIN.substring(11,16)})</b></li>
+                                        <li>Ngày đi: <b>{val.NGAY_DI} ({val.CHECKOUT.substring(11,16)})</b></li>
                                         <li>Bữa sáng: <b>{val.BUASANG}</b></li>
                                         <li>Giường phụ: <b>{val.SO_GIUONGPHU}</b></li>
                                         <li>Ghi chú: <b>{val.GHICHU}</b></li>
                                         <li>Trạng thái: <b>{val.ID_TT_DCH_TRANGTHAIDATCANHO.TEN_TRANGTHAI}</b></li>
-                                        <li>Thao tác: <p className="rental-card__button">Hủy thuê</p></li>
+                                        <li>Thao tác: <p className="rental-card__button" onClick={() =>this.refund(val)}>Hủy thuê</p></li>
                                     </ul>)
                                     
                                 })}
@@ -392,7 +450,7 @@ export class CustomerInfoPage extends Component {
                                     </ul>
                                 </td>
                                 <td className="content">
-                                    <p>Điểm của bạn: {this.state.accountInfo.value_TotalPoint} điểm</p>
+                                    <p>Điểm của bạn: {this.state.accountInfo.diem_tich_luy==undefined?"0":this.state.accountInfo.diem_tich_luy} điểm</p>
                                 </td>
                             </tr>
                         </table>
@@ -443,7 +501,17 @@ export class CustomerInfoPage extends Component {
                                     <p></p>   
                                 }
                                     {this.state.lsRental_Past.map((val,key)=>{
-
+                                        return(<ul className="rental-card">
+                                        <li>Căn hộ/ Biệt thự: <b>{val.ID_NHA}</b></li>
+                                        <li>Ngày đặt: <b>{val.NGAYDAT}</b></li>
+                                        <li>Ngày đến: <b>{val.NGAY_DEN} ({val.CHECKIN.substring(11,16)})</b></li>
+                                        <li>Ngày đi: <b>{val.NGAY_DI} ({val.CHECKOUT.substring(11,16)})</b></li>
+                                        <li>Bữa sáng: <b>{val.BUASANG}</b></li>
+                                        <li>Giường phụ: <b>{val.SO_GIUONGPHU}</b></li>
+                                        <li>Ghi chú: <b>{val.GHICHU}</b></li>
+                                        <li>Trạng thái: <b>{val.ID_TT_DCH_TRANGTHAIDATCANHO.TEN_TRANGTHAI}</b></li>
+                                        <li>Thao tác: <p className="rental-card__button" onClick={()=>this.uncancel(val)}>Khôi phục</p></li>
+                                    </ul>)
                                     })}
                                 </td>
                             </tr>
