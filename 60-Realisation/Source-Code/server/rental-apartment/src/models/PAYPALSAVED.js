@@ -1,27 +1,35 @@
 const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('CSVC', {
-    ID_CSVC: {
+  return sequelize.define('PAYPALSAVED', {
+    ID_SAVED: {
       autoIncrement: true,
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true
     },
-    TEN_CSVC: {
+    ID_PAYMENT: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      references: {
+        model: 'DATCANHO',
+        key: 'ID_DATCANHO'
+      }
+    },
+    ID_TRANSACTION: {
       type: DataTypes.TEXT,
       allowNull: true
     }
   }, {
     sequelize,
-    tableName: 'CSVC',
+    tableName: 'PAYPALSAVED',
     schema: 'dbo',
     timestamps: false,
     indexes: [
       {
-        name: "PK__CSVC__7F901212894D9490",
+        name: "PK__PAYPALSA__E6FD57B39F644554",
         unique: true,
         fields: [
-          { name: "ID_CSVC" },
+          { name: "ID_SAVED" },
         ]
       },
     ]

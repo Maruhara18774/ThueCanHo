@@ -16,7 +16,7 @@ module.exports = {
 	 * Settings
 	 */
 	settings: {
-		
+
 	},
 
 	/**
@@ -49,24 +49,24 @@ module.exports = {
                     throw new MoleculerError("Không có người dùng này");
                 }
 				// Test 1: http://localhost:3000/api/user/signin?username=demo1&password=abc123
-                const checkUser = await dbContext.TAIKHOAN.findOne({
+                const checkUser = await dbContext.TAIKHOANHETHONG.findOne({
                     where: {
-                        TEN_TAIKHOAN: username,
+                        TEN_TAIKHOAN_HT: username,
                         MATKHAU: password
                       }
                 });
-				
+
                 // Create account
                 // 1 54 28
-                // localhost - 1400 
-                // npx sequelize-auto -h localhost -d RENTALAPARTMENT -u sa -x !Passw0rd -p 1400 -e mssql -o "./src/models"    
+                // localhost - 1400
+                // npx sequelize-auto -h localhost -d RENTALAPARTMENT -u sa -x !Passw0rd -p 1400 -e mssql -o "./src/models"
 				if (checkUser == null){
 					return "Không có người dùng này";
 				}
 				else{
-					return checkUser.ID_TAIKHOAN;
+					return checkUser.ID_TAIKHOAN_HT;
 				}
-				
+
 			}
 		},
 		/*-------------------------------[Get] List of Account------------------------------*/
@@ -76,7 +76,7 @@ module.exports = {
 				path: "/getListAccount"
 			},
 			async handler() {
-                const checkList = await dbContext.TAIKHOAN.findAll();
+                const checkList = await dbContext.TAIKHOANHETHONG.findAll();
                 if (checkList == null){
                     return "Không có Tài khoản nào";
                 }
@@ -95,13 +95,13 @@ module.exports = {
 				role: {type:"string"}
             },
 			async handler({action,params,meta, ... ctx}) {
-				const {username, password, role} = params;	
-                const createAccount = await dbContext.TAIKHOAN.findOrCreate({
-					where: {TEN_TAIKHOAN: username},
+				const {username, password, role} = params;
+                const createAccount = await dbContext.TAIKHOANHETHONG.findOrCreate({
+					where: {TEN_TAIKHOAN_HT: username},
 					defaults: {
-						TEN_TAIKHOAN: username,
+						TEN_TAIKHOAN_HT: username,
 						MATKHAU: password,
-						ROLE_TAIKHOAN: role
+						ROLE_TAIKHOAN_HT: role
 					}
 				});
 				return createAccount;
@@ -115,14 +115,14 @@ module.exports = {
 			},
 			async handler({action,params,meta, ... ctx}) {
 				const {id} = params;
-                const checkAccount = await dbContext.TAIKHOAN.findOne({
+                const checkAccount = await dbContext.TAIKHOANHETHONG.findOne({
 					where: {
-						ID_TAIKHOAN: id
+						ID_TAIKHOAN_HT: id
 					}
 				});
                 if (checkAccount == null){
                     return "Không có Tài khoản này";
-                } 
+                }
 				return checkAccount;
 			}
 		},
@@ -133,14 +133,14 @@ module.exports = {
 			},
 			async handler({action,params,meta, ... ctx}) {
 				const {id} = params;
-                const checkList = await dbContext.TAIKHOAN.findOne({
+                const checkList = await dbContext.TAIKHOANHETHONG.findOne({
 					where: {
-						ID_TAIKHOAN: id
+						ID_TAIKHOAN_HT: id
 					}
 				});
                 if (checkList == null){
                     return "Không có Tài khoản này";
-                } 
+                }
 				return checkList;
 			}
 		},
@@ -156,16 +156,16 @@ module.exports = {
 				role: {type:"string"}
             },
 			async handler({action,params,meta, ... ctx}) {
-				const {id, username, password, role} = params;				 	
-                const updateAccount = await dbContext.TAIKHOAN.update(
+				const {id, username, password, role} = params;
+                const updateAccount = await dbContext.TAIKHOANHETHONG.update(
 					{
-						TEN_TAIKHOAN: username, MATKHAU: password, ROLE_TAIKHOAN: role					
+						TEN_TAIKHOAN_HT: username, MATKHAU: password, ROLE_TAIKHOAN_HT: role
 					},
 					{
-						where: {ID_TAIKHOAN: id}
-					}													
+						where: {ID_TAIKHOAN_HT: id}
+					}
 				);
-				return updateAccount;						
+				return updateAccount;
 			}
 		},
 		/*-------------------------------[Post] DeleteAccount------------------------------*/
@@ -178,9 +178,9 @@ module.exports = {
 				id: {type: "string"},
             },
 			async handler({action,params,meta, ... ctx}) {
-				const {id} = params;	
-                const deleteAccount = await dbContext.TAIKHOAN.destroy({
-					where: {ID_TAIKHOAN: id}
+				const {id} = params;
+                const deleteAccount = await dbContext.TAIKHOANHETHONG.destroy({
+					where: {ID_TAIKHOAN_HT: id}
 				})
 				return deleteAccount;
 			}
@@ -201,7 +201,7 @@ module.exports = {
 			rest: {
 				method: "GET",
 				path: "/getListCountry"
-			},		
+			},
 			async handler({action,params,meta, ... ctx}) {
                 const lstQuocGia = await dbContext.QUOCGIA.findAll()
 				return lstQuocGia
@@ -229,12 +229,12 @@ module.exports = {
 				idCity: {type:"string"}
             },
 			async handler({action,params,meta, ... ctx}) {
-				const {districtName, idCity} = params;	
+				const {districtName, idCity} = params;
                 const createDistrict = await dbContext.QUAN.findOrCreate({
 					where: {TEN_QUAN: districtName},
 					defaults: {
 						TEN_QUAN: districtName,
-						ID_THANHPHO: idCity				
+						ID_THANHPHO: idCity
 					}
 				});
 				return createDistrict;
@@ -250,11 +250,11 @@ module.exports = {
                 countryName: {type:"string"},
             },
 			async handler({action,params,meta, ... ctx}) {
-				const {countryName} = params;	
+				const {countryName} = params;
                 const createCountry = await dbContext.QUOCGIA.findOrCreate({
 					where: {TEN_QUOCGIA: countryName},
 					defaults: {
-						TEN_QUOCGIA: countryName,		
+						TEN_QUOCGIA: countryName,
 					}
 				});
 				return createCountry;
@@ -275,7 +275,7 @@ module.exports = {
 				});
                 if (checkList == null){
                     return "Không có Tài khoản này";
-                } 
+                }
 				return checkList;
 			}
 		},
@@ -289,16 +289,16 @@ module.exports = {
                 countryName: {type:"string"},
             },
 			async handler({action,params,meta, ... ctx}) {
-				const {id, countryName} = params;				 	
+				const {id, countryName} = params;
                 const updateCountry = await dbContext.QUOCGIA.update(
 					{
-						TEN_QUOCGIA: countryName				
+						TEN_QUOCGIA: countryName
 					},
 					{
 						where: {ID_QUOCGIA: id}
-					}													
+					}
 				);
-				return updateCountry;						
+				return updateCountry;
 			}
 		},
 		/*-------------------------------[Post] Add City ------------------------------*/
@@ -307,12 +307,12 @@ module.exports = {
 				method: "POST",
 				path: "/addCity"
 			},
-			params: {         
+			params: {
                 cityName: {type:"string"},
 				idCountry: {type:"string"}
             },
 			async handler({action,params,meta, ... ctx}) {
-				const {cityName, idCountry} = params;	
+				const {cityName, idCountry} = params;
                 const createCity = await dbContext.THANHPHO.findOrCreate({
 					where: {TEN_THANHPHO: cityName},
 					defaults: {
@@ -338,7 +338,7 @@ module.exports = {
 				});
                 if (checkList == null){
                     return "Không có Tài khoản này";
-                } 
+                }
 				return checkList;
 			}
 		},
@@ -353,17 +353,17 @@ module.exports = {
 				idCountry: {type:"string"}
             },
 			async handler({action,params,meta, ... ctx}) {
-				const {id, cityName, idCountry} = params;				 	
+				const {id, cityName, idCountry} = params;
                 const updateCity = await dbContext.THANHPHO.update(
 					{
 						TEN_THANHPHO: cityName,
-						ID_QUOCGIA: idCountry				
+						ID_QUOCGIA: idCountry
 					},
 					{
 						where: {ID_THANHPHO: id}
-					}													
+					}
 				);
-				return updateCity;						
+				return updateCity;
 			}
 		},
 		/*-------------------------------[Get] DistrictById ------------------------------*/
@@ -381,7 +381,7 @@ module.exports = {
 				});
                 if (checkList == null){
                     return "Không có Tài khoản này";
-                } 
+                }
 				return checkList;
 			}
 		},
@@ -396,17 +396,17 @@ module.exports = {
 				idCity: {type:"string"}
             },
 			async handler({action,params,meta, ... ctx}) {
-				const {id, districtName, idCity} = params;				 	
+				const {id, districtName, idCity} = params;
                 const updateDistrict = await dbContext.QUAN.update(
 					{
 						TEN_QUAN: districtName,
-						ID_THANHPHO: idCity			
+						ID_THANHPHO: idCity
 					},
 					{
 						where: {ID_QUAN: id}
-					}													
+					}
 				);
-				return updateDistrict;						
+				return updateDistrict;
 			}
 		},
 		/*-------------------------------[Get] List of Order ------------------------------*/
@@ -414,13 +414,13 @@ module.exports = {
 			rest: {
 				method: "GET",
 				path: "/getListOrder"
-			},		
+			},
 			async handler({action,params,meta, ... ctx}) {
                 const lstOrder = await dbContext.DATCANHO.findAll()
 				return lstOrder
 			}
 		},
-		
+
 		/**
 		 * Welcome, a username
 		 *

@@ -16,7 +16,7 @@ module.exports = {
 	 * Settings
 	 */
 	settings: {
-		
+
 	},
 
 	/**
@@ -46,25 +46,25 @@ module.exports = {
 			async handler({action,params,meta, ... ctx}) {
 				const {username, password} = params;
 				// Test 1: http://localhost:3000/api/user/signin?username=demo1&password=abc123
-                const checkUser = await dbContext.TAIKHOAN.findOne({
+                const checkUser = await dbContext.TAIKHOANHETHONG.findOne({
                     where: {
-                        TEN_TAIKHOAN: username,
+                        TEN_TAIKHOAN_HT: username,
                         MATKHAU: password,
-						ROLE_TAIKHOAN: 'Customer'
+						ROLE_TAIKHOAN_HT: 'Customer'
                       }
                 });
-				
+
                 // Create account
                 // 1 54 28
-                // localhost - 1400 
-                // npx sequelize-auto -h localhost -d RENTALAPARTMENT -u sa -x !Passw0rd -p 1400 -e mssql -o "./src/models"    
+                // localhost - 1400
+                // npx sequelize-auto -h localhost -d RENTALAPARTMENT -u sa -x !Passw0rd -p 1400 -e mssql -o "./src/models"
 				if (checkUser == null){
 					return 0;
 				}
 				else{
-					return checkUser.ID_TAIKHOAN;
+					return checkUser.ID_TAIKHOAN_HT;
 				}
-				
+
 			}
 		},
         getListApartment: {
@@ -79,8 +79,8 @@ module.exports = {
                 }
                 // Create account
                 // 1 54 28
-                // localhost - 1400 
-                // npx sequelize-auto -h localhost -d RENTALAPARTMENT -u sa -x !Passw0rd -p 1400 -e mssql -o "./src/models"    
+                // localhost - 1400
+                // npx sequelize-auto -h localhost -d RENTALAPARTMENT -u sa -x !Passw0rd -p 1400 -e mssql -o "./src/models"
 				return checkList;
 			}
 		},
@@ -91,7 +91,7 @@ module.exports = {
 			},
 			params:{
 				id: {type: "string"},
-				
+
 			},
 			async handler({action,params,meta, ... ctx}) {
                 const {id} = params;
@@ -106,12 +106,12 @@ module.exports = {
                 }
                 // Create account
                 // 1 54 28
-                // localhost - 1400 
-                // npx sequelize-auto -h localhost -d RENTALAPARTMENT -u sa -x !Passw0rd -p 1400 -e mssql -o "./src/models"    
+                // localhost - 1400
+                // npx sequelize-auto -h localhost -d RENTALAPARTMENT -u sa -x !Passw0rd -p 1400 -e mssql -o "./src/models"
 				return checkDetail;
 			}
 		},
-		
+
         searchApartmentWithText: {
 			rest: {
 				method: "POST",
@@ -160,7 +160,7 @@ module.exports = {
 								check = true;
 								break;
 							}
-							
+
 						}
 						if(check){
 							break;
@@ -170,7 +170,7 @@ module.exports = {
 						output.push(lsApartment[i]);
 					}
 				}
-				
+
 				return output;
 			}
 		},
@@ -208,7 +208,7 @@ module.exports = {
 				return output;
 			}
 		},
-		
+
 		searchApartmentWithDetail: {
 			rest: {
 				method: "POST",
@@ -255,11 +255,11 @@ module.exports = {
 					else{
 						lsApart.forEach(item =>{
 								result.push(item);
-							
+
 						})
 					}
 				}
-				
+
 				return result;
 			}
 		},
@@ -289,9 +289,9 @@ module.exports = {
 						ID_QUOCGIA: countryId
 					}
 				});
-				
+
 				return listCity;
-				
+
 			}
 		},
 		getListDistrict:{
@@ -338,6 +338,7 @@ module.exports = {
 				idTK: {type: "string"},
 			},
 			async handler({action,params,meta, ... ctx}){
+				console.log("hello")
                 var {tenKH,email,phoneNumber,maGiayTo,loaiGiayTo,quocTich,gioiTinh,idTK} = params;
 				if(parseInt(idTK)==0){
 					idTK = 1;
@@ -465,9 +466,9 @@ module.exports = {
 			async handler({action,params,meta, ... ctx}){
                 var {id} = params;
 				id = parseInt(id);
-				const acc = dbContext.TAIKHOAN.findOne({
+				const acc = dbContext.TAIKHOANHETHONG.findOne({
 					where:{
-						ID_TAIKHOAN: id
+						ID_TAIKHOAN_HT: id
 					}
 				})
 				return acc;
@@ -479,19 +480,35 @@ module.exports = {
 				path: "/updateCustomerInfo4Account"
 			},
 			params:{
-				idAccount: {type: "string"},
 				idCustomerInfo: {type: "string"},
+				tenKH: {type: "string"},
+				email: {type: "string"},
+				phone: {type: "string"},
+				gtttID: {type: "string"},
+				gtttType: {type: "string"},
+				quocTich: {type: "string"},
+				gioiTinh: {type: "string"},
+				idAccount: {type: "string"},
 			},
 			async handler({action,params,meta, ... ctx}){
-                var {idAccount, idCustomerInfo} = params;
-				idAccount = parseInt(idAccount);
-				idCustomerInfo = parseInt(idCustomerInfo);
-				const acc = dbContext.TAIKHOAN.update({
-					ID_TAIKHOAN: idAccount,
-					where:{
-						ID_TAIKHOAN: idCustomerInfo
+                var {idCustomerInfo, tenKH,email,phone,gtttID,gtttType,quocTich,gioiTinh,idAccount} = params;
+				const acc = dbContext.THONGTINKHACHHANG.update(
+					{
+						TEN_KHACHHANG:tenKH,
+						EMAIL: email,
+						PHONE_NUMBER:phone,
+						MA_GIAYTOTUYTHAN:gtttID,
+						LOAI_GIAYTOTUYTHAN:gtttType,
+						QUOCTICH:quocTich,
+						GIOITINH:(gioiTinh=="Nam"?false:true),
+						ID_TAIKHOAN: idAccount
+					},
+					{
+						where:{
+							ID_TT_KHACHHANG: idCustomerInfo
+						}
 					}
-				})
+				)
 				return acc;
 			},
 		},
@@ -506,7 +523,7 @@ module.exports = {
 			async handler({action,params,meta, ... ctx}){
                 var {idCustomerInfo} = params;
 				idCustomerInfo = parseInt(idCustomerInfo);
-				const ls = dbContext.DATCANHO.update({
+				const ls = dbContext.DATCANHO.findAll({
 					where:{
 						ID_TT_KHACHHANG: idCustomerInfo
 					},
@@ -535,6 +552,90 @@ module.exports = {
 					}
 				})
 				return stateSet;
+			},
+		},
+		getCustomerInfo:{
+			rest:{
+				method: "POST",
+				path: "/getCustomerInfo"
+			},
+			params:{
+				idAccount : {type: "string"}
+			},
+			async handler({action,params,meta, ... ctx}){
+                var {idAccount} = params;
+				const stateSet = dbContext.THONGTINKHACHHANG.findOne({
+					where:{
+						ID_TAIKHOAN: idAccount
+					}
+				})
+				if(stateSet == null){
+					return 0;
+				}
+				return stateSet;
+			},
+		},
+		register:{
+			rest:{
+				method: "POST",
+				path: "/register"
+			},
+			params:{
+				username: {type:"string", min:3},
+                password: {type:"string"}
+			},
+			async handler({action,params,meta, ... ctx}){
+                var {username,password} = params;
+				const check = await dbContext.TAIKHOANHETHONG.findAll();
+				check.forEach(element=>{
+					if(element.TEN_TAIKHOAN_HT == username){
+						return "Trùng tên tài khoản";
+					}
+				})
+					const createAccount = await dbContext.TAIKHOANHETHONG.create({
+						where:{
+							TEN_TAIKHOAN_HT: username,
+							MATKHAU: password,
+							ROLE_TAIKHOAN_HT: "Customer"
+						}
+					})
+					return createAccount.ID_TAIKHOAN_HT;
+			},
+		},
+		savedPaypalCheckout:{
+			rest:{
+				method: "POST",
+				path: "/savedPaypalCheckout"
+			},
+			params:{
+				idPayment: {type:"string"},
+                code: {type:"string"}
+			},
+			async handler({action,params,meta, ... ctx}){
+                var {idPayment, code} = params;
+				const createPS = await dbContext.PAYPALSAVED.create({
+					ID_PAYMENT: parseInt(idPayment),
+					ID_TRANSACTION: code
+				});
+				return createPS.ID_SAVED;
+			},
+		},
+		getPaypalTransactionID: {
+			rest:{
+				method: "POST",
+				path: "/getPaypalTransactionID"
+			},
+			params:{
+				idOrder: {type:"string"}
+			},
+			async handler({action,params,meta, ... ctx}){
+                var {idOrder} = params;
+				const check = db.PAYPALSAVED.findOne({
+					where:{
+						ID_PAYMENT: idOrder
+					}
+				})
+				return check;
 			},
 		},
 		/**
