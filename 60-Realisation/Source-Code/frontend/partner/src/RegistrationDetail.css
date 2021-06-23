@@ -21,8 +21,8 @@ a:hover {
   color: inherit;
   text-decoration: none;
 }
-input[type="number"],
-input[type="text"],
+input[type='number'],
+input[type='text'],
 select {
   outline: 0;
   margin: 0;
@@ -30,7 +30,7 @@ select {
   vertical-align: baseline;
   box-sizing: border-box;
 }
-#textarea{
+#textarea {
   outline: 0;
 }
 .css-detail {
@@ -89,7 +89,7 @@ select {
   transition: none 0s ease 0s;
 }
 .css-text {
-  font-family: Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-family: Roboto, 'Helvetica Neue', Arial, sans-serif;
   font-size: 14px;
 }
 .css-check:first-child {
@@ -140,7 +140,7 @@ select {
 }
 .css-check::after {
   position: absolute;
-  content: "";
+  content: '';
   top: 0px;
   right: 0px;
   height: 100%;
@@ -202,7 +202,7 @@ select {
   font-size: 14px;
 }
 .css-text {
-  font-family: Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-family: Roboto, 'Helvetica Neue', Arial, sans-serif;
   font-size: 14px;
 }
 
@@ -296,7 +296,7 @@ select {
 }
 .css-section.cleafix::after {
   clear: both;
-  content: "";
+  content: '';
   display: table;
 }
 .css-label .label-required {
@@ -358,7 +358,7 @@ select {
   margin-right: -15px;
 }
 .css-text-2 {
-  font-family: Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-family: Roboto, 'Helvetica Neue', Arial, sans-serif;
 }
 h2 {
   font-size: 28px;
@@ -417,11 +417,11 @@ h2 {
   position: relative;
   display: block;
 }
-.css-btn-radio input[type="radio"] {
+.css-btn-radio input[type='radio'] {
   width: 20px;
   height: 22px;
 }
-.css-btn-radio input[type="radio"] {
+.css-btn-radio input[type='radio'] {
   position: absolute;
   top: 0px;
   opacity: 0;
@@ -430,15 +430,15 @@ h2 {
   z-index: 10;
   cursor: pointer;
 }
-.css-btn-radio.c-radio--is-inline input[type="radio"] + label {
+.css-btn-radio.c-radio--is-inline input[type='radio'] + label {
   margin-top: 0px;
 }
-.css-btn-radio input[type="radio"] + label {
+.css-btn-radio input[type='radio'] + label {
   color: rgb(101, 127, 163);
   line-height: 20px;
   transition: color 100ms ease-out 0s;
 }
-.css-btn-radio input[type="radio"] + label {
+.css-btn-radio input[type='radio'] + label {
   position: relative;
   display: inline-block;
   line-height: 20px;
@@ -449,10 +449,10 @@ h2 {
   margin-bottom: 0px;
   transition: color 100ms ease-out 0s;
 }
-.css-btn-radio input[type="radio"] + label::before {
+.css-btn-radio input[type='radio'] + label::before {
   position: absolute;
   display: inline-block;
-  content: "";
+  content: '';
   box-sizing: border-box;
   background: rgb(255, 255, 255);
   border: 1px solid rgb(168, 176, 186);
@@ -463,15 +463,15 @@ h2 {
   top: 0px;
   /* transition: background 100ms ease-out 0s, border-color 100ms ease-out 0s; */
 }
-.css-btn-radio input[type="radio"] + label::after {
+.css-btn-radio input[type='radio'] + label::after {
   width: 20px;
   height: 20px;
   /* transition: transform 100ms ease-out 0s, background 100ms ease-out 0s; */
 }
-.css-btn-radio input[type="radio"] + label::after {
+.css-btn-radio input[type='radio'] + label::after {
   position: absolute;
   display: inline-block;
-  content: "";
+  content: '';
   box-sizing: border-box;
   background: rgb(246, 246, 246);
   width: 20px;
@@ -486,22 +486,22 @@ h2 {
   margin-top: 0px;
   margin-left: 1rem;
 }
-.css-btn-radio input[type="radio"]:checked + label::before {
+.css-btn-radio input[type='radio']:checked + label::before {
   border-color: rgb(87, 167, 237);
 }
-.css-btn-radio input[type="radio"]:checked + label::before {
+.css-btn-radio input[type='radio']:checked + label::before {
   background: rgb(255, 255, 255);
   border-color: rgb(27, 160, 226);
 }
-.css-btn-radio input[type="radio"]:checked + label::after {
+.css-btn-radio input[type='radio']:checked + label::after {
   background: rgb(87, 167, 237);
   transform: scale(0.65);
 }
-.css-btn-radio input[type="radio"] {
+.css-btn-radio input[type='radio'] {
   width: 20px;
   height: 22px;
 }
-.css-btn-radio input[type="radio"] {
+.css-btn-radio input[type='radio'] {
   position: absolute;
   top: 0px;
   opacity: 0;
@@ -510,7 +510,7 @@ h2 {
   z-index: 10;
   cursor: pointer;
 }
-input[type="radio"] {
+input[type='radio'] {
   display: inline;
 }
 .css-span {
@@ -520,7 +520,7 @@ b {
   font-weight: 600;
   display: flex;
 }
-.css-btn-radio input[type="radio"] + label {
+.css-btn-radio input[type='radio'] + label {
   color: rgb(101, 127, 163);
   line-height: 20px;
   transition: color 100ms ease-out 0s;
@@ -1154,4 +1154,341 @@ textarea {
   justify-content: space-between;
   align-items: center;
   width: 100%;
+}
+.navbar .navbar-toggle {
+  border-color: #fff;
+}
+
+.navbar .navbar-toggle .icon-bar {
+  background: #fff;
+}
+
+.navbar .navbar-toggle:focus,
+.navbar .navbar-toggle:hover {
+  background: transparent;
+}
+
+.navbar .navbar-nav .open .dropdown-menu {
+  background: #faf7fd;
+  border-radius: 1px;
+  border-color: #faf7fd;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.navbar .divider {
+  background-color: #e9ecef !important;
+}
+.navbar .navbar-nav > a > i {
+  display: block;
+  text-align: center;
+}
+
+.navbar .dropdown-item i {
+  font-size: 16px;
+  min-width: 22px;
+}
+
+.navbar .dropdown-item .material-icons {
+  font-size: 21px;
+  line-height: 16px;
+  vertical-align: middle;
+  margin-top: -2px;
+}
+
+.navbar .nav-item.open > a,
+.navbar .nav-item.open > a:hover,
+.navbar .nav-item.open > a:focus {
+  color: #fff;
+  background: none !important;
+}
+
+.navbar .dropdown-menu {
+  border-radius: 1px;
+  border-color: #e5e5e5;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.navbar .dropdown-menu a {
+  color: #777 !important;
+  padding: 8px 20px;
+  line-height: normal;
+  font-size: 15px;
+}
+
+.navbar .dropdown-menu a:hover,
+.navbar .dropdown-menu a:focus {
+  color: #333 !important;
+  background: transparent !important;
+}
+.navbar .nav-item span {
+  position: relative;
+  top: 3px;
+}
+.sign-item {
+  margin-right: 15px;
+}
+.dropdown-toggle::after {
+  margin-left: 10px;
+  margin-bottom: 10px;
+}
+.table tbody tr .span-name {
+  padding: 0;
+  width: 28%;
+  font-weight: 500;
+  color: #797373;
+  padding-bottom: 12px;
+  padding-left: 12px;
+}
+.table tbody tr .p-name {
+  padding: 0;
+  padding-bottom: 12px;
+  word-break: break-all;
+  padding-right: 12px;
+}
+.btn-order {
+  width: 167px;
+  font-size: 15px;
+  border-radius: 4px;
+  border: none;
+  background-color: #007bffc7;
+  height: 35px;
+  font-weight: 500;
+  color: white;
+}
+.ant-tabs-nav .ant-tabs-nav-wrap .ant-tabs-nav-list .ant-tabs-tab {
+  padding: 12px 25px;
+}
+
+.bloc-tabs {
+  padding-left: 46px;
+  display: flex;
+  width: 400px;
+  font-size: 18px;
+}
+.tabs {
+  padding: 15px;
+  text-align: center;
+  width: 50%;
+  background: rgba(128, 128, 128, 0.075);
+  cursor: pointer;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.274);
+  box-sizing: content-box;
+  position: relative;
+  outline: none;
+}
+.tabs:not(:last-child) {
+  border-right: 1px solid rgba(0, 0, 0, 0.274);
+}
+
+.active-tabs {
+  background: white;
+  border-bottom: 1px solid transparent;
+}
+
+.active-tabs::before {
+  content: '';
+  display: block;
+  position: absolute;
+  top: -5px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(100% + 2px);
+  height: 5px;
+  background: rgb(88, 147, 241);
+}
+
+button {
+  border: none;
+}
+.content-tabs {
+  flex-grow: 1;
+  padding-left: 46px;
+  width: 1000px;
+}
+.content {
+  background: white;
+  padding-top: 20px;
+  /*padding-left: 20px;*/
+  padding-bottom: 20px;
+  width: 100%;
+  height: 100%;
+  display: none;
+}
+.content h2 {
+  padding: 0px 0 5px 0px;
+}
+.content hr {
+  width: 100px;
+  height: 2px;
+  background: #222;
+  margin-bottom: 5px;
+}
+.content p {
+  width: 100%;
+  height: 100%;
+}
+.active-content {
+  display: block;
+  padding-left: 35px;
+  padding-right: 35px;
+}
+.btn-back {
+  margin-top: 20px;
+  margin-left: 38px;
+  font-size: 17px;
+  color: #5893f1;
+}
+.btn-success-save {
+  outline: none;
+  box-shadow: none;
+  border: 1px solid rgb(252, 145, 0);
+  width: 250px;
+  height: 40px;
+  font-size: 16px;
+  color: white;
+  font-weight: 500;
+  background-color: rgb(252, 145, 0);
+  border-radius: 5px;
+}
+.btn-success-save:hover {
+  background-color: rgb(228, 148, 36);
+  border: 1px solid rgb(228, 148, 36);
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+
+
+.btn-turn-backlist {
+  background-color: #6699ff;
+  margin-top: 20px;
+  margin-left: 50px;
+  width: 150px;
+  height: 40px;
+  border-radius: 15px;
+  font-size: 15px;
+}
+
+.fa-arrow-alt-circle-left{
+  color: #66ccff;}
+
+.css-title-orderDetail {
+  text-align: center;
+  font-style: italic;
+  font-size: 28px;
+  border-bottom-style: ridge;
+  font-weight: 500;
+}
+
+.table-detail {
+  float: left;
+  margin-left: 50px;
+  border: 1px solid #000;
+  background-color: #fff;
+  border-radius: 15px;
+  margin-right: 50px;
+  width: 650px;
+  margin-top: 20px;
+  margin-bottom: 50px;
+}
+.table-order-detail {
+  margin: 20px;
+  font-size: 15px;
+  align-items: center;
+  width: 90%;
+}
+.value-orderDetail {
+  text-align: left;
+}
+td {
+  border-bottom: 1px solid #ddd;
+  height: 40px;
+  vertical-align: bottom;
+}
+.info-customer {
+  float: left;
+  margin-left: 50px;
+  border: 1px solid #000;
+  background-color: #fff;
+  border-radius: 15px;
+  width: 650px;
+  margin-top: 20px;
+  height: fit-content;
+}
+
+.form-btn-status {
+  margin-left: 220px;
+  width: 300px;
+  margin-top: 50px;
+  height: 300px;
+  float: none;
+  position: absolute;
+}
+.css-profile-body {
+  background-color: #f5f5f5;
+}
+.table-borderless {
+  width: 60%;
+  font-size: 20px;
+  background-color: #fff;
+  border-radius: 25px;
+  box-shadow: 5px 10px #888888;
+}
+.span-name {
+  width: 50%;
+}
+
+.link-back{
+  color: #f5f5f5;
+}
+.back-list-order{
+  display: flex;
+  color: #33CCFF;
+  margin-top: 20px;
+  margin-left: 50px;
+  font-size: 20px;
+}
+.container-view-apartment{
+  margin: 60px;
+  margin-top: 20px;
+  padding-bottom: 50px;
+}
+.img-content{
+  border-radius: 25px;
+  width: 600px;
+}
+.table-Aifo-detail{
+  margin: 30px;
+  width: 500px;
+}
+.header-table-info{
+  border: 1px solid #000;
+  border-radius: 15px;
+  display: flex;
+  width: 600px;
+  height: 335px;
+}
+.detail-apartment-wrap{
+  margin-top: 40px;
+  display: flex;
+}
+.img-apartment{
+  margin-right: 50px;
+}
+.content-info{
+  font-weight: bold;
+}
+.description-table{
+  width: 90%;
+}
+.Content-ul{
+  font-weight: bold;
+  font-size: 18px;
+}
+.table th:nth-last-child(n){
+  border-bottom: 1px solid #dee2e6;
 }

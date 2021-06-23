@@ -17,7 +17,7 @@ export default class RoomFacilities extends Component {
   getListAnimal = () => {
     axios
       .post(
-        "http://localhost:33456/api/partner/registrationDetail/getListRoomFacility",
+        "https://rental-apartment-huflit.herokuapp.com/api/partner/registrationDetail/getListRoomFacility",
         {}
       )
       .then((response) => {
@@ -44,15 +44,7 @@ export default class RoomFacilities extends Component {
                     >
                       <div className="c-flexbox css-nb">
                         <span className="text css-nb-text">Main Contact</span>
-                        <span
-                          className="bagde__number bagde__color bagde__pill css-bagde"
-                          style={{
-                            paddingRight: "10px",
-                            paddingLeft: "10px",
-                          }}
-                        >
-                          7
-                        </span>
+                      
                       </div>
                     </Link>
                     <Link
@@ -64,15 +56,7 @@ export default class RoomFacilities extends Component {
                         <span className="text css-nb-text">
                           General Information
                         </span>
-                        <span
-                          className="bagde__number bagde__color bagde__pill css-bagde"
-                          style={{
-                            paddingRight: "10px",
-                            paddingLeft: "10px",
-                          }}
-                        >
-                          7
-                        </span>
+                        
                       </div>
                     </Link>
                     <Link
@@ -84,15 +68,7 @@ export default class RoomFacilities extends Component {
                         <span className="text css-nb-text">
                           Property Facilities
                         </span>
-                        <span
-                          className="bagde__number bagde__color bagde__pill css-bagde"
-                          style={{
-                            paddingRight: "10px",
-                            paddingLeft: "10px",
-                          }}
-                        >
-                          7
-                        </span>
+                        
                       </div>
                     </Link>
                     <Link
@@ -102,15 +78,7 @@ export default class RoomFacilities extends Component {
                     >
                       <div className="c-flexbox css-nb">
                         <span className="text css-nb-text">Rooms</span>
-                        <span
-                          className="bagde__number bagde__color bagde__pill css-bagde"
-                          style={{
-                            paddingRight: "10px",
-                            paddingLeft: "10px",
-                          }}
-                        >
-                          7
-                        </span>
+                        
                       </div>
                     </Link>
                     <Link
@@ -122,78 +90,12 @@ export default class RoomFacilities extends Component {
                         <span className="text css-nb-text">
                           Room Facilities
                         </span>
-                        <span
-                          className="bagde__number bagde__color bagde__pill css-bagde"
-                          style={{
-                            paddingRight: "10px",
-                            paddingLeft: "10px",
-                          }}
-                        >
-                          7
-                        </span>
+                        
                       </div>
                     </Link>
-                    <Link key="6" to="" className="slidebar-item css-check">
-                      <div className="c-flexbox css-nb">
-                        <span className="text css-nb-text">Photos</span>
-                        <span
-                          className="bagde__number bagde__color bagde__pill css-bagde"
-                          style={{
-                            paddingRight: "10px",
-                            paddingLeft: "10px",
-                          }}
-                        >
-                          7
-                        </span>
-                      </div>
-                    </Link>
-                    <Link key="7" to="" className="slidebar-item css-check">
-                      <div className="c-flexbox css-nb">
-                        <span className="text css-nb-text">
-                          Payment Information
-                        </span>
-                        <span
-                          className="bagde__number bagde__color bagde__pill css-bagde"
-                          style={{
-                            paddingRight: "10px",
-                            paddingLeft: "10px",
-                          }}
-                        >
-                          7
-                        </span>
-                      </div>
-                    </Link>
+                    
                   </div>
                 </span>
-                <div
-                  className="table__block css-tbl-block"
-                  style={{ marginTop: "30px" }}
-                >
-                  <label className="block__label css-label">
-                    <span>Mandatory Fields Progress</span>
-                  </label>
-                  <div className="block__row css-row">
-                    <div className="block__column css-block-col">
-                      <div className="progress css-progress">
-                        <div
-                          className="progress__bar"
-                          role="progressbar"
-                          aria-valuenow="52"
-                          aria-valuemin="0"
-                          aria-valuemax="100"
-                          style={{ width: "52%" }}
-                        ></div>
-                      </div>
-                    </div>
-                    <div
-                      align="right"
-                      className="column css-col"
-                      style={{ paddingLeft: "0px" }}
-                    >
-                      <span className="text css-text">52%</span>
-                    </div>
-                  </div>
-                </div>
               </div>
             </div>
 

@@ -1,7 +1,8 @@
 /* eslint-disable react/no-direct-mutation-state */
-import React, { createRef, Component } from "react";
-import axios from "axios";
-import { Link } from "react-router-dom";
+import React, {createRef, Component} from 'react';
+import axios from 'axios';
+import {Link} from 'react-router-dom';
+import NumberFormat from 'react-number-format';
 class Rooms extends Component {
   constructor(props) {
     super(props);
@@ -10,6 +11,8 @@ class Rooms extends Component {
       idBed: 0,
       lstRoom: [],
       lstBed: [],
+      MAX_VAL: 1400,
+      MIN_VAL: 0,
       idApart: document.location.pathname.substring(26),
     };
     this.roomName = createRef();
@@ -18,7 +21,6 @@ class Rooms extends Component {
     this.numberBed = createRef();
     this.maxPer = createRef();
     this.maxExtraBed = createRef();
-    this.priceExtra = createRef();
     this.width = createRef();
     this.height = createRef();
     this.numberRooms = createRef();
@@ -26,24 +28,35 @@ class Rooms extends Component {
     this.getListRoom();
     this.getListBed();
   }
+  withValueCap = (inputObj) => {
+    const {value} = inputObj;
+    if (value <= this.state.MAX_VAL && value >= this.state.MIN_VAL) return true;
+    return false;
+  };
   createRoom = () => {
     axios
-      .post("http://localhost:33456/api/partner/registrationDetail/createRoom", {
-        idApart: this.state.idApart.toString(),
-        roomName: this.roomName.current.value,
-        idStyleRoom: this.state.idRoom,
-        idStyleBed: this.state.idBed,
-        numberBed: this.numberBed.current.value,
-        maxPer: this.maxPer.current.value,
-        maxExtraBed: this.maxExtraBed.current.value,
-        priceExtra: this.priceExtra.current.value,
-        width: this.width.current.value,
-        height: this.height.current.value,
-        numberRooms: this.numberRooms.current.value,
-        descript: this.descript.current.value,
-      })
+      .post(
+        'https://rental-apartment-huflit.herokuapp.com/api/partner/registrationDetail/createRoom',
+        {
+          idApart: this.state.idApart.toString(),
+          roomName: this.roomName.current.value,
+          idStyleRoom: this.state.idRoom,
+          idStyleBed: this.state.idBed,
+          numberBed: this.numberBed.current.value,
+          maxPer: this.maxPer.current.value,
+          maxExtraBed: this.maxExtraBed.current.value,
+          width: this.width.current.value,
+          height: this.height.current.value,
+          numberRooms: this.numberRooms.current.value,
+          descript: this.descript.current.value,
+        }
+      )
       .then((response) => {
         console.log(response.data);
+        this.props.history.push(
+          '/lstApartment/' + localStorage.getItem('idTk')
+        );
+        window.location.reload();
       })
       .catch((error) => {
         console.log(error.response);
@@ -52,7 +65,7 @@ class Rooms extends Component {
   getListRoom = () => {
     axios
       .post(
-        "http://localhost:33456/api/partner/registrationDetail/getListRoomType",
+        'https://rental-apartment-huflit.herokuapp.com/api/partner/registrationDetail/getListRoomType',
         {}
       )
       .then((response) => {
@@ -63,7 +76,7 @@ class Rooms extends Component {
   getListBed = () => {
     axios
       .post(
-        "http://localhost:33456/api/partner/registrationDetail/getListBedType",
+        'https://rental-apartment-huflit.herokuapp.com/api/partner/registrationDetail/getListBedType',
         {}
       )
       .then((response) => {
@@ -90,7 +103,7 @@ class Rooms extends Component {
           <div className="table-row css-row">
             <div
               className="table__column css-column"
-              style={{ marginTop: "58px" }}
+              style={{marginTop: '58px'}}
             >
               <div className="table__detail css-detail">
                 <span>
@@ -102,15 +115,6 @@ class Rooms extends Component {
                     >
                       <div className="c-flexbox css-nb">
                         <span className="text css-nb-text">Main Contact</span>
-                        <span
-                          className="bagde__number bagde__color bagde__pill css-bagde"
-                          style={{
-                            paddingRight: "10px",
-                            paddingLeft: "10px",
-                          }}
-                        >
-                          7
-                        </span>
                       </div>
                     </Link>
                     <Link
@@ -122,143 +126,26 @@ class Rooms extends Component {
                         <span className="text css-nb-text">
                           General Information
                         </span>
-                        <span
-                          className="bagde__number bagde__color bagde__pill css-bagde"
-                          style={{
-                            paddingRight: "10px",
-                            paddingLeft: "10px",
-                          }}
-                        >
-                          7
-                        </span>
                       </div>
                     </Link>
                     <Link
                       key="3"
-                      to="/registrationDetail/propertyFacilities"
-                      className="slidebar-item css-check"
-                    >
-                      <div className="c-flexbox css-nb">
-                        <span className="text css-nb-text">
-                          Property Facilities
-                        </span>
-                        <span
-                          className="bagde__number bagde__color bagde__pill css-bagde"
-                          style={{
-                            paddingRight: "10px",
-                            paddingLeft: "10px",
-                          }}
-                        >
-                          7
-                        </span>
-                      </div>
-                    </Link>
-                    <Link
-                      key="4"
                       to="/registrationDetail/rooms"
                       className="slidebar-item slidebar-item--is-active css-check"
                     >
                       <div className="c-flexbox css-nb">
                         <span className="text css-nb-text">Rooms</span>
-                        <span
-                          className="bagde__number bagde__color bagde__pill css-bagde"
-                          style={{
-                            paddingRight: "10px",
-                            paddingLeft: "10px",
-                          }}
-                        >
-                          7
-                        </span>
-                      </div>
-                    </Link>
-                    <Link
-                      key="5"
-                      to="/registrationDetail/roomFacilities"
-                      className="slidebar-item css-check"
-                    >
-                      <div className="c-flexbox css-nb">
-                        <span className="text css-nb-text">
-                          Room Facilities
-                        </span>
-                        <span
-                          className="bagde__number bagde__color bagde__pill css-bagde"
-                          style={{
-                            paddingRight: "10px",
-                            paddingLeft: "10px",
-                          }}
-                        >
-                          7
-                        </span>
-                      </div>
-                    </Link>
-                    <Link key="6" to="" className="slidebar-item css-check">
-                      <div className="c-flexbox css-nb">
-                        <span className="text css-nb-text">Photos</span>
-                        <span
-                          className="bagde__number bagde__color bagde__pill css-bagde"
-                          style={{
-                            paddingRight: "10px",
-                            paddingLeft: "10px",
-                          }}
-                        >
-                          7
-                        </span>
-                      </div>
-                    </Link>
-                    <Link key="7" to="" className="slidebar-item css-check">
-                      <div className="c-flexbox css-nb">
-                        <span className="text css-nb-text">
-                          Payment Information
-                        </span>
-                        <span
-                          className="bagde__number bagde__color bagde__pill css-bagde"
-                          style={{
-                            paddingRight: "10px",
-                            paddingLeft: "10px",
-                          }}
-                        >
-                          7
-                        </span>
                       </div>
                     </Link>
                   </div>
                 </span>
-                <div
-                  className="table__block css-tbl-block"
-                  style={{ marginTop: "30px" }}
-                >
-                  <label className="block__label css-label">
-                    <span>Mandatory Fields Progress</span>
-                  </label>
-                  <div className="block__row css-row">
-                    <div className="block__column css-block-col">
-                      <div className="progress css-progress">
-                        <div
-                          className="progress__bar"
-                          role="progressbar"
-                          aria-valuenow="52"
-                          aria-valuemin="0"
-                          aria-valuemax="100"
-                          style={{ width: "52%" }}
-                        ></div>
-                      </div>
-                    </div>
-                    <div
-                      align="right"
-                      className="column css-col"
-                      style={{ paddingLeft: "0px" }}
-                    >
-                      <span className="text css-text">52%</span>
-                    </div>
-                  </div>
-                </div>
               </div>
             </div>
 
             <div className="table__column__2 css-column-2">
               <div
                 className="table__title css-row"
-                style={{ marginBottom: "16px" }}
+                style={{marginBottom: '16px'}}
               >
                 <div className="column2 css-col">
                   <div className="text2 css-text-2">
@@ -270,7 +157,7 @@ class Rooms extends Component {
                 <div className="detail__column css-col">
                   <div
                     className="box__detail css-bx-dtl"
-                    style={{ marginBottom: "30px" }}
+                    style={{marginBottom: '30px'}}
                   >
                     <div className="box__detail__section header clearfix css-section">
                       <span>Rooms Types</span>
@@ -279,7 +166,7 @@ class Rooms extends Component {
                       <div>
                         <div
                           className="box css-bx-dtl"
-                          style={{ marginTop: "15px", marginBottom: "30px" }}
+                          style={{marginTop: '15px', marginBottom: '30px'}}
                         >
                           <div className="box__detail__section header clearfix css-section css-room">
                             <div className="flexbox-room css-flex-room">
@@ -290,7 +177,7 @@ class Rooms extends Component {
                                 <button
                                   type="button"
                                   className="btn btn--variant-link"
-                                  style={{ margin: "0", padding: "0" }}
+                                  style={{margin: '0', padding: '0'}}
                                 >
                                   <span>Duplicate</span>
                                 </button>
@@ -312,7 +199,7 @@ class Rooms extends Component {
                               <div className="box-row css-row">
                                 <div
                                   className="box-column css-box-col"
-                                  style={{ marginTop: "8px" }}
+                                  style={{marginTop: '8px'}}
                                 >
                                   <label className="box-label css-label">
                                     <span>Room Name</span>
@@ -348,7 +235,7 @@ class Rooms extends Component {
                               </div>
                               <div
                                 className="line css-line"
-                                style={{ marginTop: "0" }}
+                                style={{marginTop: '0'}}
                               ></div>
                             </div>
                             {/* Room Type */}
@@ -367,7 +254,7 @@ class Rooms extends Component {
                                     </label>
                                     <div
                                       className="select control-container css-select css-radio-gr"
-                                      style={{ width: "250px" }}
+                                      style={{width: '250px'}}
                                     >
                                       <div className="select has-value">
                                         <select
@@ -376,15 +263,15 @@ class Rooms extends Component {
                                           value={this.state.idRoom}
                                         >
                                           <option className="select-option">
-                                            {" "}
+                                            {' '}
                                             Select Room Type
                                           </option>
                                           {this.state.lstRoom.map(
                                             (item, key) => (
                                               <option
-                                              key={key.ID_LOAIPHONG}
-                                              ref={item.ID_LOAIPHONG}
-                                              value={item.ID_LOAIPHONG}
+                                                key={key.ID_LOAIPHONG}
+                                                ref={item.ID_LOAIPHONG}
+                                                value={item.ID_LOAIPHONG}
                                               >
                                                 {item.TEN_LOAIPHONG}
                                               </option>
@@ -402,7 +289,7 @@ class Rooms extends Component {
 
                                     <div
                                       className="select control-container css-select css-radio-gr"
-                                      style={{ width: "250px" }}
+                                      style={{width: '250px'}}
                                     >
                                       <div className="select has-value">
                                         <select
@@ -411,7 +298,7 @@ class Rooms extends Component {
                                           onChange={this.changeBedStyle}
                                         >
                                           <option className="select-option">
-                                            {" "}
+                                            {' '}
                                             Select Bed Type
                                           </option>
                                           {this.state.lstBed.map((val, key) => (
@@ -432,8 +319,8 @@ class Rooms extends Component {
                                       <span
                                         className="label-required"
                                         style={{
-                                          marginLeft: "3px",
-                                          color: "rgb(87, 167, 237)",
+                                          marginLeft: '3px',
+                                          color: 'rgb(87, 167, 237)',
                                         }}
                                       >
                                         *
@@ -441,25 +328,32 @@ class Rooms extends Component {
                                     </label>
                                     <div
                                       className="input-group css-inp"
-                                      style={{ display: "inline-block" }}
+                                      style={{display: 'inline-block'}}
                                     >
                                       <div
                                         className="input-group__inner"
-                                        style={{ width: "fit-content" }}
+                                        style={{width: 'fit-content'}}
                                       >
                                         <div
                                           className="input control-container css-radio-gr"
-                                          style={{ width: "100px" }}
+                                          style={{width: '100px'}}
                                         >
                                           <div className="__inner">
                                             <div className="__padder">
-                                              <input
+                                              <NumberFormat
+                                                allowNegative={false}
+                                                allowEmptyFormatting={false}
+                                                className="css-txt -control"
+                                                getInputRef={this.maxPer}
+                                                isAllowed={this.withValueCap}
+                                              />
+                                              {/* <input
                                                 name="generalInformation,propertyDetails,numberOfRooms"
                                                 touched="true"
                                                 type="text"
                                                 className="css-txt -control"
                                                 ref={this.maxPer}
-                                              />
+                                              /> */}
                                             </div>
                                           </div>
                                         </div>
@@ -474,13 +368,13 @@ class Rooms extends Component {
                             </div>
                             <div
                               className="line css-line"
-                              style={{ marginTop: "0" }}
+                              style={{marginTop: '0'}}
                             ></div>
                             <div className="c-block">
                               <div className="box-row css-row">
                                 <div
                                   className="box-column css-box-col"
-                                  style={{ marginTop: "8px" }}
+                                  style={{marginTop: '8px'}}
                                 >
                                   <label className="box-label css-label">
                                     <span>Number Of Bed</span>
@@ -490,25 +384,32 @@ class Rooms extends Component {
                                 <div className="box-column css-box-col">
                                   <div
                                     className="input-group css-inp"
-                                    style={{ display: "inline-block" }}
+                                    style={{display: 'inline-block'}}
                                   >
                                     <div
                                       className="input-group__inner"
-                                      style={{ width: "fit-content" }}
+                                      style={{width: 'fit-content'}}
                                     >
                                       <div
                                         className="input control-container css-radio-gr"
-                                        style={{ width: "100px" }}
+                                        style={{width: '100px'}}
                                       >
                                         <div className="__inner">
                                           <div className="__padder">
-                                            <input
+                                            <NumberFormat
+                                              allowNegative={false}
+                                              allowEmptyFormatting={false}
+                                              className="css-txt -control"
+                                              getInputRef={this.numberBed}
+                                              isAllowed={this.withValueCap}
+                                            />
+                                            {/* <input
                                               name="generalInformation,propertyDetails,numberOfRooms"
                                               touched="true"
                                               type="text"
                                               className="css-txt -control"
                                               ref={this.numberBed}
-                                            />
+                                            /> */}
                                           </div>
                                         </div>
                                       </div>
@@ -522,13 +423,13 @@ class Rooms extends Component {
                             </div>
                             <div
                               className="line css-line"
-                              style={{ marginTop: "0px" }}
+                              style={{marginTop: '0px'}}
                             ></div>
                             <div className="c-block">
                               <div className="box-row css-row">
                                 <div
                                   className="box-column css-box-col"
-                                  style={{ marginTop: "8px" }}
+                                  style={{marginTop: '8px'}}
                                 >
                                   <label className="box-label css-label">
                                     <span>Extra Bed Information</span>
@@ -537,28 +438,35 @@ class Rooms extends Component {
                                 <div className="box-column css-box-col">
                                   <div
                                     className="input-group css-inp"
-                                    style={{ display: "inline-block" }}
+                                    style={{display: 'inline-block'}}
                                   >
                                     <label className="box-label css-label">
                                       <span>Maximum Extra Beds</span>
                                     </label>
                                     <div
                                       className="input-group__inner"
-                                      style={{ width: "fit-content" }}
+                                      style={{width: 'fit-content'}}
                                     >
                                       <div
                                         className="input control-container css-radio-gr"
-                                        style={{ width: "100px" }}
+                                        style={{width: '100px'}}
                                       >
                                         <div className="__inner">
                                           <div className="__padder">
-                                            <input
+                                            <NumberFormat
+                                              allowNegative={false}
+                                              allowEmptyFormatting={false}
+                                              className="css-txt -control"
+                                              getInputRef={this.maxExtraBed}
+                                              isAllowed={this.withValueCap}
+                                            />
+                                            {/* <input
                                               name="generalInformation,propertyDetails,numberOfRooms"
                                               touched="true"
                                               type="text"
                                               className="css-txt -control"
                                               ref={this.maxExtraBed}
-                                            />
+                                            /> */}
                                           </div>
                                         </div>
                                       </div>
@@ -567,47 +475,18 @@ class Rooms extends Component {
                                       </div>
                                     </div>
                                   </div>
-                                  <div
-                                    className="input-group css-inp"
-                                    style={{ display: "inline-block" }}
-                                  >
-                                    <label className="box-label css-label">
-                                      <span>Price of Extra Bed</span>
-                                    </label>
-                                    <div
-                                      className="input-group__inner"
-                                      style={{ width: "fit-content" }}
-                                    >
-                                      <div className="input-group-addon css-number-2">
-                                        <span>VND</span>
-                                      </div>
-                                      <div className="input control-container css-radio-gr">
-                                        <div className="__inner">
-                                          <div className="__padder">
-                                            <input
-                                              ref={this.priceExtra}
-                                              name="generalInformation,propertyDetails,numberOfRooms"
-                                              touched="true"
-                                              type="text"
-                                              className="css-txt-2 -control"
-                                            />
-                                          </div>
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </div>
                                 </div>
                               </div>
                             </div>
                             <div
                               className="line css-line"
-                              style={{ marginTop: "0" }}
+                              style={{marginTop: '0'}}
                             ></div>
                             <div className="c-block">
                               <div className="box-row css-row">
                                 <div
                                   className="box-column css-box-col"
-                                  style={{ marginTop: "8px" }}
+                                  style={{marginTop: '8px'}}
                                 >
                                   <label className="box-label css-label">
                                     <span>Room Size</span>
@@ -615,33 +494,40 @@ class Rooms extends Component {
                                 </div>
                                 <div
                                   className="box-column"
-                                  style={{ marginRight: "30px" }}
+                                  style={{marginRight: '30px'}}
                                 >
                                   <div className="box-column css-column-2">
                                     <div
                                       className="input-group css-inp"
-                                      style={{ display: "inline-block" }}
+                                      style={{display: 'inline-block'}}
                                     >
                                       <label className="box-label css-label">
                                         <span>Width</span>
                                       </label>
                                       <div
                                         className="input-group__inner"
-                                        style={{ width: "fit-content" }}
+                                        style={{width: 'fit-content'}}
                                       >
                                         <div
                                           className="input control-container css-radio-gr"
-                                          style={{ width: "100px" }}
+                                          style={{width: '100px'}}
                                         >
                                           <div className="__inner">
                                             <div className="__padder">
-                                              <input
+                                              <NumberFormat
+                                                allowNegative={false}
+                                                allowEmptyFormatting={false}
+                                                className="css-txt -control"
+                                                getInputRef={this.width}
+                                                isAllowed={this.withValueCap}
+                                              />
+                                              {/* <input
                                                 name="generalInformation,propertyDetails,numberOfRooms"
                                                 touched="true"
                                                 type="text"
                                                 className="css-txt -control"
                                                 ref={this.width}
-                                              />
+                                              /> */}
                                             </div>
                                           </div>
                                         </div>
@@ -656,28 +542,35 @@ class Rooms extends Component {
                                   <div className="box-column css-column-2">
                                     <div
                                       className="input-group css-inp"
-                                      style={{ display: "inline-block" }}
+                                      style={{display: 'inline-block'}}
                                     >
                                       <label className="box-label css-label">
                                         <span>Height</span>
                                       </label>
                                       <div
                                         className="input-group__inner"
-                                        style={{ width: "fit-content" }}
+                                        style={{width: 'fit-content'}}
                                       >
                                         <div
                                           className="input control-container css-radio-gr"
-                                          style={{ width: "100px" }}
+                                          style={{width: '100px'}}
                                         >
                                           <div className="__inner">
                                             <div className="__padder">
-                                              <input
+                                              <NumberFormat
+                                                allowNegative={false}
+                                                allowEmptyFormatting={false}
+                                                className="css-txt -control"
+                                                getInputRef={this.height}
+                                                isAllowed={this.withValueCap}
+                                              />
+                                              {/* <input
                                                 name="generalInformation,propertyDetails,numberOfRooms"
                                                 touched="true"
                                                 type="text"
                                                 className="css-txt -control"
                                                 ref={this.height}
-                                              />
+                                              /> */}
                                             </div>
                                           </div>
                                         </div>
@@ -692,52 +585,60 @@ class Rooms extends Component {
                             </div>
                             <div
                               className="line css-line"
-                              style={{ marginTop: "0" }}
+                              style={{marginTop: '0'}}
                             ></div>
 
                             <div className="c-block">
                               <div className="box-row css-row">
                                 <div
                                   className="box-column css-box-col"
-                                  style={{ marginTop: "8px" }}
+                                  style={{marginTop: '8px'}}
                                 >
                                   <label className="box-label css-label">
                                     <span>Number Of Rooms</span>
                                     <span
                                       className="label-required"
                                       style={{
-                                        marginLeft: "3px",
-                                        color: "rgb(87, 167, 237)",
+                                        marginLeft: '3px',
+                                        color: 'rgb(87, 167, 237)',
                                       }}
                                     >
                                       *
                                     </span>
                                   </label>
                                 </div>
-                                {this.state.numberRooms == null ? (
+                                {this.state.numberRooms === null ? (
                                   <div className="box-column css-box-col">
                                     <div
                                       className="input-group css-number"
-                                      style={{ display: "inline-block" }}
+                                      style={{display: 'inline-block'}}
                                     >
                                       <div
                                         className="input-group__inner"
-                                        style={{ width: "fit-content" }}
+                                        style={{width: 'fit-content'}}
                                       >
                                         <div
                                           className="input control-container --is-error css-radio-gr"
-                                          style={{ width: "130px" }}
+                                          style={{width: '130px'}}
                                         >
                                           <div className="__inner">
                                             <div className="__padder">
-                                              <input
+                                              <NumberFormat
+                                                allowNegative={false}
+                                                allowEmptyFormatting={false}
+                                                onChange={this.checkNull}
+                                                className="css-txt -control"
+                                                getInputRef={this.numberRooms}
+                                                isAllowed={this.withValueCap}
+                                              />
+                                              {/* <input
                                                 onChange={this.checkNull}
                                                 name="generalInformation,propertyDetails,numberOfRooms"
                                                 touched="true"
                                                 type="text"
                                                 className="css-txt -control"
                                                 ref={this.numberRooms}
-                                              />
+                                              /> */}
                                             </div>
                                           </div>
                                         </div>
@@ -758,26 +659,34 @@ class Rooms extends Component {
                                   <div className="box-column css-box-col">
                                     <div
                                       className="input-group css-number"
-                                      style={{ display: "inline-block" }}
+                                      style={{display: 'inline-block'}}
                                     >
                                       <div
                                         className="input-group__inner"
-                                        style={{ width: "fit-content" }}
+                                        style={{width: 'fit-content'}}
                                       >
                                         <div
                                           className="input control-container css-radio-gr"
-                                          style={{ width: "130px" }}
+                                          style={{width: '130px'}}
                                         >
                                           <div className="__inner">
                                             <div className="__padder">
-                                              <input
+                                              <NumberFormat
+                                                allowNegative={false}
+                                                allowEmptyFormatting={false}
+                                                onChange={this.checkNull}
+                                                className="css-txt -control"
+                                                getInputRef={this.numberRooms}
+                                                isAllowed={this.withValueCap}
+                                              />
+                                              {/* <input
                                                 onChange={this.checkNull}
                                                 name="generalInformation,propertyDetails,numberOfRooms"
                                                 touched="true"
                                                 type="text"
                                                 className="css-txt -control"
                                                 ref={this.numberRooms}
-                                              />
+                                              /> */}
                                             </div>
                                           </div>
                                         </div>
@@ -794,21 +703,20 @@ class Rooms extends Component {
                         </div>
                       </div>
                     </div>
-                    
                   </div>
                   <div className="table__title css-row">
                     <div className="detail__column css-col">
                       <div
                         className="box__detail css-bx-dtl"
-                        style={{ marginBottom: "30px" }}
+                        style={{marginBottom: '30px'}}
                       >
                         <div className="box__detail__section header clearfix css-section">
                           <span>Description</span>
                           <span
                             className="label-required"
                             style={{
-                              marginLeft: "3px",
-                              color: "rgb(87, 167, 237)",
+                              marginLeft: '3px',
+                              color: 'rgb(87, 167, 237)',
                             }}
                           >
                             *
@@ -824,7 +732,7 @@ class Rooms extends Component {
                             </div>
                             <div
                               className="box-column css-column"
-                              style={{ marginRight: "20px" }}
+                              style={{marginRight: '20px'}}
                             >
                               <div className="input-group css-inp">
                                 <div className="input-group__inner">
@@ -832,7 +740,12 @@ class Rooms extends Component {
                                     <div className="__inner">
                                       <div className="__padder">
                                         <textarea
-                                          style={{width: "432px", margin: "0px -269.25px 0px 0px", height: "138px", resize: "none"}}
+                                          style={{
+                                            width: '432px',
+                                            margin: '0px -269.25px 0px 0px',
+                                            height: '138px',
+                                            resize: 'none',
+                                          }}
                                           ref={this.descript}
                                           id="textarea"
                                           type="text"
@@ -845,18 +758,16 @@ class Rooms extends Component {
                               </div>
                             </div>
                           </div>
-                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
               <div className="block css-contact">
-                <Link to="/registrationDetail/roomFacilities">
-                  <button className="btn-contact" onClick={this.createRoom}>
-                    Save and Continues
-                  </button>
-                </Link>
+                <button className="btn-success-save" onClick={this.createRoom}>
+                  Save and Go To Apartments List
+                </button>
               </div>
             </div>
           </div>

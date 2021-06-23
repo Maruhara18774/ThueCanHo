@@ -43,7 +43,7 @@ $font-app: Roboto,'Helvetica Neue',Arial,sans-serif;
             -webkit-font-smoothing: antialiased;
             color: #4c5052;
             cursor: default;
-            font-weight: 1000;
+            font-weight: 500;
           }
           input {
             background-color: rgb(236, 248, 255);;
@@ -52,7 +52,7 @@ $font-app: Roboto,'Helvetica Neue',Arial,sans-serif;
             font-size: 14px;
             border: 1px solid #235d9f;
             border-radius: 3px;
-            width: 100%;
+            width: 90%;
             margin-bottom: 16px;
             line-height: 20.02px;
             &:focus {
@@ -83,7 +83,7 @@ $font-app: Roboto,'Helvetica Neue',Arial,sans-serif;
             height: 41px;
             color: #fff;
             outline: none;
-            margin-bottom: 16px;
+            margin-top: 16px;
           }
 
         }
