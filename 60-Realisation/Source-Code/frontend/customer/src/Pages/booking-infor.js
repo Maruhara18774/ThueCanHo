@@ -47,7 +47,9 @@ export default class BookingForm extends Component {
             voucherValid: true,
             invalidReason: "",
             voucherCode: "",
-            voucher: {}
+            voucher: {},
+            // Profie
+            point: 0,
         }
         this.getApartmentInfo();
         if(this.props.id!= 0){
@@ -91,13 +93,16 @@ export default class BookingForm extends Component {
         })
     }
     getAccountInfo(id) {
-        Axios.get('https://oka1kh.azurewebsites.net/api/user/'+id.toString())
+        Axios.get('https://gift-api-v1.herokuapp.com/customer/list')
         .then(response => {
-            if (response.data[0] != null || response.data[0] != "") {
-                this.state.username = response.data[0].email;
-                this.state.password = response.data[0].pass;
-                this.setState(this);
-            }
+            response.data.forEach(item =>{
+                if(item.id == id){
+                    this.state.username = item.email;
+                    this.state.password = item.pass;
+                    this.state.point = item.diem_tich_luy;
+                    this.setState(this);
+                }
+            })
         })
     }
     confirmEmail = () => {
@@ -340,28 +345,29 @@ export default class BookingForm extends Component {
                         tongTien: this.state.total.toString(),
                         ghiChu: this.state.ghiChu,
                     }
-                    if(this.state.voucher.GiaTriSuDung != undefined){
-                        const tienGiam = Math.round((parseFloat(sendData.tongTien)*this.state.voucher.GiaTriSuDung)/100);
+                    if (this.state.voucher.GiaTriSuDung != undefined) {
+                        const tienGiam = Math.round((parseFloat(sendData.tongTien) * this.state.voucher.GiaTriSuDung) / 100);
                         sendData.tongTien = (parseFloat(sendData.tongTien) - tienGiam).toString();
                         Axios.post('http://localhost:33456/api/customer/rentalApartment', sendData)
-                .then(response=>{
-                    Axios.post('https://oka2-hv.herokuapp.com/api/payment', {ma: response.data});
-                    Axios.post('http://localhost:33456/api/customer/savedPaypalCheckout',{
-                        idPayment: response.data.toString(),
-                        code: order.id
-                    });
-                })
+                            .then(response2 => {
+                                
+                                Axios.post('https://oka2-hv.herokuapp.com/api/payment', { ma: response2.data });
+                                Axios.post('http://localhost:33456/api/customer/savedPaypalCheckout', {
+                                    idPayment: response2.data.toString(),
+                                    code: order.id
+                                });
+                            })
                     }
-                    else{
+                    else {
                         Axios.post('http://localhost:33456/api/customer/rentalApartment', sendData)
-                        .then(response =>{
-                            Axios.post('http://localhost:33456/api/customer/savedPaypalCheckout',{
-                        idPayment: response.data.toString(),
-                        code: order.id
-                    });
-                        });
+                            .then(response2 => {
+                                Axios.post('http://localhost:33456/api/customer/savedPaypalCheckout', {
+                                    idPayment: response2.data.toString(),
+                                    code: order.id
+                                });
+                            });
                     }
-                    
+
                 }
             )
         }
@@ -391,6 +397,10 @@ export default class BookingForm extends Component {
                 sendData.tongTien = (parseFloat(sendData.tongTien) - tienGiam).toString();
                 Axios.post('http://localhost:33456/api/customer/rentalApartment', sendData)
                 .then(response=>{
+                    Axios.put('https://gift-api-v1.herokuapp.com/customer/updatepoint',{
+                                    khach_hang_id: this.props.id,
+                                    diem_tich_luy: this.state.point +Math.round((this.state.total*2)/100)
+                                })
                     Axios.post('https://oka2-hv.herokuapp.com/api/payment', {ma: response.data})
                     Axios.post('http://localhost:33456/api/customer/savedPaypalCheckout',{
                         idPayment: response.data.toString(),
@@ -401,6 +411,10 @@ export default class BookingForm extends Component {
             else{
                 Axios.post('http://localhost:33456/api/customer/rentalApartment', sendData)
                 .then(response =>{
+                    Axios.put('https://gift-api-v1.herokuapp.com/customer/updatepoint',{
+                                    khach_hang_id: this.props.id,
+                                    diem_tich_luy: this.state.point +Math.round((this.state.total*2)/100)
+                                })
                     Axios.post('http://localhost:33456/api/customer/savedPaypalCheckout',{
                         idPayment: response.data.toString(),
                         code: order.id
@@ -796,7 +810,7 @@ export default class BookingForm extends Component {
                                     </div> :
                                     <div>
                                         <p className="title">Đã nhận thông tin tích điểm.</p>
-                                        <div class="form-group col-md-4">
+                                        <div class="form-group col">
                                             <button type="button" class="btn btn-warning btn-lg center-block" onClick={() => this.nextStep(this.state.currentStep)}>Bước tiếp theo</button>
                                         </div>
                                     </div>
