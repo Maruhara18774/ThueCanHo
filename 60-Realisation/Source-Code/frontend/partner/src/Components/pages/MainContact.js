@@ -24,7 +24,7 @@ class MainContact extends React.Component {
   }
   createContact = () => {
     Axios.post(
-      "http://localhost:33456/api/partner/registrationDetail/contactRegistration",
+      "https://rental-apartment-huflit.herokuapp.com/api/partner/registrationDetail/contactRegistration",
       {
         fullName: this.fullName.current.value,
         email: this.email.current.value,
@@ -38,10 +38,10 @@ class MainContact extends React.Component {
         idTK: this.state.idTk.toString(),
       }
     ).then((response) => {
-      // this.state.idTT = response.data;
-      // this.setState(this);
-      console.log(this.state.idTk);
-      this.props.history.push("/registrationDetail/generationInformation/" + this.state.idTk);
+      this.state.idTT = response.data;
+      this.setState(this);
+      console.log(this.state.idTT);
+      this.props.history.push("/registrationDetail/generationInformation/" + this.state.idTT);
     }).catch(err => console.log(err.response));
   };
   setName = (e) => {
@@ -67,15 +67,7 @@ class MainContact extends React.Component {
                     >
                       <div className="c-flexbox css-nb">
                         <span className="text css-nb-text">Main Contact</span>
-                        <span
-                          className="bagde__number bagde__color bagde__pill css-bagde"
-                          style={{
-                            paddingRight: "10px",
-                            paddingLeft: "10px",
-                          }}
-                        >
-                          7
-                        </span>
+                        
                       </div>
                     </Link>
                     <Link
@@ -87,35 +79,7 @@ class MainContact extends React.Component {
                         <span className="text css-nb-text">
                           General Information
                         </span>
-                        <span
-                          className="bagde__number bagde__color bagde__pill css-bagde"
-                          style={{
-                            paddingRight: "10px",
-                            paddingLeft: "10px",
-                          }}
-                        >
-                          7
-                        </span>
-                      </div>
-                    </Link>
-                    <Link
-                      key="3"
-                      to="/registrationDetail/propertyFacilities"
-                      className="slidebar-item css-check"
-                    >
-                      <div className="c-flexbox css-nb">
-                        <span className="text css-nb-text">
-                          Property Facilities
-                        </span>
-                        <span
-                          className="bagde__number bagde__color bagde__pill css-bagde"
-                          style={{
-                            paddingRight: "10px",
-                            paddingLeft: "10px",
-                          }}
-                        >
-                          7
-                        </span>
+                        
                       </div>
                     </Link>
                     <Link
@@ -125,98 +89,11 @@ class MainContact extends React.Component {
                     >
                       <div className="c-flexbox css-nb">
                         <span className="text css-nb-text">Rooms</span>
-                        <span
-                          className="bagde__number bagde__color bagde__pill css-bagde"
-                          style={{
-                            paddingRight: "10px",
-                            paddingLeft: "10px",
-                          }}
-                        >
-                          7
-                        </span>
-                      </div>
-                    </Link>
-                    <Link
-                      key="5"
-                      to="/registrationDetail/roomFacilities"
-                      className="slidebar-item css-check"
-                    >
-                      <div className="c-flexbox css-nb">
-                        <span className="text css-nb-text">
-                          Room Facilities
-                        </span>
-                        <span
-                          className="bagde__number bagde__color bagde__pill css-bagde"
-                          style={{
-                            paddingRight: "10px",
-                            paddingLeft: "10px",
-                          }}
-                        >
-                          7
-                        </span>
-                      </div>
-                    </Link>
-                    <Link key="6" to="" className="slidebar-item css-check">
-                      <div className="c-flexbox css-nb">
-                        <span className="text css-nb-text">Photos</span>
-                        <span
-                          className="bagde__number bagde__color bagde__pill css-bagde"
-                          style={{
-                            paddingRight: "10px",
-                            paddingLeft: "10px",
-                          }}
-                        >
-                          7
-                        </span>
-                      </div>
-                    </Link>
-                    <Link key="7" to="" className="slidebar-item css-check">
-                      <div className="c-flexbox css-nb">
-                        <span className="text css-nb-text">
-                          Payment Information
-                        </span>
-                        <span
-                          className="bagde__number bagde__color bagde__pill css-bagde"
-                          style={{
-                            paddingRight: "10px",
-                            paddingLeft: "10px",
-                          }}
-                        >
-                          7
-                        </span>
+                        
                       </div>
                     </Link>
                   </div>
                 </span>
-                <div
-                  className="table__block css-tbl-block"
-                  style={{ marginTop: "30px" }}
-                >
-                  <label className="block__label css-label">
-                    <span>Mandatory Fields Progress</span>
-                  </label>
-                  <div className="block__row css-row">
-                    <div className="block__column css-block-col">
-                      <div className="progress css-progress">
-                        <div
-                          className="progress__bar"
-                          role="progressbar"
-                          aria-valuenow="52"
-                          aria-valuemin="0"
-                          aria-valuemax="100"
-                          style={{ width: "52%" }}
-                        ></div>
-                      </div>
-                    </div>
-                    <div
-                      align="right"
-                      className="column css-col"
-                      style={{ paddingLeft: "0px" }}
-                    >
-                      <span className="text css-text">52%</span>
-                    </div>
-                  </div>
-                </div>
               </div>
             </div>
 
@@ -510,30 +387,6 @@ class MainContact extends React.Component {
                             <span className="label-required">*</span>
                           </label>
                         </div>
-                        <div className="box-column css-bxcol2">
-                          <div className="input-group css-inp">
-                            <div className="input-group__inner">
-                              <div className="input control-container css-radio-gr">
-                                <div className="__inner">
-                                  <div className="__padder">
-                                    <input
-                                      ref={this.gender}
-                                      touched="true"
-                                      type="text"
-                                      className="css-txt -control"
-                                    />
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                            <ul className="css-error --simple">
-                              <li>
-                                <span>This section must be filled.</span>
-                              </li>
-                            </ul>
-                          </div>
-                        </div>
-                      {/*
                         <div
                           className="c-column css-bxcol2"
                           style={{ marginTop: "-4px" }}
@@ -548,7 +401,7 @@ class MainContact extends React.Component {
                                 name="mainContact,previousNameBoolean"
                                 ref={this.gender}
                                 type="radio"
-                                value="Female"
+                                value="1"
                                 id="radio-9"
                               />
                               <label className="" htmlFor="radio-9">
@@ -563,7 +416,7 @@ class MainContact extends React.Component {
                                 name="mainContact,previousNameBoolean"
                                 ref={this.gender}
                                 type="radio"
-                                value="Male"
+                                value="0"
                                 id="radio-10"
                               />
                               <label className="" htmlFor="radio-10">
@@ -571,7 +424,7 @@ class MainContact extends React.Component {
                               </label>
                             </div>
                           </div>
-                        </div> */}
+                        </div>
                       </div>
                       <div
                         className="line css-line"
