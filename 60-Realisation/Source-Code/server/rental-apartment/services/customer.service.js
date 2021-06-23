@@ -338,10 +338,9 @@ module.exports = {
 				idTK: {type: "string"},
 			},
 			async handler({action,params,meta, ... ctx}){
-				console.log("hello")
                 var {tenKH,email,phoneNumber,maGiayTo,loaiGiayTo,quocTich,gioiTinh,idTK} = params;
-				if(parseInt(idTK)==0){
-					idTK = 1;
+				if(idTK=="0"){
+					idTK = 'DEFAULT';
 				}
 				const checkInfo = await dbContext.THONGTINKHACHHANG.findOne({
 					where:{
@@ -364,7 +363,7 @@ module.exports = {
 						LOAI_GIAYTOTUYTHAN: loaiGiayTo,
 						QUOCTICH: quocTich,
 						GIOITINH: gioiTinh,
-						ID_TAIKHOAN: parseInt(idTK)
+						ID_TAIKHOAN: idTK
 					})
 					return createInfo.ID_TT_KHACHHANG;
 				}
@@ -535,7 +534,7 @@ module.exports = {
 		updateRentalState:{
 			rest:{
 				method: "POST",
-				path: "/updateCustomerInfo4Account"
+				path: "/updateRentalState"
 			},
 			params:{
 				idOrder: {type: "string"},
@@ -546,7 +545,8 @@ module.exports = {
 				idOrder = parseInt(idOrder);
 				idState = parseInt(idState);
 				const stateSet = dbContext.DATCANHO.update({
-					ID_TT_DCH: idState,
+					ID_TT_DCH: idState
+				},{
 					where:{
 						ID_DATCANHO: idOrder
 					}
@@ -630,7 +630,7 @@ module.exports = {
 			},
 			async handler({action,params,meta, ... ctx}){
                 var {idOrder} = params;
-				const check = db.PAYPALSAVED.findOne({
+				const check = dbContext.PAYPALSAVED.findOne({
 					where:{
 						ID_PAYMENT: idOrder
 					}
